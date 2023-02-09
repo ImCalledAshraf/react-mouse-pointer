@@ -91,8 +91,8 @@ export const Cursor: FC<CursorProps> = ({
   stickAnimationAmount = 0.09,
   stickAnimationDuration = 0.7,
   stickAnimationEase = Power4.easeOut,
-  magneticAnimationAmount = 0.2,
-  magneticAnimationDuration = 0.7,
+  magneticAnimationAmount = 2,
+  magneticAnimationDuration = 0.9,
   magneticAnimationEase = Power4.easeOut,
   colorAnimationEase = Power4.easeOut,
   colorAnimationDuration = 0.2,
@@ -397,6 +397,33 @@ export const Cursor: FC<CursorProps> = ({
       });
     });
 
+
+    transparentElements.forEach(el => {
+      el.addEventListener('mouseenter', (e: MouseEvent) => {
+        if (e.target instanceof HTMLElement && cursor.current) {
+          gsap.to(`#${cursor.current.id}`, {
+            backgroundColor: ``,
+            outline: ``,
+            duration: 0.4,
+            ease: colorAnimationEase,
+          });
+        }
+      });
+    });
+    transparentElements.forEach(el => {
+      el.addEventListener('mouseleave', (e: MouseEvent) => {
+        if (e.target instanceof HTMLElement && cursor.current) {
+          gsap.to(`#${cursor.current.id}`, {
+            backgroundColor: `${cursorBackgroundColor}`,
+            outlineColor: `${cursorOutlineColor}`,
+            outlineWidth: `${cursorOutlineSize}`,
+            outlineStyle: `${cursorOutlineStyle}`,
+            duration: colorAnimationDuration,
+            ease: colorAnimationEase,
+          });
+        }
+      });
+    });
     // CLEANUP ---------------------------------------------------------------------
     // Magnetic Element
     magneticElements.forEach(el => {
@@ -416,8 +443,10 @@ export const Cursor: FC<CursorProps> = ({
             el.getBoundingClientRect().top +
             el.getBoundingClientRect().height / 2
         };
+
+
         const distance = {
-          x: targetPosition.left - cursorPosition.left,
+          x: targetPosition.left - cursorPosition.left ,
           y: targetPosition.top - cursorPosition.top
         };
         const angle = Math.atan2(distance.x, distance.y);
@@ -427,13 +456,12 @@ export const Cursor: FC<CursorProps> = ({
         //--------------------------------------------------------------
 
         const areatarget = e.target as HTMLElement;
-        console.log(hypotenuse)
-        console.log(triggerDistance)
+
         if (hypotenuse < triggerDistance) {
 
           gsap.to(areatarget, {
-            x: -((Math.sin(angle) * hypotenuse) / 2) * 1.3,
-            y: -((Math.cos(angle) * hypotenuse) / 2) * 1.3,
+            x: -((Math.sin(angle) * hypotenuse) / 2) * magneticAnimationAmount,
+            y: -((Math.cos(angle) * hypotenuse) / 2) * magneticAnimationAmount,
             duration: magneticAnimationDuration,
             ease: magneticAnimationEase,
           });
