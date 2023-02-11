@@ -19,12 +19,8 @@ const Demo = () => {
          // data-cursor-border-radius = "40%"
           data-cursor-outline-color= "red"
           data-cursor-color = "red"
-         style={{
-           borderRadius: '20px 40px 180px 20px',
-           background: 'red',
-           'width': '50px',
-           height: '50px'
-         }}>
+
+         >
       <img id='stick-title' src={'/images/icon.png'} height={50} width={50} />
     </div>
 

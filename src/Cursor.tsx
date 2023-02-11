@@ -209,7 +209,9 @@ export const Cursor: FC<CursorProps> = ({
       let bound: DOMRect | undefined;
       let x = e.clientX;
       let y = e.clientY;
+
       let duration = animationDuration;
+
       let ease = animationEase;
 
       if (stickStatus) {
@@ -228,7 +230,7 @@ export const Cursor: FC<CursorProps> = ({
             target.clientWidth / 2 -
             (bound.left + target.clientWidth / 2 - e.clientX) *
             stickAnimationAmount;
-          // duration = stickAnimationDuration ;
+          duration = duration ;
           ease = stickAnimationEase;
         }
       }
@@ -340,6 +342,7 @@ export const Cursor: FC<CursorProps> = ({
         let calculatedFloatFollow = el.dataset['cursorFloatFollow']? el.dataset['cursorFloatFollow'] : elementFloatFollow;
 
         let triggerDistanceOffset;
+        // @ts-ignore
         triggerDistanceOffset = el.dataset['cursorFloatTriggerOffset'] * 1 ;
         const cursorPosition = {
           left: calculatedFloatFollow? e.clientX : - e.clientX,
@@ -365,7 +368,9 @@ export const Cursor: FC<CursorProps> = ({
         if(triggerDistanceOffset){
           if(hypotenuse <= triggerDistance){
             gsap.to(el, {
+              // @ts-ignore
               x: -((Math.sin(angle) * hypotenuse) * calculatedFloatAmount) ,
+              // @ts-ignore
               y: -((Math.cos(angle) * hypotenuse) * calculatedFloatAmount) ,
               duration: calculatedFloatDuration,
               ease: magneticAnimationEase,
@@ -373,7 +378,9 @@ export const Cursor: FC<CursorProps> = ({
           }
         }else{
           gsap.to(el, {
+            // @ts-ignore
             x: -((Math.sin(angle) * hypotenuse) * calculatedFloatAmount) ,
+            // @ts-ignore
             y: -((Math.cos(angle) * hypotenuse) * calculatedFloatAmount) ,
             duration: calculatedFloatDuration,
             ease: magneticAnimationEase,
@@ -559,16 +566,68 @@ export const Cursor: FC<CursorProps> = ({
     });
     // CLEANUP ---------------------------------------------------------------------
     // Magnetic Element
+    let cursorPosition
+    let triggerDistance
+    let targetPosition
+    let distance
+    let angle
+    let hypotenuse
     magneticElements.forEach(el => {
+      document.addEventListener('mousemove', (e: MouseEvent) => {
+      // console.log(e);
+      //--------------------------------------------------------------
+        let calculatedMagneticAmount = el.dataset['cursorMagneticAmount']? el.dataset['cursorMagneticAmount']: magneticAnimationAmount
+        let calculatedMagneticDuration = el.dataset['cursorMagneticDuration']?el.dataset['cursorMagneticDuration']: magneticAnimationDuration
+        cursorPosition = {
+          left: e.clientX,
+          top: e.clientY
+        };
+        triggerDistance = el.dataset['cursorMagneticAmount']? el.dataset['cursorMagneticAmount'] : el.getBoundingClientRect().width  ;
+        targetPosition = {
+          left:
+            el.getBoundingClientRect().left +
+            el.getBoundingClientRect().width / 2,
+          top:
+            el.getBoundingClientRect().top +
+            el.getBoundingClientRect().height / 2
+        };
+        distance = {
+          x: targetPosition.left - cursorPosition.left ,
+          y: targetPosition.top - cursorPosition.top
+        }
+        angle = Math.atan2(distance.x, distance.y);
+        hypotenuse = Math.sqrt(
+          distance.x * (distance.x)   + distance.y * (distance.y)
+        );
+        const areatarget = e.target as HTMLElement;
+      //--------------------------------------------------------------
+      //   if(hypotenuse < triggerDistance){
+      //     gsap.to(el, {
+      //       x: -((Math.sin(angle) * hypotenuse) /2) * calculatedMagneticAmount,
+      //       y: -((Math.cos(angle) * hypotenuse) /2) * calculatedMagneticAmount,
+      //       duration: calculatedMagneticDuration,
+      //       ease: magneticAnimationEase,
+      //     });
+      //   }else{
+      //     gsap.to(el, {
+      //       x: 0,
+      //       y: 0,
+      //       duration: calculatedMagneticDuration,
+      //       ease: magneticAnimationEase,
+      //     });
+      //   }
+
+      });
       el.addEventListener('mousemove', e => {
+        let calculatedMagneticAmount = el.dataset['cursorMagneticAmount']?el.dataset['cursorMagneticAmount']: magneticAnimationAmount
+        let calculatedMagneticDuration = el.dataset['cursorMagneticDuration']?el.dataset['cursorMagneticDuration']: magneticAnimationDuration
         // console.log(e);
         //--------------------------------------------------------------
         const cursorPosition = {
           left: e.clientX,
           top: e.clientY
         };
-        const triggerDistance = el.getBoundingClientRect().width;
-
+        // const triggerDistance = el.getBoundingClientRect().width;
         const targetPosition = {
           left:
             el.getBoundingClientRect().left +
@@ -577,8 +636,6 @@ export const Cursor: FC<CursorProps> = ({
             el.getBoundingClientRect().top +
             el.getBoundingClientRect().height / 2
         };
-
-
         const distance = {
           x: targetPosition.left - cursorPosition.left ,
           y: targetPosition.top - cursorPosition.top
@@ -588,28 +645,27 @@ export const Cursor: FC<CursorProps> = ({
           distance.x * distance.x + distance.y * distance.y
         );
         //--------------------------------------------------------------
-
         const areatarget = e.target as HTMLElement;
 
-        // if (hypotenuse < triggerDistance) {
+        gsap.to(el, {
+          x: -((Math.sin(angle) * hypotenuse) /2) * calculatedMagneticAmount,
+          y: -((Math.cos(angle) * hypotenuse) /2) * calculatedMagneticAmount,
+          duration: calculatedMagneticDuration,
+          ease: magneticAnimationEase,
+        });
 
-          gsap.to(areatarget, {
-            x: -((Math.sin(angle) * hypotenuse) / 2) * magneticAnimationAmount,
-            y: -((Math.cos(angle) * hypotenuse) / 2) * magneticAnimationAmount,
-            duration: magneticAnimationDuration,
-            ease: magneticAnimationEase,
-          });
-        // }
+
 
       });
     });
     magneticElements.forEach(el => {
+      let calculatedMagneticDuration = el.dataset['cursorMagneticDuration']?el.dataset['cursorMagneticDuration']: magneticAnimationDuration
       el.addEventListener('mouseleave', e => {
         const areatarget = e.target as HTMLElement;
-        gsap.to(areatarget, {
+        gsap.to(el, {
           x: 0,
           y: 0,
-          duration: magneticAnimationDuration,
+          duration: calculatedMagneticDuration,
           ease: magneticAnimationEase,
         });
       });
