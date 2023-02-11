@@ -335,15 +335,17 @@ export const Cursor: FC<CursorProps> = ({
     //----------------------------------------------------------------------------
     floatingElements.forEach(el => {
       document.addEventListener('mousemove', (e: MouseEvent) => {
-        let floatAmount = el.dataset['cursorFloatAmount']? el.dataset['cursorFloatAmount'] : elementFloatAmount
-        let floatDuration = el.dataset['cursorFloatDuration']? el.dataset['cursorFloatDuration'] : elementFloatDuration;
-        let floatFollow = el.dataset['cursorFloatFollow']? el.dataset['cursorFloatFollow'] : elementFloatFollow;
-        const cursorPosition = {
-          left: floatFollow? e.clientX : - e.clientX,
-          top: floatFollow? e.clientY : - e.clientY
-        };
-        const triggerDistance = el.getBoundingClientRect().width;
+        let calculatedFloatAmount = el.dataset['cursorFloatAmount']? el.dataset['cursorFloatAmount'] : elementFloatAmount
+        let calculatedFloatDuration = el.dataset['cursorFloatDuration']? el.dataset['cursorFloatDuration'] : elementFloatDuration;
+        let calculatedFloatFollow = el.dataset['cursorFloatFollow']? el.dataset['cursorFloatFollow'] : elementFloatFollow;
 
+        let triggerDistanceOffset;
+        triggerDistanceOffset = el.dataset['cursorFloatTriggerOffset'] * 1 ;
+        const cursorPosition = {
+          left: calculatedFloatFollow? e.clientX : - e.clientX,
+          top: calculatedFloatFollow? e.clientY : - e.clientY
+        };
+        const triggerDistance = el.getBoundingClientRect().width + triggerDistanceOffset;
         const targetPosition = {
           left:
             el.getBoundingClientRect().left +
@@ -352,8 +354,6 @@ export const Cursor: FC<CursorProps> = ({
             el.getBoundingClientRect().top +
             el.getBoundingClientRect().height / 2
         };
-
-
         const distance = {
           x: targetPosition.left - cursorPosition.left ,
           y: targetPosition.top - cursorPosition.top
@@ -361,14 +361,24 @@ export const Cursor: FC<CursorProps> = ({
         const angle = Math.atan2(distance.x, distance.y);
         const hypotenuse = Math.sqrt(
           distance.x * distance.x + distance.y * distance.y
-        );
-        gsap.to(el, {
-          x: -((Math.sin(angle) * hypotenuse) * floatAmount) ,
-          y: -((Math.cos(angle) * hypotenuse) * floatAmount) ,
-          duration: floatDuration,
-          ease: magneticAnimationEase,
-        });
-        // el.style.transform = `translateY(-${y})`
+        )
+        if(triggerDistanceOffset){
+          if(hypotenuse <= triggerDistance){
+            gsap.to(el, {
+              x: -((Math.sin(angle) * hypotenuse) * calculatedFloatAmount) ,
+              y: -((Math.cos(angle) * hypotenuse) * calculatedFloatAmount) ,
+              duration: calculatedFloatDuration,
+              ease: magneticAnimationEase,
+            });
+          }
+        }else{
+          gsap.to(el, {
+            x: -((Math.sin(angle) * hypotenuse) * calculatedFloatAmount) ,
+            y: -((Math.cos(angle) * hypotenuse) * calculatedFloatAmount) ,
+            duration: calculatedFloatDuration,
+            ease: magneticAnimationEase,
+          });
+        }
       });
     });
     //----------------------------------------------------------------------------
