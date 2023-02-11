@@ -53,7 +53,7 @@ function useTicker(callback: () => void, paused?: boolean) {
 
 interface CursorProps {
   isGelly?: boolean;
-  borderRadius: string;
+  borderRadius?: string;
   animationDuration?: number;
   animationEase?: string | gsap.EaseFunction | undefined;
   gellyAnimationAmount?: number;
@@ -84,6 +84,7 @@ interface CursorProps {
   cursorOutlineColor?: string;
   cursorOutlineStyle?: string;
   shapeShiftDuration?: number;
+  cursorTransparency?: string;
 }
 
 export const Cursor: FC<CursorProps> = ({
@@ -117,6 +118,7 @@ export const Cursor: FC<CursorProps> = ({
   cursorOutlineColor = 'black',
   cursorOutlineStyle = 'solid',
   shapeShiftDuration = 0.5,
+  cursorTransparency = '100%',
 }) => {
   const cursor = useRef<HTMLDivElement | null>(null);
   const cursorInner = useRef<HTMLDivElement | null>(null);
@@ -161,8 +163,14 @@ export const Cursor: FC<CursorProps> = ({
     const textElements = (document.querySelectorAll(
       '[data-cursor-text]'
     ) as unknown) as NodeListOf<HTMLElement>;
-    const colorElements = (document.querySelectorAll(
-      '[data-cursor-color]'
+    const backgroundColorElements = (document.querySelectorAll(
+      '[data-cursor-background-color]'
+    ) as unknown) as NodeListOf<HTMLElement>;
+    const cursorTransparencyElements = (document.querySelectorAll(
+      '[data-cursor-transparency]'
+    ) as unknown) as NodeListOf<HTMLElement>;
+    const outlineColorElements = (document.querySelectorAll(
+      '[data-cursor-outline-color]'
     ) as unknown) as NodeListOf<HTMLElement>;
     const backgroundImageElements = (document.querySelectorAll(
       '[data-cursor-background-image]'
@@ -178,9 +186,6 @@ export const Cursor: FC<CursorProps> = ({
     ) as unknown) as NodeListOf<HTMLElement>;
     // CLEANUP ------------------------------------------------------------
 
-    const transparentElements = (document.querySelectorAll(
-      '[data-cursor-transparent]'
-    ) as unknown) as NodeListOf<HTMLElement>;
     // CLEANUP ------------------------------------------------------------
     const shapeShiftElements = (document.querySelectorAll(
       '[data-cursor-shapeshift]'
@@ -320,18 +325,65 @@ export const Cursor: FC<CursorProps> = ({
       });
     });
 
-    colorElements.forEach(el => {
+
+    cursorTransparencyElements.forEach(el => {
       el.addEventListener('mouseenter', (e: MouseEvent) => {
         if (e.target instanceof HTMLElement && cursor.current) {
           gsap.to(`#${cursor.current.id}`, {
-            backgroundColor: `${e.target.dataset['cursorColor']}`,
+            filter: `opacity(${e.target.dataset['cursorTransparency']})`,
             duration: colorAnimationDuration,
             ease: colorAnimationEase,
           });
         }
       });
     });
-    colorElements.forEach(el => {
+    cursorTransparencyElements.forEach(el => {
+      el.addEventListener('mouseleave', (e: MouseEvent) => {
+        if (e.target instanceof HTMLElement && cursor.current) {
+          gsap.to(`#${cursor.current.id}`, {
+            filter: `opacity(${cursorTransparency})`,
+            duration: colorAnimationDuration,
+            ease: colorAnimationEase,
+          });
+        }
+      });
+    });
+    //------------------------
+    outlineColorElements.forEach(el => {
+      el.addEventListener('mouseenter', (e: MouseEvent) => {
+        if (e.target instanceof HTMLElement && cursor.current) {
+          gsap.to(`#${cursor.current.id}`, {
+            outlineColor: `${e.target.dataset['cursorOutlineColor']}`,
+            duration: colorAnimationDuration,
+            ease: colorAnimationEase,
+          });
+        }
+      });
+    });
+    outlineColorElements.forEach(el => {
+      el.addEventListener('mouseleave', (e: MouseEvent) => {
+        if (e.target instanceof HTMLElement && cursor.current) {
+          gsap.to(`#${cursor.current.id}`, {
+            outlineColor: `${cursorOutlineColor}`,
+            duration: colorAnimationDuration,
+            ease: colorAnimationEase,
+          });
+        }
+      });
+    });
+
+    backgroundColorElements.forEach(el => {
+      el.addEventListener('mouseenter', (e: MouseEvent) => {
+        if (e.target instanceof HTMLElement && cursor.current) {
+          gsap.to(`#${cursor.current.id}`, {
+            backgroundColor: `${e.target.dataset['cursorBackgroundColor']}`,
+            duration: colorAnimationDuration,
+            ease: colorAnimationEase,
+          });
+        }
+      });
+    });
+    backgroundColorElements.forEach(el => {
       el.addEventListener('mouseleave', (e: MouseEvent) => {
         if (e.target instanceof HTMLElement && cursor.current) {
           gsap.to(`#${cursor.current.id}`, {
@@ -410,32 +462,6 @@ export const Cursor: FC<CursorProps> = ({
     });
 
 
-    transparentElements.forEach(el => {
-      el.addEventListener('mouseenter', (e: MouseEvent) => {
-        if (e.target instanceof HTMLElement && cursor.current) {
-          gsap.to(`#${cursor.current.id}`, {
-            backgroundColor: ``,
-            outline: ``,
-            duration: 0.4,
-            ease: colorAnimationEase,
-          });
-        }
-      });
-    });
-    transparentElements.forEach(el => {
-      el.addEventListener('mouseleave', (e: MouseEvent) => {
-        if (e.target instanceof HTMLElement && cursor.current) {
-          gsap.to(`#${cursor.current.id}`, {
-            backgroundColor: `${cursorBackgroundColor}`,
-            outlineColor: `${cursorOutlineColor}`,
-            outlineWidth: `${cursorOutlineSize}`,
-            outlineStyle: `${cursorOutlineStyle}`,
-            duration: colorAnimationDuration,
-            ease: colorAnimationEase,
-          });
-        }
-      });
-    });
     // CLEANUP ---------------------------------------------------------------------
     shapeShiftElements.forEach(el => {
       el.addEventListener('mouseenter', (e: MouseEvent) => {
@@ -448,12 +474,13 @@ export const Cursor: FC<CursorProps> = ({
           }else{
             calculatedBorderRadius = 0;
           }
-          console.log(e.target.dataset);
+          // console.log(e.target.dataset);
           // e.target.style.borderRadius.length === 0 ?calculatedBorderRadius = 0 : calculatedBorderRadius = e.target.style.borderRadius.length;
           gsap.to(`#${cursor.current.id}`, {
             width: `${e.target.clientWidth}`,
             height: `${e.target.clientHeight}`,
             borderRadius: calculatedBorderRadius,
+            // outlineColor:`${e.target.dataset.cursorOutlineColor}`,
             duration: shapeShiftDuration,
             ease: shapeShiftAnimationEase,
           });
@@ -467,6 +494,7 @@ export const Cursor: FC<CursorProps> = ({
             width: `${cursorSize}`,
             height: `${cursorSize}`,
             borderRadius: `${borderRadius}`,
+            // outlineColor: `${cursorOutlineColor}`,
             duration: shapeShiftDuration,
             ease: shapeShiftAnimationEase,
           });
@@ -559,7 +587,7 @@ export const Cursor: FC<CursorProps> = ({
         });
       });
 
-      colorElements.forEach(el => {
+      backgroundColorElements.forEach(el => {
         el.removeEventListener('mouseenter', () => {
         });
         el.removeEventListener('mouseleave', () => {

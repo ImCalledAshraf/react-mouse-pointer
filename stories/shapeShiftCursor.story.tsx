@@ -18,6 +18,7 @@ const Demo = () => {
          data-cursor-shapeshift
          // data-cursor-border-radius = "40%"
          data-cursor-outline-color= "red"
+          data-cursor-color = "red"
          style={{
            borderRadius: '20px 40px 180px 20px',
            background: 'red',
