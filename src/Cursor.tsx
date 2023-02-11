@@ -85,6 +85,9 @@ interface CursorProps {
   cursorOutlineStyle?: string;
   shapeShiftDuration?: number;
   cursorTransparency?: string;
+  elementFloatAmount?: number;
+  elementFloatDuration?: number;
+  elementFloatFollow?: boolean;
 }
 
 export const Cursor: FC<CursorProps> = ({
@@ -119,6 +122,9 @@ export const Cursor: FC<CursorProps> = ({
   cursorOutlineStyle = 'solid',
   shapeShiftDuration = 0.5,
   cursorTransparency = '100%',
+  elementFloatAmount = 0.05,
+  elementFloatDuration= 0.5,
+  elementFloatFollow= false,
 }) => {
   const cursor = useRef<HTMLDivElement | null>(null);
   const cursorInner = useRef<HTMLDivElement | null>(null);
@@ -185,7 +191,9 @@ export const Cursor: FC<CursorProps> = ({
       '[data-cursor-exclusion]'
     ) as unknown) as NodeListOf<HTMLElement>;
     // CLEANUP ------------------------------------------------------------
-
+    const floatingElements = (document.querySelectorAll(
+      '[data-cursor-float]'
+    ) as unknown) as NodeListOf<HTMLElement>;
     // CLEANUP ------------------------------------------------------------
     const shapeShiftElements = (document.querySelectorAll(
       '[data-cursor-shapeshift]'
@@ -324,8 +332,46 @@ export const Cursor: FC<CursorProps> = ({
         }
       });
     });
+    //----------------------------------------------------------------------------
+    floatingElements.forEach(el => {
+      document.addEventListener('mousemove', (e: MouseEvent) => {
+        let floatAmount = el.dataset['cursorFloatAmount']? el.dataset['cursorFloatAmount'] : elementFloatAmount
+        let floatDuration = el.dataset['cursorFloatDuration']? el.dataset['cursorFloatDuration'] : elementFloatDuration;
+        let floatFollow = el.dataset['cursorFloatFollow']? el.dataset['cursorFloatFollow'] : elementFloatFollow;
+        const cursorPosition = {
+          left: floatFollow? e.clientX : - e.clientX,
+          top: floatFollow? e.clientY : - e.clientY
+        };
+        const triggerDistance = el.getBoundingClientRect().width;
+
+        const targetPosition = {
+          left:
+            el.getBoundingClientRect().left +
+            el.getBoundingClientRect().width / 2,
+          top:
+            el.getBoundingClientRect().top +
+            el.getBoundingClientRect().height / 2
+        };
 
 
+        const distance = {
+          x: targetPosition.left - cursorPosition.left ,
+          y: targetPosition.top - cursorPosition.top
+        };
+        const angle = Math.atan2(distance.x, distance.y);
+        const hypotenuse = Math.sqrt(
+          distance.x * distance.x + distance.y * distance.y
+        );
+        gsap.to(el, {
+          x: -((Math.sin(angle) * hypotenuse) * floatAmount) ,
+          y: -((Math.cos(angle) * hypotenuse) * floatAmount) ,
+          duration: floatDuration,
+          ease: magneticAnimationEase,
+        });
+        // el.style.transform = `translateY(-${y})`
+      });
+    });
+    //----------------------------------------------------------------------------
     cursorTransparencyElements.forEach(el => {
       el.addEventListener('mouseenter', (e: MouseEvent) => {
         if (e.target instanceof HTMLElement && cursor.current) {
@@ -348,7 +394,7 @@ export const Cursor: FC<CursorProps> = ({
         }
       });
     });
-    //------------------------
+    //----------------------------------------------------------------------------
     outlineColorElements.forEach(el => {
       el.addEventListener('mouseenter', (e: MouseEvent) => {
         if (e.target instanceof HTMLElement && cursor.current) {
@@ -627,17 +673,20 @@ export const Cursor: FC<CursorProps> = ({
   useTicker(loop);
 
   return (
+
     <div
       ref={cursor}
       id={'c-cursor'}
       className='c-cursor'
       style={{
+
         width: cursorSize,
         height: cursorSize,
         background: cursorBackgroundColor,
         outlineWidth: cursorOutlineSize,
         outlineColor: cursorOutlineColor,
         outlineStyle: cursorOutlineStyle,
+        filter:`opacity(${cursorTransparency}`
       }}
     >
       <div
