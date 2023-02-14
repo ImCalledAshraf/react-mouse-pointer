@@ -7,14 +7,16 @@ import ShowDocs from './util/ShowDocs';
 
 const Demo = () => {
   return (
-    <div style={{ 'height': '100vh' }}>
-    <Cursor
-      isGelly={true}
-      cursorSize={30}
-      cursorBackgroundColor={''}/>
-    <div data-cursor-background-color='black' data-cursor-text='React' data-cursor-size='100px' >
-        <h1 id='stick-title' >React.js</h1>
-    </div>
+    <div style={{ height: '100vh' }}>
+      <Cursor isGelly={true} cursorSize={30} cursorBackgroundColor={''} />
+      <div
+        // data-cursor-background-color="black"
+        data-cursor-text="React"
+        data-cursor-text-color="gray"
+        data-cursor-text-scale="2"
+        data-cursor-size="100px">
+        <h1 id="stick-title">React.js</h1>
+      </div>
     </div>
   );
 };

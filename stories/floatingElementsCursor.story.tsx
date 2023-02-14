@@ -7,8 +7,8 @@ import ShowDocs from './util/ShowDocs';
 
 const Demo = () => {
   return (
-    <div style={{ 'height': '100vh' }}>
-      <Cursor isGelly={true} cursorTransparency={'100'} cursorSize={30}/>
+    <div style={{ height: '100vh' }}>
+      <Cursor isGelly={true} cursorTransparency={'100'} cursorSize={30}  />
       <br />
       <br />
       <br />
@@ -20,12 +20,12 @@ const Demo = () => {
       {/*</div>*/}
       <div
         data-cursor-float
-        data-cursor-float-amount='0.05'
-        data-cursor-float-duration='1.02'
-        data-cursor-float-follow='true'
+        data-cursor-float-amount="0.05"
+        data-cursor-float-duration="1.02"
+        data-cursor-float-follow="true"
         // data-cursor-float-trigger-offset={'10'}
         style={{ width: '200px', background: 'red' }}>
-        <h1 id='stick-title'>Float Element</h1>
+        <h1 id="stick-title">Float Element</h1>
       </div>
     </div>
   );

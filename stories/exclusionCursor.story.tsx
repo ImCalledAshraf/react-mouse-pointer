@@ -7,11 +7,13 @@ import ShowDocs from './util/ShowDocs';
 
 const Demo = () => {
   return (
-    <body style={{ 'height': '100vh' }}>
-      <Cursor isGelly={true}/>
+    <body style={{ height: '100vh' }}>
+      <Cursor isGelly={true} />
 
-      <div  style={{backgroundColor: 'white'}}>
-        <h1 data-cursor-exclusion id="stick-title">React.js</h1>
+      <div style={{ backgroundColor: 'white' }}>
+        <h1 data-cursor-exclusion id="stick-title">
+          React.js
+        </h1>
       </div>
     </body>
   );

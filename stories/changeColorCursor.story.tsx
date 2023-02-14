@@ -7,7 +7,7 @@ import ShowDocs from './util/ShowDocs';
 
 const Demo = () => {
   return (
-    <body style={{ 'height': '100vh' }}>
+    <body style={{ height: '100vh' }}>
       <Cursor isGelly={true} />
       <div data-cursor-background-color="#61dbfb">
         <h1 id="stick-title">Colorized Cursor Background</h1>
@@ -21,5 +21,5 @@ const Demo = () => {
 };
 
 storiesOf('Cursor/ChangeColor', module)
-  // .add('Docs', () => <ShowDocs md={require('../docs/test.md')} />)
+  .add('Docs', () => <ShowDocs md={require('../docs/changeColorCursor.md')} />)
   .add('Demo', () => <Demo />);

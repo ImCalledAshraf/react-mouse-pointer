@@ -59,7 +59,7 @@ interface CursorProps {
   gellyAnimationAmount?: number;
   gellyAnimationDuration?: number;
   stickAnimationAmount?: number;
-  stickAnimationDuration?: number;
+  // stickAnimationDuration?: number;
   stickAnimationEase?: string | gsap.EaseFunction | undefined;
   magneticAnimationAmount?: number;
   magneticAnimationDuration?: number;
@@ -77,10 +77,7 @@ interface CursorProps {
   cursorBackgroundColor?: string | undefined;
   exclusionBackgroundColor?: string;
   cursorInnerColor?: string;
-
-  // CLEANUP ------------------------------------------------------------
-  // Border
-  cursorOutlineSize?: string;
+  cursorOutlineWidth?: string;
   cursorOutlineColor?: string;
   cursorOutlineStyle?: string;
   shapeShiftDuration?: number;
@@ -92,14 +89,14 @@ interface CursorProps {
 
 export const Cursor: FC<CursorProps> = ({
   isGelly = false,
-  borderRadius = '100%' ,
+  borderRadius = '100%',
   animationDuration = 1.25,
   animationEase = Expo.easeOut,
   gellyAnimationAmount = 50,
   stickAnimationAmount = 0.1,
-  stickAnimationDuration = 0.7,
+  // stickAnimationDuration = 0.7,
   stickAnimationEase = Power4.easeOut,
-  magneticAnimationAmount = 2,
+  magneticAnimationAmount = 0.5,
   magneticAnimationDuration = 0.9,
   magneticAnimationEase = Power4.easeOut,
   colorAnimationEase = Power4.easeOut,
@@ -115,17 +112,16 @@ export const Cursor: FC<CursorProps> = ({
   cursorBackgroundColor = '',
   exclusionBackgroundColor = '#fff',
   cursorInnerColor = '#fff',
-  // CLEANUP ------------------------------------------------------------
-  // Border
-  cursorOutlineSize = '2px',
+  cursorOutlineWidth = '2px',
   cursorOutlineColor = 'black',
   cursorOutlineStyle = 'solid',
   shapeShiftDuration = 0.5,
   cursorTransparency = '100%',
   elementFloatAmount = 0.05,
-  elementFloatDuration= 0.5,
-  elementFloatFollow= false,
+  elementFloatDuration = 0.5,
+  elementFloatFollow = false,
 }) => {
+  let rotateCursor = true;
   const cursor = useRef<HTMLDivElement | null>(null);
   const cursorInner = useRef<HTMLDivElement | null>(null);
 
@@ -155,49 +151,60 @@ export const Cursor: FC<CursorProps> = ({
 
     if (isGelly && scale && rotation && cursor.current) {
       set.width(cursor.current?.style.height + scale * gellyAnimationAmount);
-      set.r(rotation);
       set.sx(1 + scale);
       set.sy(1 - scale);
-      set.rt(-rotation);
+      if(rotateCursor){
+        set.r(rotation);
+        set.rt(-rotation);
+      }else{
+        set.r(0);
+        set.rt(0);
+      }
     }
   }, [gellyAnimationAmount, isGelly, pos.x, pos.y, set, vel.x, vel.y]);
 
   useLayoutEffect(() => {
-    const sizeElements = (document.querySelectorAll(
+    const sizeElements = document.querySelectorAll(
       '[data-cursor-size]'
-    ) as unknown) as NodeListOf<HTMLElement>;
-    const textElements = (document.querySelectorAll(
+    ) as unknown as NodeListOf<HTMLElement>;
+    const textElements = document.querySelectorAll(
       '[data-cursor-text]'
-    ) as unknown) as NodeListOf<HTMLElement>;
-    const backgroundColorElements = (document.querySelectorAll(
+    ) as unknown as NodeListOf<HTMLElement>;
+    const backgroundColorElements = document.querySelectorAll(
       '[data-cursor-background-color]'
-    ) as unknown) as NodeListOf<HTMLElement>;
-    const cursorTransparencyElements = (document.querySelectorAll(
+    ) as unknown as NodeListOf<HTMLElement>;
+    const cursorTransparencyElements = document.querySelectorAll(
       '[data-cursor-transparency]'
-    ) as unknown) as NodeListOf<HTMLElement>;
-    const outlineColorElements = (document.querySelectorAll(
+    ) as unknown as NodeListOf<HTMLElement>;
+    const outlineColorElements = document.querySelectorAll(
       '[data-cursor-outline-color]'
-    ) as unknown) as NodeListOf<HTMLElement>;
-    const backgroundImageElements = (document.querySelectorAll(
+    ) as unknown as NodeListOf<HTMLElement>;
+    const outlineWidthElements = document.querySelectorAll(
+      '[data-cursor-outline-width]'
+    ) as unknown as NodeListOf<HTMLElement>;
+    const backgroundImageElements = document.querySelectorAll(
       '[data-cursor-background-image]'
-    ) as unknown) as NodeListOf<HTMLElement>;
-    const magneticElements = (document.querySelectorAll(
+    ) as unknown as NodeListOf<HTMLElement>;
+    const magneticElements = document.querySelectorAll(
       '[data-cursor-magnetic]'
-    ) as unknown) as NodeListOf<HTMLElement>;
-    const stickElements = (document.querySelectorAll(
+    ) as unknown as NodeListOf<HTMLElement>;
+    const stickElements = document.querySelectorAll(
       '[data-cursor-stick]'
-    ) as unknown) as NodeListOf<HTMLElement>;
-    const exclusionElements = (document.querySelectorAll(
+    ) as unknown as NodeListOf<HTMLElement>;
+    const exclusionElements = document.querySelectorAll(
       '[data-cursor-exclusion]'
-    ) as unknown) as NodeListOf<HTMLElement>;
+    ) as unknown as NodeListOf<HTMLElement>;
     // CLEANUP ------------------------------------------------------------
-    const floatingElements = (document.querySelectorAll(
+    const floatingElements = document.querySelectorAll(
       '[data-cursor-float]'
-    ) as unknown) as NodeListOf<HTMLElement>;
+    ) as unknown as NodeListOf<HTMLElement>;
     // CLEANUP ------------------------------------------------------------
-    const shapeShiftElements = (document.querySelectorAll(
+    const shapeShiftElements = document.querySelectorAll(
       '[data-cursor-shapeshift]'
-    ) as unknown) as NodeListOf<HTMLElement>;
+    ) as unknown as NodeListOf<HTMLElement>;
+    const cursorBorderRadiusElements = document.querySelectorAll(
+      '[data-cursor-border-radius]'
+    ) as unknown as NodeListOf<HTMLElement>;
 
     let stickStatus = false;
 
@@ -215,22 +222,18 @@ export const Cursor: FC<CursorProps> = ({
       let ease = animationEase;
 
       if (stickStatus) {
-        target = areatarget.querySelector(
-          areatarget.dataset['cursorStick'] as string
-        );
+        target = areatarget.querySelector(areatarget.dataset['cursorStick'] as string);
         bound = target?.getBoundingClientRect();
         if (target && bound) {
           y =
             bound.top +
             target.clientHeight / 2 -
-            (bound.top + target.clientHeight / 2 - e.clientY) *
-            stickAnimationAmount;
+            (bound.top + target.clientHeight / 2 - e.clientY) * stickAnimationAmount;
           x =
             bound.left +
             target.clientWidth / 2 -
-            (bound.left + target.clientWidth / 2 - e.clientX) *
-            stickAnimationAmount;
-          duration = duration ;
+            (bound.left + target.clientWidth / 2 - e.clientX) * stickAnimationAmount;
+          duration = animationDuration;
           ease = stickAnimationEase;
         }
       }
@@ -258,11 +261,9 @@ export const Cursor: FC<CursorProps> = ({
 
       loop();
     };
-
-    window.addEventListener('mousemove', e => {
+    window.addEventListener('mousemove', (e) => {
       setFromEvent(e);
     });
-
     document.body.addEventListener('mouseenter', (e: MouseEvent) => {
       if (e.target instanceof HTMLElement && cursor.current) {
         gsap.to(`#${cursor.current.id}`, {
@@ -272,7 +273,6 @@ export const Cursor: FC<CursorProps> = ({
         });
       }
     });
-
     document.body.addEventListener('mouseleave', (e: MouseEvent) => {
       if (e.target instanceof HTMLElement && cursor.current) {
         gsap.to(`#${cursor.current.id}`, {
@@ -282,8 +282,8 @@ export const Cursor: FC<CursorProps> = ({
         });
       }
     });
-
-    sizeElements.forEach(el => {
+    //---------------------------------------------------------------------------------------------------[START OF ELEMENTS]--//
+    sizeElements.forEach((el) => {
       el.addEventListener('mouseenter', (e: MouseEvent) => {
         if (e.target instanceof HTMLElement && cursor.current) {
           gsap.to(`#${cursor.current.id}`, {
@@ -295,7 +295,7 @@ export const Cursor: FC<CursorProps> = ({
         }
       });
     });
-    sizeElements.forEach(el => {
+    sizeElements.forEach((el) => {
       el.addEventListener('mouseleave', (e: MouseEvent) => {
         if (e.target instanceof HTMLElement && cursor.current) {
           gsap.to(`#${cursor.current.id}`, {
@@ -307,21 +307,28 @@ export const Cursor: FC<CursorProps> = ({
         }
       });
     });
-
-    textElements.forEach(el => {
+    //---- [ Text Elements ]------------------------------------------------------------------------//
+    textElements.forEach((el) => {
       el.addEventListener('mouseenter', (e: MouseEvent) => {
         if (e.target instanceof HTMLElement && cursorInner.current) {
+          // @ts-ignore
+          let calculatedTextColor = e.target.dataset['cursorTextColor']?  e.target.dataset['cursorTextColor']: null;
+          // @ts-ignore
+          let calculatedTextScale = e.target.dataset['cursorTextScale']? 1 * e.target.dataset['cursorTextScale']: 1;
+          // @ts-ignore
+          let calculatedTextOpacity = e.target.dataset['cursorTextOpacity']? 1 * e.target.dataset['cursorTextOpacity']: 1;
           cursorInner.current.textContent = `${e.target.dataset['cursorText']}`;
           gsap.to(`#${cursorInner.current.id}`, {
-            scale: 1,
-            opacity: 1,
+            color: calculatedTextColor? calculatedTextColor :'inherit',
+            scale: calculatedTextScale,
+            opacity: calculatedTextOpacity,
             duration: textAnimationDuration,
             ease: textAnimationEase,
           });
         }
       });
     });
-    textElements.forEach(el => {
+    textElements.forEach((el) => {
       el.addEventListener('mouseleave', (e: MouseEvent) => {
         if (e.target instanceof HTMLElement && cursorInner.current) {
           cursorInner.current.textContent = '';
@@ -334,62 +341,62 @@ export const Cursor: FC<CursorProps> = ({
         }
       });
     });
-    //----------------------------------------------------------------------------
-    floatingElements.forEach(el => {
+    //---- [ Floating Elements ]------------------------------------------------------------------------//
+    floatingElements.forEach((el) => {
       document.addEventListener('mousemove', (e: MouseEvent) => {
-        let calculatedFloatAmount = el.dataset['cursorFloatAmount']? el.dataset['cursorFloatAmount'] : elementFloatAmount
-        let calculatedFloatDuration = el.dataset['cursorFloatDuration']? el.dataset['cursorFloatDuration'] : elementFloatDuration;
-        let calculatedFloatFollow = el.dataset['cursorFloatFollow']? el.dataset['cursorFloatFollow'] : elementFloatFollow;
+        let calculatedFloatAmount = el.dataset['cursorFloatAmount']
+          ? el.dataset['cursorFloatAmount']
+          : elementFloatAmount;
+        let calculatedFloatDuration = el.dataset['cursorFloatDuration']
+          ? el.dataset['cursorFloatDuration']
+          : elementFloatDuration;
+        let calculatedFloatFollow = el.dataset['cursorFloatFollow']
+          ? el.dataset['cursorFloatFollow']
+          : elementFloatFollow;
 
         let triggerDistanceOffset;
         // @ts-ignore
-        triggerDistanceOffset = el.dataset['cursorFloatTriggerOffset'] * 1 ;
+        triggerDistanceOffset = el.dataset['cursorFloatTriggerOffset'] * 1;
         const cursorPosition = {
-          left: calculatedFloatFollow? e.clientX : - e.clientX,
-          top: calculatedFloatFollow? e.clientY : - e.clientY
+          left: calculatedFloatFollow ? e.clientX : -e.clientX,
+          top: calculatedFloatFollow ? e.clientY : -e.clientY,
         };
         const triggerDistance = el.getBoundingClientRect().width + triggerDistanceOffset;
         const targetPosition = {
-          left:
-            el.getBoundingClientRect().left +
-            el.getBoundingClientRect().width / 2,
-          top:
-            el.getBoundingClientRect().top +
-            el.getBoundingClientRect().height / 2
+          left: el.getBoundingClientRect().left + el.getBoundingClientRect().width / 2,
+          top: el.getBoundingClientRect().top + el.getBoundingClientRect().height / 2,
         };
         const distance = {
-          x: targetPosition.left - cursorPosition.left ,
-          y: targetPosition.top - cursorPosition.top
+          x: targetPosition.left - cursorPosition.left,
+          y: targetPosition.top - cursorPosition.top,
         };
         const angle = Math.atan2(distance.x, distance.y);
-        const hypotenuse = Math.sqrt(
-          distance.x * distance.x + distance.y * distance.y
-        )
-        if(triggerDistanceOffset){
-          if(hypotenuse <= triggerDistance){
+        const hypotenuse = Math.sqrt(distance.x * distance.x + distance.y * distance.y);
+        if (triggerDistanceOffset) {
+          if (hypotenuse <= triggerDistance) {
             gsap.to(el, {
               // @ts-ignore
-              x: -((Math.sin(angle) * hypotenuse) * calculatedFloatAmount) ,
+              x: -(Math.sin(angle) * hypotenuse * calculatedFloatAmount),
               // @ts-ignore
-              y: -((Math.cos(angle) * hypotenuse) * calculatedFloatAmount) ,
+              y: -(Math.cos(angle) * hypotenuse * calculatedFloatAmount),
               duration: calculatedFloatDuration,
               ease: magneticAnimationEase,
             });
           }
-        }else{
+        } else {
           gsap.to(el, {
             // @ts-ignore
-            x: -((Math.sin(angle) * hypotenuse) * calculatedFloatAmount) ,
+            x: -(Math.sin(angle) * hypotenuse * calculatedFloatAmount),
             // @ts-ignore
-            y: -((Math.cos(angle) * hypotenuse) * calculatedFloatAmount) ,
+            y: -(Math.cos(angle) * hypotenuse * calculatedFloatAmount),
             duration: calculatedFloatDuration,
             ease: magneticAnimationEase,
           });
         }
       });
     });
-    //----------------------------------------------------------------------------
-    cursorTransparencyElements.forEach(el => {
+    //---- [ Cursor Transparency Elements ]------------------------------------------------------------------------//
+    cursorTransparencyElements.forEach((el) => {
       el.addEventListener('mouseenter', (e: MouseEvent) => {
         if (e.target instanceof HTMLElement && cursor.current) {
           gsap.to(`#${cursor.current.id}`, {
@@ -400,7 +407,7 @@ export const Cursor: FC<CursorProps> = ({
         }
       });
     });
-    cursorTransparencyElements.forEach(el => {
+    cursorTransparencyElements.forEach((el) => {
       el.addEventListener('mouseleave', (e: MouseEvent) => {
         if (e.target instanceof HTMLElement && cursor.current) {
           gsap.to(`#${cursor.current.id}`, {
@@ -411,19 +418,22 @@ export const Cursor: FC<CursorProps> = ({
         }
       });
     });
-    //----------------------------------------------------------------------------
-    outlineColorElements.forEach(el => {
+
+    //---- [ Outline ]--------------------------------------------------------------------------------------------------------------------------------------------------//
+    //---- [ Outline Color Elements ]------------------------------------------------------------------------//
+    outlineColorElements.forEach((el) => {
       el.addEventListener('mouseenter', (e: MouseEvent) => {
         if (e.target instanceof HTMLElement && cursor.current) {
+          let calculatedOutlineColor = e.target.dataset['cursorOutlineColor'] ? e.target.dataset['cursorOutlineColor'] : cursorOutlineColor;
           gsap.to(`#${cursor.current.id}`, {
-            outlineColor: `${e.target.dataset['cursorOutlineColor']}`,
+            outlineColor: `${calculatedOutlineColor}`,
             duration: colorAnimationDuration,
             ease: colorAnimationEase,
           });
         }
       });
     });
-    outlineColorElements.forEach(el => {
+    outlineColorElements.forEach((el) => {
       el.addEventListener('mouseleave', (e: MouseEvent) => {
         if (e.target instanceof HTMLElement && cursor.current) {
           gsap.to(`#${cursor.current.id}`, {
@@ -434,8 +444,34 @@ export const Cursor: FC<CursorProps> = ({
         }
       });
     });
+    //---- [ Outline Size Elements ]------------------------------------------------------------------------//
+    outlineWidthElements.forEach((el) => {
+      el.addEventListener('mouseenter', (e: MouseEvent) => {
+        if (e.target instanceof HTMLElement && cursor.current) {
+          let calculatedOutlineWidth = e.target.dataset['cursorOutlineWidth'] ? e.target.dataset['cursorOutlineWidth'] : cursorOutlineWidth;
+          gsap.to(`#${cursor.current.id}`, {
+            outlineWidth: `${calculatedOutlineWidth}`,
+            duration: colorAnimationDuration,
+            ease: colorAnimationEase,
+          });
+        }
+      });
+    });
+    outlineWidthElements.forEach((el) => {
+      el.addEventListener('mouseleave', (e: MouseEvent) => {
+        if (e.target instanceof HTMLElement && cursor.current) {
+          gsap.to(`#${cursor.current.id}`, {
+            outlineWidth: `${cursorOutlineWidth}`,
+            duration: colorAnimationDuration,
+            ease: colorAnimationEase,
+          });
+        }
+      });
+    });
+    //---- [ END Outline ]------------------------------------------------------------------------------------------------------------------------------------------------//
 
-    backgroundColorElements.forEach(el => {
+    //---- [ Background Color Elements ]------------------------------------------------------------------------//
+    backgroundColorElements.forEach((el) => {
       el.addEventListener('mouseenter', (e: MouseEvent) => {
         if (e.target instanceof HTMLElement && cursor.current) {
           gsap.to(`#${cursor.current.id}`, {
@@ -446,7 +482,7 @@ export const Cursor: FC<CursorProps> = ({
         }
       });
     });
-    backgroundColorElements.forEach(el => {
+    backgroundColorElements.forEach((el) => {
       el.addEventListener('mouseleave', (e: MouseEvent) => {
         if (e.target instanceof HTMLElement && cursor.current) {
           gsap.to(`#${cursor.current.id}`, {
@@ -457,8 +493,9 @@ export const Cursor: FC<CursorProps> = ({
         }
       });
     });
-
-    exclusionElements.forEach(el => {
+    //---- [ Exclusion Elements ]------------------------------------------------------------------------//
+    // TODO: Do More Testing
+    exclusionElements.forEach((el) => {
       el.addEventListener('mouseenter', (e: MouseEvent) => {
         if (e.target instanceof HTMLElement && cursor.current) {
           // @ts-ignore: Unreachable code error
@@ -467,7 +504,7 @@ export const Cursor: FC<CursorProps> = ({
         }
       });
     });
-    exclusionElements.forEach(el => {
+    exclusionElements.forEach((el) => {
       el.addEventListener('mouseleave', (e: MouseEvent) => {
         if (e.target instanceof HTMLElement && cursor.current) {
           // @ts-ignore: Unreachable code error
@@ -476,22 +513,29 @@ export const Cursor: FC<CursorProps> = ({
         }
       });
     });
-
-    backgroundImageElements.forEach(el => {
+    //---- [ Background Image Elements ]------------------------------------------------------------------------//
+    // TODO: Clean up Size Controls
+    // TODO: Add Background Image Skew on Mouse Move
+    backgroundImageElements.forEach((el) => {
       el.addEventListener('mouseenter', (e: MouseEvent) => {
         if (e.target instanceof HTMLElement && cursorInner.current) {
           if (cursor.current) {
             // @ts-ignore: Unreachable code error
-            if (cursor.current.style.mixBlendMode === 'exclusion')
-              hasExclusionAlready = true;
-
+            if (cursor.current.style.mixBlendMode === 'exclusion') hasExclusionAlready = true;
             // @ts-ignore: Unreachable code error
             cursor.current.style.mixBlendMode = 'exclusion';
             cursor.current.style.backgroundColor = 'transform';
           }
+          // @ts-ignore
+          let calculatedBackgroundScale = e.target.dataset['cursorBackgroundImageScale']? 1 * e.target.dataset['cursorBackgroundImageScale'] : 1;
+          let calculatedBorderRadius = e.target.dataset['cursorBorderRadius']?  e.target.dataset['cursorBorderRadius'] : '100%';
+
+
+          rotateCursor = false
           gsap.to(`#${cursorInner.current.id}`, {
-            scale: 1,
+            scale: calculatedBackgroundScale,
             opacity: 1,
+            borderRadius: calculatedBorderRadius,
             background: `url("${e.target.dataset['cursorBackgroundImage']}")`,
             filter: 'invert(1)',
             duration: backgroundImageAnimationDuration,
@@ -500,9 +544,10 @@ export const Cursor: FC<CursorProps> = ({
         }
       });
     });
-    backgroundImageElements.forEach(el => {
+    backgroundImageElements.forEach((el) => {
       el.addEventListener('mouseleave', (e: MouseEvent) => {
         if (e.target instanceof HTMLElement && cursorInner.current) {
+          rotateCursor = true
           if (cursor.current) {
             if (!hasExclusionAlready) {
               // @ts-ignore: Unreachable code error
@@ -523,18 +568,46 @@ export const Cursor: FC<CursorProps> = ({
         }
       });
     });
-
-
-    // CLEANUP ---------------------------------------------------------------------
-    shapeShiftElements.forEach(el => {
+    //---- [ Border Radius Elements ]------------------------------------------------------------------------//
+    cursorBorderRadiusElements.forEach((el) => {
       el.addEventListener('mouseenter', (e: MouseEvent) => {
         if (e.target instanceof HTMLElement && cursor.current) {
-          let calculatedBorderRadius ;
-          if(e.target.dataset.cursorBorderRadius){
+          let calculatedBorderRadius;
+          if (e.target.dataset.cursorBorderRadius) {
             calculatedBorderRadius = e.target.dataset.cursorBorderRadius;
-          }else if(e.target.style.borderRadius.length > 0){
+          } else  {
+            calculatedBorderRadius = borderRadius;
+          }
+          gsap.to(`#${cursor.current.id}`, {
+            borderRadius: calculatedBorderRadius,
+            duration: shapeShiftDuration,
+            ease: shapeShiftAnimationEase,
+          });
+        }
+      });
+    });
+    cursorBorderRadiusElements.forEach((el) => {
+      el.addEventListener('mouseleave', (e: MouseEvent) => {
+        if (e.target instanceof HTMLElement && cursor.current) {
+          gsap.to(`#${cursor.current.id}`, {
+            borderRadius: `${borderRadius}`,
+            duration: shapeShiftDuration,
+            ease: shapeShiftAnimationEase,
+          });
+        }
+      });
+    });
+    //---- [ Shape Shift Elements ]------------------------------------------------------------------------//
+    // TODO: Cleanup Code
+    shapeShiftElements.forEach((el) => {
+      el.addEventListener('mouseenter', (e: MouseEvent) => {
+        if (e.target instanceof HTMLElement && cursor.current) {
+          let calculatedBorderRadius;
+          if (e.target.dataset.cursorBorderRadius) {
+            calculatedBorderRadius = e.target.dataset.cursorBorderRadius;
+          } else if (e.target.style.borderRadius.length > 0) {
             calculatedBorderRadius = e.target.style.borderRadius;
-          }else{
+          } else {
             calculatedBorderRadius = 0;
           }
           // console.log(e.target.dataset);
@@ -550,7 +623,7 @@ export const Cursor: FC<CursorProps> = ({
         }
       });
     });
-    shapeShiftElements.forEach(el => {
+    shapeShiftElements.forEach((el) => {
       el.addEventListener('mouseleave', (e: MouseEvent) => {
         if (e.target instanceof HTMLElement && cursor.current) {
           gsap.to(`#${cursor.current.id}`, {
@@ -564,104 +637,35 @@ export const Cursor: FC<CursorProps> = ({
         }
       });
     });
-    // CLEANUP ---------------------------------------------------------------------
-    // Magnetic Element
-    let cursorPosition
-    let triggerDistance
-    let targetPosition
-    let distance
-    let angle
-    let hypotenuse
-    magneticElements.forEach(el => {
-      document.addEventListener('mousemove', (e: MouseEvent) => {
-      // console.log(e);
-      //--------------------------------------------------------------
-        let calculatedMagneticAmount = el.dataset['cursorMagneticAmount']? el.dataset['cursorMagneticAmount']: magneticAnimationAmount
-        let calculatedMagneticDuration = el.dataset['cursorMagneticDuration']?el.dataset['cursorMagneticDuration']: magneticAnimationDuration
-        cursorPosition = {
-          left: e.clientX,
-          top: e.clientY
-        };
-        triggerDistance = el.dataset['cursorMagneticAmount']? el.dataset['cursorMagneticAmount'] : el.getBoundingClientRect().width  ;
-        targetPosition = {
-          left:
-            el.getBoundingClientRect().left +
-            el.getBoundingClientRect().width / 2,
-          top:
-            el.getBoundingClientRect().top +
-            el.getBoundingClientRect().height / 2
-        };
-        distance = {
-          x: targetPosition.left - cursorPosition.left ,
-          y: targetPosition.top - cursorPosition.top
-        }
-        angle = Math.atan2(distance.x, distance.y);
-        hypotenuse = Math.sqrt(
-          distance.x * (distance.x)   + distance.y * (distance.y)
-        );
+    //---- [ Magnetic Elements ]------------------------------------------------------------------------//
+    magneticElements.forEach((el) => {
+      el.addEventListener('mousemove', (e) => {
+        // @ts-ignore
+        let calculatedMagneticDuration = el.dataset['cursorMagneticDuration'] ? 1 * el.dataset['cursorMagneticDuration'] : magneticAnimationDuration;
+        // @ts-ignore
+        let calculatedMagneticAmount = el.dataset['cursorMagneticAmount'] ? 1 * el.dataset['cursorMagneticAmount'] : magneticAnimationAmount;
         const areatarget = e.target as HTMLElement;
-      //--------------------------------------------------------------
-      //   if(hypotenuse < triggerDistance){
-      //     gsap.to(el, {
-      //       x: -((Math.sin(angle) * hypotenuse) /2) * calculatedMagneticAmount,
-      //       y: -((Math.cos(angle) * hypotenuse) /2) * calculatedMagneticAmount,
-      //       duration: calculatedMagneticDuration,
-      //       ease: magneticAnimationEase,
-      //     });
-      //   }else{
-      //     gsap.to(el, {
-      //       x: 0,
-      //       y: 0,
-      //       duration: calculatedMagneticDuration,
-      //       ease: magneticAnimationEase,
-      //     });
-      //   }
-
-      });
-      el.addEventListener('mousemove', e => {
-        let calculatedMagneticAmount = el.dataset['cursorMagneticAmount']?el.dataset['cursorMagneticAmount']: magneticAnimationAmount
-        let calculatedMagneticDuration = el.dataset['cursorMagneticDuration']?el.dataset['cursorMagneticDuration']: magneticAnimationDuration
-        // console.log(e);
-        //--------------------------------------------------------------
-        const cursorPosition = {
-          left: e.clientX,
-          top: e.clientY
-        };
-        // const triggerDistance = el.getBoundingClientRect().width;
-        const targetPosition = {
-          left:
-            el.getBoundingClientRect().left +
-            el.getBoundingClientRect().width / 2,
-          top:
-            el.getBoundingClientRect().top +
-            el.getBoundingClientRect().height / 2
-        };
-        const distance = {
-          x: targetPosition.left - cursorPosition.left ,
-          y: targetPosition.top - cursorPosition.top
-        };
-        const angle = Math.atan2(distance.x, distance.y);
-        const hypotenuse = Math.sqrt(
-          distance.x * distance.x + distance.y * distance.y
-        );
-        //--------------------------------------------------------------
-        const areatarget = e.target as HTMLElement;
-
         gsap.to(el, {
-          x: -((Math.sin(angle) * hypotenuse) /2) * calculatedMagneticAmount,
-          y: -((Math.cos(angle) * hypotenuse) /2) * calculatedMagneticAmount,
+          x:
+            (e.clientX -
+              (areatarget.offsetLeft - window.pageXOffset) -
+              areatarget.clientWidth / 2) *
+            calculatedMagneticAmount,
+          y:
+            (e.clientY -
+              (areatarget.offsetTop - window.pageYOffset) -
+              areatarget.clientHeight / 2) *
+            calculatedMagneticAmount,
           duration: calculatedMagneticDuration,
           ease: magneticAnimationEase,
         });
-
-
-
       });
     });
-    magneticElements.forEach(el => {
-      let calculatedMagneticDuration = el.dataset['cursorMagneticDuration']?el.dataset['cursorMagneticDuration']: magneticAnimationDuration
-      el.addEventListener('mouseleave', e => {
-        const areatarget = e.target as HTMLElement;
+    magneticElements.forEach((el) => {
+      let calculatedMagneticDuration = el.dataset['cursorMagneticDuration']
+        ? el.dataset['cursorMagneticDuration']
+        : magneticAnimationDuration;
+      el.addEventListener('mouseleave', () => {
         gsap.to(el, {
           x: 0,
           y: 0,
@@ -670,96 +674,82 @@ export const Cursor: FC<CursorProps> = ({
         });
       });
     });
-
-    stickElements.forEach(el => {
-      el.addEventListener('mouseenter', () => (stickStatus = true));
+    //---- [ Sticky Elements ]------------------------------------------------------------------------//
+    stickElements.forEach((el) => {
+      el.addEventListener('mouseenter', () => {
+        stickStatus = true;
+      });
     });
-    stickElements.forEach(el => {
-      el.addEventListener('mouseleave', () => (stickStatus = false));
+    stickElements.forEach((el) => {
+      el.addEventListener('mouseleave', () => {
+        stickStatus = false;
+      });
     });
+    //---------------------------------------------------------------------------------------------------[END OF ELEMENTS]--//
 
     return () => {
       window.removeEventListener('mousemove', setFromEvent);
-      document.body.removeEventListener('mouseenter', () => {
+      document.body.removeEventListener('mouseenter', () => {});
+      document.body.removeEventListener('mouseleave', () => {});
+      sizeElements.forEach((el) => {
+        el.removeEventListener('mouseenter', () => {});
+        el.removeEventListener('mouseleave', () => {});
       });
-      document.body.removeEventListener('mouseleave', () => {
+      textElements.forEach((el) => {
+        el.removeEventListener('mouseenter', () => {});
+        el.removeEventListener('mouseleave', () => {});
       });
-
-      sizeElements.forEach(el => {
-        el.removeEventListener('mouseenter', () => {
-        });
-        el.removeEventListener('mouseleave', () => {
-        });
+      backgroundColorElements.forEach((el) => {
+        el.removeEventListener('mouseenter', () => {});
+        el.removeEventListener('mouseleave', () => {});
       });
-
-      textElements.forEach(el => {
-        el.removeEventListener('mouseenter', () => {
-        });
-        el.removeEventListener('mouseleave', () => {
-        });
+      exclusionElements.forEach((el) => {
+        el.removeEventListener('mouseenter', () => {});
+        el.removeEventListener('mouseleave', () => {});
       });
-
-      backgroundColorElements.forEach(el => {
-        el.removeEventListener('mouseenter', () => {
-        });
-        el.removeEventListener('mouseleave', () => {
-        });
+      backgroundImageElements.forEach((el) => {
+        el.removeEventListener('mouseenter', () => {});
+        el.removeEventListener('mouseleave', () => {});
       });
-
-      exclusionElements.forEach(el => {
-        el.removeEventListener('mouseenter', () => {
-        });
-        el.removeEventListener('mouseleave', () => {
-        });
+      magneticElements.forEach((el) => {
+        el.removeEventListener('mousemove', () => {});
+        el.removeEventListener('mouseleave', () => {});
       });
-
-      backgroundImageElements.forEach(el => {
-        el.removeEventListener('mouseenter', () => {
-        });
-        el.removeEventListener('mouseleave', () => {
-        });
+      stickElements.forEach((el) => {
+        el.removeEventListener('mouseenter', () => {});
+        el.removeEventListener('mouseleave', () => {});
       });
-
-      magneticElements.forEach(el => {
-        el.removeEventListener('mousemove', () => {
-        });
-        el.removeEventListener('mouseleave', () => {
-        });
+      floatingElements.forEach((el) => {
+        el.removeEventListener('mouseenter', () => {});
+        el.removeEventListener('mouseleave', () => {});
       });
-
-      stickElements.forEach(el => {
-        el.removeEventListener('mouseenter', () => {
-        });
-        el.removeEventListener('mouseleave', () => {
-        });
+      cursorBorderRadiusElements.forEach((el) => {
+        el.removeEventListener('mouseenter', () => {});
+        el.removeEventListener('mouseleave', () => {});
       });
     };
   });
-
   useTicker(loop);
-
   return (
-
     <div
       ref={cursor}
       id={'c-cursor'}
-      className='c-cursor'
+      className="c-cursor"
       style={{
-
         width: cursorSize,
         height: cursorSize,
         background: cursorBackgroundColor,
-        outlineWidth: cursorOutlineSize,
+        outlineWidth: cursorOutlineWidth,
         outlineColor: cursorOutlineColor,
         outlineStyle: cursorOutlineStyle,
-        filter:`opacity(${cursorTransparency}`
-      }}
-    >
+        borderRadius : `${borderRadius}`,
+        filter: `opacity(${cursorTransparency}`,
+      }}>
       <div
         style={{ color: cursorInnerColor }}
         ref={cursorInner}
         id={'c-cursorInner'}
-        className='c-cursor__inner'
+        className="c-cursor__inner"
       />
     </div>
   );

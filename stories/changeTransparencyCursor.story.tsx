@@ -7,8 +7,8 @@ import ShowDocs from './util/ShowDocs';
 
 const Demo = () => {
   return (
-    <body style={{ 'height': '100vh' }}>
-      <Cursor isGelly={true} cursorSize={30} />
+    <body style={{ height: '100vh' }} >
+      <Cursor isGelly={true} cursorSize={30}/>
       <div data-cursor-transparency="100%">
         <h1 id="stick-title">100% Transparency </h1>
       </div>

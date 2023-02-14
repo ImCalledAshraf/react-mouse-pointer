@@ -4,3 +4,4 @@
 - Shape Shift Element Based on shape - Done
 
 - Issue/ On isGelly Enabled : ShapeShifting will start rotating
+- add docs

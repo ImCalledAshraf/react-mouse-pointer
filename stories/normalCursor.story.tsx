@@ -7,13 +7,14 @@ import ShowDocs from './util/ShowDocs';
 
 const Demo = () => {
   return (
-      <body style={{ 'height':'100vh' }}>
-        <Cursor isGelly={true}
-                cursorSize={30}
-                cursorOutlineColor={'black'}
-                cursorOutlineSize={'2px'}
-        />
-      </body>
+    <body style={{ height: '100vh' }}>
+      <Cursor
+        isGelly={true}
+        cursorSize={30}
+        cursorOutlineColor={'black'}
+        cursorOutlineWidth={'2px'}
+      />
+    </body>
   );
 };
 
