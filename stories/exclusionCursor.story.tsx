@@ -10,6 +10,7 @@ export const Docs = () => (
 );
 export const Demo = () => {
   const exclusionBackgroundColor = text('exclusionBackgroundColor', '#c5ded8');
+  const cursorExclusionBackgroundColor = text('data-cursor-exclusion-background-color', 'red');
 
   const demoComponent = () => {
   return (
@@ -18,7 +19,6 @@ export const Demo = () => {
               cursorSize={60}
               exclusionBackgroundColor={exclusionBackgroundColor}
       />
-
       <div
         style={{
           borderRadius: '20px',
@@ -29,6 +29,7 @@ export const Demo = () => {
 
         }}
         data-cursor-exclusion
+        data-cursor-exclusion-background-color={cursorExclusionBackgroundColor}
       >
         <h1  id="stick-title">
           Hover Container & Text To See Effect

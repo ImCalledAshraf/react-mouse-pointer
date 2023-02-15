@@ -309,7 +309,6 @@ export const Cursor: FC<CursorProps> = ({
       });
     });
     //---- [ Text Elements ]------------------------------------------------------------------------//
-    // TODO: Add Text Color controls for global
     textElements.forEach((el) => {
       el.addEventListener('mouseenter', (e: MouseEvent) => {
         if (e.target instanceof HTMLElement && cursorInner.current) {
@@ -507,14 +506,13 @@ export const Cursor: FC<CursorProps> = ({
       });
     });
     //---- [ Exclusion Elements ]------------------------------------------------------------------------//
-    // TODO: Do More Testing
-    // TODO: Add Background Color Control for individual Elements
     exclusionElements.forEach((el) => {
       el.addEventListener('mouseenter', (e: MouseEvent) => {
         if (e.target instanceof HTMLElement && cursor.current) {
+          let calcualtedExclusionBackgroundColor = e.target.dataset['cursorExclusionBackgroundColor'] ? e.target.dataset['cursorExclusionBackgroundColor'] : exclusionBackgroundColor;
           // @ts-ignore: Unreachable code error
           cursor.current.style.mixBlendMode = 'exclusion';
-          cursor.current.style.background = `${exclusionBackgroundColor}`;
+          cursor.current.style.background = `${calcualtedExclusionBackgroundColor}`;
         }
       });
     });
