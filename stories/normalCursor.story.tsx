@@ -1,23 +1,69 @@
-import { storiesOf } from '@storybook/react';
-import * as React from 'react';
+import { withKnobs} from '@storybook/addon-knobs';
 import { Cursor } from '../src/Cursor';
 import '../src/misc/style.css';
 // @ts-ignore
 import ShowDocs from './util/ShowDocs';
+import * as React from 'react';
 
-const Demo = () => {
-  return (
-    <body style={{ height: '100vh' }}>
-      <Cursor
-        isGelly={true}
-        cursorSize={30}
-        cursorOutlineColor={'black'}
-        cursorOutlineWidth={'2px'}
-      />
-    </body>
-  );
+
+export default {
+  title: 'Cursor/Cursor',
+  decorators: [withKnobs],
 };
 
-storiesOf('Cursor/Normal', module)
-  // .add('Docs', () => <ShowDocs md={require('../docs/test.md')} />)
-  .add('Demo', () => <Demo />);
+export const Docs = () => (
+  <ShowDocs md={require('../docs/normalCursor.md')} />
+);
+
+export const Normal = () => {
+
+  const demoComponent = () => {
+    return (
+      <div style={{ height: '95vh' }}>
+        <Cursor
+          isGelly={false}
+        />
+        <div style={{
+          borderRadius: '20px',
+          outline: '2px solid orange',
+          padding: '2em',
+          display: 'grid',
+          placeItems: 'center'
+        }}>
+          <h1 style={{ margin: '0' }}>Normal Cursor</h1>
+          <h3 style={{ margin: '0' }}>Move Mouse Around</h3>
+          <p style={{ margin: '0' }}>Has all the Cursor Component Props, but with <b>isGelly</b> set to <b>False</b></p>
+        </div>
+      </div>
+    );
+  };
+
+  return demoComponent();
+};
+export const Gelly = () => {
+
+  const demoComponent = () => {
+
+    return (
+      <div style={{ height: '95vh' }}>
+        <Cursor isGelly={true} />
+        <div style={{
+          borderRadius: '20px',
+          outline: '2px solid orange',
+          padding: '2em',
+          display: 'grid',
+          placeItems: 'center'
+        }}>
+          <h1 style={{ margin: '0' }}>Gelly Cursor</h1>
+          <h3 style={{ margin: '0' }}>Move Mouse Around to see Cursor Skew Effect</h3>
+          <p style={{ margin: '0' }}>Has all the Cursor Component Props, but with <b>isGelly</b> set to <b>True</b></p>
+
+        </div>
+
+      </div>
+    );
+  };
+
+  return demoComponent();
+};
+

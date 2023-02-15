@@ -1,28 +1,53 @@
-import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 import { Cursor } from '../src/Cursor';
 import '../src/misc/style.css';
 // @ts-ignore
 import ShowDocs from './util/ShowDocs';
+import { number, text, withKnobs } from '@storybook/addon-knobs';
 
-const Demo = () => {
-  return (
-    <body style={{ height: '100vh' }}>
-      <Cursor isGelly={true} borderRadius={'40%'}/>
-      <div
-        data-cursor-background-image="https://reactjs.org/logo-og.png"
-        // data-cursor-background-image-scale="3"
-        data-cursor-border-radius = "40%"
-        data-cursor-size="200px"
-        data-cursor-outline-color="red"
-        data-cursor-outline-width="0"
-      >
-        <h1 id="stick-title">React.js</h1>
+
+export const Docs = () => (
+  <ShowDocs md={require('../docs/changeBackgroundCursor.md')} />
+);
+export const Demo = () => {
+  // const cursorSize = number('Cursor Size', 30);
+  const backgroundImageAnimationDuration = number('backgroundImageAnimationDuration', 0);
+  const cusorBackgroundImage = text('data-cursor-background-imag', '/images/image-tv.png');
+  const cursorBorderRadiusOnHover = text('data-cursor-border-radius', '100%');
+  const cursorSizeOnHover = text('data-cursor-size', '200px');
+  const cursorOutlineWidthOnHover = text('data-cursor-outline-width', '0');
+  const backgroundImageScale = text('data-cursor-background-image-scale', '1');
+  const demoComponent = () => {
+    return (
+      <div style={{ height: '95vh' }}>
+        <Cursor
+          isGelly={true}
+          backgroundImageAnimationDuration={backgroundImageAnimationDuration}
+        />
+        <div
+          style={{
+            borderRadius: '20px',
+            outline: '2px solid orange',
+            padding: '2em',
+            display: 'grid',
+            placeItems: 'center'
+          }}
+          data-cursor-background-image={cusorBackgroundImage}
+          data-cursor-background-image-scale={backgroundImageScale}
+          data-cursor-border-radius={cursorBorderRadiusOnHover}
+          data-cursor-size={cursorSizeOnHover}
+          data-cursor-outline-width={cursorOutlineWidthOnHover}
+        >
+          <h1 id='stick-title'>Hover to Change Cursor's Background Image</h1>
+        </div>
       </div>
-    </body>
-  );
+    );
+  };
+  return demoComponent();
 };
 
-storiesOf('Cursor/ChangeBackground', module)
-  // .add('Docs', () => <ShowDocs md={require('../docs/changeBackground.md')} />)
-  .add('Demo', () => <Demo />);
+
+export default {
+  title: 'Cursor/Background',
+  decorators: [withKnobs],
+};

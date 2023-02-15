@@ -85,6 +85,7 @@ interface CursorProps {
   elementFloatAmount?: number;
   elementFloatDuration?: number;
   elementFloatFollow?: boolean;
+  elementFloatSpringToPosition?: boolean;
 }
 
 export const Cursor: FC<CursorProps> = ({
@@ -108,7 +109,7 @@ export const Cursor: FC<CursorProps> = ({
   sizeAnimationDuration = 0.5,
   textAnimationEase = Expo.easeOut,
   textAnimationDuration = 1,
-  cursorSize = 48,
+  cursorSize = 30,
   cursorBackgroundColor = '',
   exclusionBackgroundColor = '#fff',
   cursorInnerColor = '#fff',
@@ -120,6 +121,7 @@ export const Cursor: FC<CursorProps> = ({
   elementFloatAmount = 0.05,
   elementFloatDuration = 0.5,
   elementFloatFollow = false,
+  elementFloatSpringToPosition = false,
 }) => {
   let rotateCursor = true;
   const cursor = useRef<HTMLDivElement | null>(null);
@@ -208,7 +210,6 @@ export const Cursor: FC<CursorProps> = ({
 
     let stickStatus = false;
 
-    let hasExclusionAlready = false;
 
     const setFromEvent = (e: MouseEvent) => {
       const areatarget = e.target as HTMLElement;
@@ -308,6 +309,7 @@ export const Cursor: FC<CursorProps> = ({
       });
     });
     //---- [ Text Elements ]------------------------------------------------------------------------//
+    // TODO: Add Text Color controls for global
     textElements.forEach((el) => {
       el.addEventListener('mouseenter', (e: MouseEvent) => {
         if (e.target instanceof HTMLElement && cursorInner.current) {
@@ -382,8 +384,19 @@ export const Cursor: FC<CursorProps> = ({
               duration: calculatedFloatDuration,
               ease: magneticAnimationEase,
             });
+          }else{
+            if(elementFloatSpringToPosition){
+              gsap.to(el, {
+                // @ts-ignore
+                x: 0,
+                // @ts-ignore
+                y: 0,
+                duration: calculatedFloatDuration,
+                ease: magneticAnimationEase,
+              });
+            }
           }
-        } else {
+        }else{
           gsap.to(el, {
             // @ts-ignore
             x: -(Math.sin(angle) * hypotenuse * calculatedFloatAmount),
@@ -495,6 +508,7 @@ export const Cursor: FC<CursorProps> = ({
     });
     //---- [ Exclusion Elements ]------------------------------------------------------------------------//
     // TODO: Do More Testing
+    // TODO: Add Background Color Control for individual Elements
     exclusionElements.forEach((el) => {
       el.addEventListener('mouseenter', (e: MouseEvent) => {
         if (e.target instanceof HTMLElement && cursor.current) {
@@ -514,17 +528,12 @@ export const Cursor: FC<CursorProps> = ({
       });
     });
     //---- [ Background Image Elements ]------------------------------------------------------------------------//
-    // TODO: Clean up Size Controls
-    // TODO: Add Background Image Skew on Mouse Move
     backgroundImageElements.forEach((el) => {
       el.addEventListener('mouseenter', (e: MouseEvent) => {
         if (e.target instanceof HTMLElement && cursorInner.current) {
           if (cursor.current) {
             // @ts-ignore: Unreachable code error
             if (cursor.current.style.mixBlendMode === 'exclusion') hasExclusionAlready = true;
-            // @ts-ignore: Unreachable code error
-            cursor.current.style.mixBlendMode = 'exclusion';
-            cursor.current.style.backgroundColor = 'transform';
           }
           // @ts-ignore
           let calculatedBackgroundScale = e.target.dataset['cursorBackgroundImageScale']? 1 * e.target.dataset['cursorBackgroundImageScale'] : 1;
@@ -537,7 +546,6 @@ export const Cursor: FC<CursorProps> = ({
             opacity: 1,
             borderRadius: calculatedBorderRadius,
             background: `url("${e.target.dataset['cursorBackgroundImage']}")`,
-            filter: 'invert(1)',
             duration: backgroundImageAnimationDuration,
             ease: backgroundImageAnimationEase,
           });
@@ -549,20 +557,16 @@ export const Cursor: FC<CursorProps> = ({
         if (e.target instanceof HTMLElement && cursorInner.current) {
           rotateCursor = true
           if (cursor.current) {
-            if (!hasExclusionAlready) {
               // @ts-ignore: Unreachable code error
               cursor.current.style.mixBlendMode = '';
               cursor.current.style.zIndex = '999999999';
               cursor.current.style.backgroundColor = `${cursorBackgroundColor}`;
-            } else {
-              cursor.current.style.backgroundColor = `${exclusionBackgroundColor}`;
-            }
           }
           gsap.to(`#${cursorInner.current.id}`, {
             scale: 0,
             opacity: 0,
             background: ``,
-            filter: 'none',
+            // filter: 'none',
             duration: backgroundImageAnimationDuration,
           });
         }
@@ -598,7 +602,6 @@ export const Cursor: FC<CursorProps> = ({
       });
     });
     //---- [ Shape Shift Elements ]------------------------------------------------------------------------//
-    // TODO: Cleanup Code
     shapeShiftElements.forEach((el) => {
       el.addEventListener('mouseenter', (e: MouseEvent) => {
         if (e.target instanceof HTMLElement && cursor.current) {
@@ -610,13 +613,10 @@ export const Cursor: FC<CursorProps> = ({
           } else {
             calculatedBorderRadius = 0;
           }
-          // console.log(e.target.dataset);
-          // e.target.style.borderRadius.length === 0 ?calculatedBorderRadius = 0 : calculatedBorderRadius = e.target.style.borderRadius.length;
           gsap.to(`#${cursor.current.id}`, {
             width: `${e.target.clientWidth}`,
             height: `${e.target.clientHeight}`,
             borderRadius: calculatedBorderRadius,
-            // outlineColor:`${e.target.dataset.cursorOutlineColor}`,
             duration: shapeShiftDuration,
             ease: shapeShiftAnimationEase,
           });
@@ -630,7 +630,6 @@ export const Cursor: FC<CursorProps> = ({
             width: `${cursorSize}`,
             height: `${cursorSize}`,
             borderRadius: `${borderRadius}`,
-            // outlineColor: `${cursorOutlineColor}`,
             duration: shapeShiftDuration,
             ease: shapeShiftAnimationEase,
           });
@@ -727,6 +726,19 @@ export const Cursor: FC<CursorProps> = ({
         el.removeEventListener('mouseenter', () => {});
         el.removeEventListener('mouseleave', () => {});
       });
+      outlineColorElements.forEach((el) => {
+        el.removeEventListener('mouseenter', () => {});
+        el.removeEventListener('mouseleave', () => {});
+      });
+      outlineWidthElements.forEach((el) => {
+        el.removeEventListener('mouseenter', () => {});
+        el.removeEventListener('mouseleave', () => {});
+      });
+      shapeShiftElements.forEach((el) => {
+        el.removeEventListener('mouseenter', () => {});
+        el.removeEventListener('mouseleave', () => {});
+      });
+
     };
   });
   useTicker(loop);

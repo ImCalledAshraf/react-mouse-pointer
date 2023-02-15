@@ -9,6 +9,7 @@ module.exports = {
     "@storybook/addon-notes/register",
   ],
   staticDirs: ["../stories/public"],
+
   framework: "@storybook/react",
   // core: {
   //   builder: "@storybook/builder-webpack5",

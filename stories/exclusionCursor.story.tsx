@@ -1,24 +1,48 @@
-import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 import { Cursor } from '../src/Cursor';
 import '../src/misc/style.css';
 // @ts-ignore
 import ShowDocs from './util/ShowDocs';
+import {  text, withKnobs } from '@storybook/addon-knobs';
 
-const Demo = () => {
+export const Docs = () => (
+  <ShowDocs md={require('../docs/exclusionCursor.md')} />
+);
+export const Demo = () => {
+  const exclusionBackgroundColor = text('exclusionBackgroundColor', '#c5ded8');
+
+  const demoComponent = () => {
   return (
-    <body style={{ height: '100vh' }}>
-      <Cursor isGelly={true} />
+    <body style={{ height: '95vh' }}>
+      <Cursor isGelly={true}
+              cursorSize={60}
+              exclusionBackgroundColor={exclusionBackgroundColor}
+      />
 
-      <div style={{ backgroundColor: 'white' }}>
-        <h1 data-cursor-exclusion id="stick-title">
-          React.js
+      <div
+        style={{
+          borderRadius: '20px',
+          background: '#c5ded8',
+          padding: '2em',
+          display: 'grid',
+          placeItems: 'center'
+
+        }}
+        data-cursor-exclusion
+      >
+        <h1  id="stick-title">
+          Hover Container & Text To See Effect
         </h1>
       </div>
+
     </body>
   );
 };
+return demoComponent();
+};
 
-storiesOf('Cursor/ExclusionCursor', module)
-  // .add('Docs', () => <ShowDocs md={require('../docs/test.md')} />)
-  .add('Demo', () => <Demo />);
+export default {
+  title: 'Cursor/Exclusion',
+  decorators: [withKnobs],
+};
+

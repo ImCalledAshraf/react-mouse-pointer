@@ -1,46 +1,72 @@
-import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 import { Cursor } from '../src/Cursor';
 import '../src/misc/style.css';
 // @ts-ignore
 import ShowDocs from './util/ShowDocs';
+import { number, withKnobs } from '@storybook/addon-knobs';
 
-const Demo = () => {
-  return (
-    <body style={{ height: '100vh', display: 'grid', placeItems: 'center' }}>
-      <Cursor isGelly={false} cursorSize={30} />
-      <div
-        data-cursor-stick="#stick-title"
-        data-cursor-magnetic
-        // data-cursor-magnetic-duration="5.9"
-        data-cursor-shapeshift
-        style={{
-          borderRadius: '20px 40px 180px 20px',
-          background: 'red',
-          width: '200px',
-          height: '100px',
-        }}>
-        <h1 id="stick-title">Magnetic Cursor</h1>
-      </div>
 
-      <div
-        data-cursor-stick="#stick-title"
-        data-cursor-shapeshift
-        // data-cursor-border-radius = "40%"
-        data-cursor-outline-color="red"
-        data-cursor-color="red"
-        style={{
-          borderRadius: '20px 40px 180px 20px',
-          background: 'red',
-          width: '50px',
-          height: '50px',
-        }}>
-        <img id="stick-title" src={'/images/icon.png'} height={50} width={50} />
+export const Docs = () => (
+  <ShowDocs md={require('../docs/shapeShiftCursor.md')} />
+);
+
+export const ShapeShift = () => {
+  const shapeShiftDuration = number('shapeShiftDuration', 0.5);
+
+  const demoComponent = () => {
+    return (
+      <div style={{ height: '95vh', display: 'grid', placeItems: 'center' }}>
+        <Cursor
+          isGelly={false}
+          cursorSize={30}
+          shapeShiftDuration={shapeShiftDuration}
+        />
+        <div
+          data-cursor-shapeshift
+          style={{
+            borderRadius: '20px 40px 180px 20px',
+            background: '#c5ded8',
+            width: '200px',
+            padding: '2em'
+          }}>
+          <h1 style={{ margin: '0' }} id='stick-title'>Shapeshift</h1>
+          <h3 style={{ margin: '0' }}>Hover To see Effect</h3>
+        </div>
       </div>
-    </body>
-  );
+    );
+  };
+  return demoComponent();
+};
+export const ShapeShiftWithStickyMagnetic = () => {
+  const shapeShiftDuration = number('shapeShiftDuration', 0.5);
+
+  const demoComponent = () => {
+    return (
+      <div style={{ height: '95vh', display: 'grid', placeItems: 'center' }}>
+        <Cursor isGelly={false} cursorSize={30} shapeShiftDuration={shapeShiftDuration} />
+        <div
+          data-cursor-stick='#stick-title'
+          data-cursor-magnetic
+          data-cursor-shapeshift
+          style={{
+            borderRadius: '20px 40px 180px 20px',
+            background: '#c5ded8',
+            width: '200px',
+            padding: '2em'
+
+          }}>
+          <h2 style={{ margin: '0' }} id='stick-title'>Magnetic Sticky Shapeshift</h2>
+          <h3 style={{ margin: '0' }}>Hover To see Effect</h3>
+        </div>
+
+
+      </div>
+    );
+  };
+  return demoComponent();
 };
 
-storiesOf('Cursor/ShapeShift', module)
-  // .add('Docs', () => <ShowDocs md={require('../docs/test.md')} />)
-  .add('Demo', () => <Demo />);
+export default {
+  title: 'Cursor/ShapeShift',
+  decorators: [withKnobs],
+};

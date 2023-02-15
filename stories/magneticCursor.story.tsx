@@ -1,45 +1,88 @@
-import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 import { Cursor } from '../src/Cursor';
 import '../src/misc/style.css';
 // @ts-ignore
 import ShowDocs from './util/ShowDocs';
+import { number, withKnobs } from '@storybook/addon-knobs';
 
-const Demo = () => {
-  return (
-    <div style={{ height: '100vh', display: 'grid', placeItems: 'center' }}>
-      <Cursor isGelly={true} cursorSize={30}  />
-      <div
-        data-cursor-stick="#stick-title"
-        data-cursor-magnetic
-        // data-cursor-magnetic-amount="0.9"
-        // data-cursor-magnetic-duration="1.9"
-      >
-        <h1 id="stick-title">Magnetic Cursor</h1>
-      </div>
-      <div
-        data-cursor-magnetic
-        // data-cursor-transparency='0%'
-        data-cursor-magnetic-amount="1.9"
-        // data-cursor-magnetic-duration="1.9"
-        data-cursor-stick="#stick-title"
-        data-cursor-outline-color="lime"
-        data-cursor-size="60px">
-        <img id="stick-title" src={'/images/icon.png'} height={50} width={50} />
-      </div>
+export const Docs = () => (
+  <ShowDocs md={require('../docs/magneticCrusor.md')} />
+);
+export const Magnetic = () => {
+  const animationDuration = number('animationDuration', 1.25);
+  const magneticAnimationAmount = number('Magnetic Animation Amount', 0.5);
+  const magneticAnimationDuration = number('Magnetic Animation Duration', 0.9);
+  const demoComponent = () => {
+    return (
+      <div style={{ height: '95vh', display: 'grid', placeItems: 'center' }}>
+        <Cursor
+          isGelly={true}
+          cursorSize={30}
+          animationDuration={animationDuration}
+          magneticAnimationAmount={magneticAnimationAmount}
+          magneticAnimationDuration={magneticAnimationDuration}
+        />
+        <div
+          style={{
+            borderRadius: '20px',
+            background: '#c5ded8',
+            padding: '2em',
+            display: 'grid',
+            placeItems: 'center'
+          }}
+          data-cursor-magnetic
+        >
+          <h1 style={{ margin: '0' }} id='stick-title'>Magnetic</h1>
+          <h3 style={{ margin: '0' }}>Hover To see Effect</h3>
+        </div>
 
-      {/*<div*/}
-      {/*  data-cursor-magnetic*/}
-      {/*  data-cursor-transparency='0%'*/}
-      {/*  // data-cursor-stick='#stick-title'*/}
-      {/*  // data-cursor-size='80px'*/}
-      {/*  style={{ background: 'red', 'width': '50px', height: '50px' }}>*/}
-      {/*  <img id='stick-title' src={'/images/icon.png'} height={50} width={50} />*/}
-      {/*</div>*/}
-    </div>
-  );
+
+      </div>
+    );
+  };
+  return demoComponent();
+};
+export const MagneticWithSticky = () => {
+  const animationDuration = number('animationDuration', 1.25);
+  const magneticAnimationAmount = number('Magnetic Animation Amount', 0.5);
+  const magneticAnimationDuration = number('Magnetic Animation Duration', 0.9);
+  const stickAnimationAmount = number('Stick Animation Amount', 0.1);
+
+  const demoComponent = () => {
+    return (
+      <div style={{ height: '95vh', display: 'grid', placeItems: 'center' }}>
+        <Cursor
+          isGelly={true}
+          cursorSize={30}
+          animationDuration={animationDuration}
+          magneticAnimationAmount={magneticAnimationAmount}
+          magneticAnimationDuration={magneticAnimationDuration}
+          stickAnimationAmount={stickAnimationAmount}
+        />
+        <div
+          id='magneticComponent'
+          style={{
+            borderRadius: '20px',
+            background: '#c5ded8',
+            padding: '2em',
+            display: 'grid',
+            placeItems: 'center'
+          }}
+          data-cursor-magnetic
+          data-cursor-stick='#stick-title'
+        >
+          <h1 style={{ margin: '0' }} id='stick-title'>Magnetic & Sticky</h1>
+          <h3 style={{ margin: '0' }}>Hover To see Effect</h3></div>
+
+
+      </div>
+    );
+  };
+  return demoComponent();
 };
 
-storiesOf('Cursor/Magnetic', module)
-  // .add('Docs', () => <ShowDocs md={require('../docs/test.md')} />)
-  .add('Demo', () => <Demo />);
+export default {
+  title: 'Cursor/Magnetic',
+  decorators: [withKnobs],
+};
+

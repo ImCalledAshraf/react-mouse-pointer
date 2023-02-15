@@ -1,46 +1,43 @@
-import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 import { Cursor } from '../src/Cursor';
 import '../src/misc/style.css';
 // @ts-ignore
 import ShowDocs from './util/ShowDocs';
+import { withKnobs } from '@storybook/addon-knobs';
 
-const Demo = () => {
-  return (
-    <div style={{ height: '100vh', display: 'grid', placeItems: 'center' }}>
-      <Cursor isGelly={true} cursorSize={30} />
-      <div
-        data-cursor-stick="#stick-title"
-        // data-cursor-magnetic
-        // data-cursor-magnetic-amount="0.9"
-        // data-cursor-magnetic-duration="1.9"
-      >
-        <h1 id="stick-title">Magnetic Cursor</h1>
+
+export const Docs = () => (
+  <ShowDocs md={require('../docs/stickyCursor.md')} />
+);
+
+
+export const Demo = () => {
+  const demoComponent = () => {
+    return (
+      <div style={{ height: '95vh', display: 'grid', placeItems: 'center' }}>
+        <Cursor isGelly={true} cursorSize={30} />
+        <div
+          style={{
+            borderRadius:'20px',
+            background: '#c5ded8',
+            padding: '2em',
+            display: 'grid',
+            placeItems: 'center'
+          }}
+          data-cursor-stick="#stick-title"
+        >
+          <h1 style={{margin:'0'}} id="stick-title">Sticky</h1>
+          <h3 style={{margin:'0'}}>Hover To see Effect</h3>
+        </div>
+
       </div>
-      {/*<div*/}
-      {/*  // data-cursor-magnetic*/}
-      {/*  // data-cursor-transparency='0%'*/}
-      {/*  // data-cursor-magnetic-amount='1.9'*/}
-      {/*  // data-cursor-magnetic-duration="1.9"*/}
-      {/*  data-cursor-stick='#stick-title'*/}
-      {/*  data-cursor-outline-color='lime'*/}
-      {/*  data-cursor-size='60px'*/}
-      {/*>*/}
-      {/*  <img id='stick-title' src={'/images/icon.png'} height={50} width={50} />*/}
-      {/*</div>*/}
+    );
+  };
+  return demoComponent()
+}
 
-      {/*<div*/}
-      {/*  data-cursor-magnetic*/}
-      {/*  data-cursor-transparency='0%'*/}
-      {/*  // data-cursor-stick='#stick-title'*/}
-      {/*  // data-cursor-size='80px'*/}
-      {/*  style={{ background: 'red', 'width': '50px', height: '50px' }}>*/}
-      {/*  <img id='stick-title' src={'/images/icon.png'} height={50} width={50} />*/}
-      {/*</div>*/}
-    </div>
-  );
+export default {
+  title: 'Cursor/Sticky',
+  decorators: [withKnobs],
 };
 
-storiesOf('Cursor/StickyCursor', module)
-  // .add('Docs', () => <ShowDocs md={require('../docs/test.md')} />)
-  .add('Demo', () => <Demo />);
