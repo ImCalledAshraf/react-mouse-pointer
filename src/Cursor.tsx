@@ -134,14 +134,14 @@ export const Cursor: FC<CursorProps> = ({
   useLayoutEffect(() => {
     set.x = gsap.quickSetter(cursor.current, 'x', 'px');
     set.y = gsap.quickSetter(cursor.current, 'y', 'px');
+      if (isGelly) {
+        set.r = gsap.quickSetter(cursor.current, 'rotate', 'deg');
+        set.sx = gsap.quickSetter(cursor.current, 'scaleX');
+        set.sy = gsap.quickSetter(cursor.current, 'scaleY');
+        set.width = gsap.quickSetter(cursor.current, 'width', 'px');
+        set.rt = gsap.quickSetter(cursorInner.current, 'rotate', 'deg');
+      }
 
-    if (isGelly) {
-      set.r = gsap.quickSetter(cursor.current, 'rotate', 'deg');
-      set.sx = gsap.quickSetter(cursor.current, 'scaleX');
-      set.sy = gsap.quickSetter(cursor.current, 'scaleY');
-      set.width = gsap.quickSetter(cursor.current, 'width', 'px');
-      set.rt = gsap.quickSetter(cursorInner.current, 'rotate', 'deg');
-    }
   });
 
   const loop = useCallback(() => {
@@ -150,6 +150,8 @@ export const Cursor: FC<CursorProps> = ({
 
     set.x(pos.x);
     set.y(pos.y);
+    set.sx(1);
+    set.sy(1);
 
     if (isGelly && scale && rotation && cursor.current) {
       set.width(cursor.current?.style.height + scale * gellyAnimationAmount);
@@ -603,6 +605,8 @@ export const Cursor: FC<CursorProps> = ({
     shapeShiftElements.forEach((el) => {
       el.addEventListener('mouseenter', (e: MouseEvent) => {
         if (e.target instanceof HTMLElement && cursor.current) {
+          // isShapeShifting = true;
+          rotateCursor = false;
           let calculatedBorderRadius;
           if (e.target.dataset.cursorBorderRadius) {
             calculatedBorderRadius = e.target.dataset.cursorBorderRadius;
@@ -624,6 +628,7 @@ export const Cursor: FC<CursorProps> = ({
     shapeShiftElements.forEach((el) => {
       el.addEventListener('mouseleave', (e: MouseEvent) => {
         if (e.target instanceof HTMLElement && cursor.current) {
+          rotateCursor = true;
           gsap.to(`#${cursor.current.id}`, {
             width: `${cursorSize}`,
             height: `${cursorSize}`,

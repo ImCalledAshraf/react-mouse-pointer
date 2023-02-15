@@ -1,4 +1,4 @@
-import { withKnobs} from '@storybook/addon-knobs';
+import {  withKnobs } from '@storybook/addon-knobs';
 import { Cursor } from '../src/Cursor';
 import '../src/misc/style.css';
 // @ts-ignore
@@ -16,6 +16,7 @@ export const Docs = () => (
 );
 
 export const Normal = () => {
+  // const isGelly = boolean('isGelly', true);
 
   const demoComponent = () => {
     return (
