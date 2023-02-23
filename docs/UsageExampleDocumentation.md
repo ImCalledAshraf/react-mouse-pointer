@@ -1,4 +1,4 @@
-<h2>How to Use</h2>
+<h2>📄 How to Use</h2>
 <hr>
 <p>Import <code>Cursor</code> and <code>CursorStyle</code> from <code>react-mouse-pointer</code></p>
 <pre>
