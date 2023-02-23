@@ -16,7 +16,7 @@ export const Demo = () => {
   );
   const cusorBackgroundImage = text(
     '<CursorStyle> data-cursor-background-imag',
-    '/images/image-tv.png'
+    './images/image-tv.png'
   );
   const cursorBorderRadiusOnHover = text('<CursorStyle> data-cursor-border-radius', '100%');
   const cursorSizeOnHover = number('<CursorStyle>Cursor Size On Hover', 200);

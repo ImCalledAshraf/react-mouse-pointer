@@ -1,7 +1,9 @@
 <div align="center">
   <h1 >
   <br>
-  <img height="50px" src="https://github.com/ImCalledAshraf/react-mouse-pointer" alt="Logo">
+  <a href="https://github.com/ImCalledAshraf/react-mouse-pointer">
+  <img height="50px" src="https://i.postimg.cc/1R29N5wH/icon.png" alt="Logo">
+  </a>
   <br>
   React Mouse Pointer
   </h1>
