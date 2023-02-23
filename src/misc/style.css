@@ -1,4 +1,10 @@
-.c-cursor {
+/*:root {*/
+  /*--opacity-duration: 300ms;*/
+/*  --glow-card-proximity-opacity: 0;*/
+/*  --glow-card-hover-opacity: 0;*/
+/*}*/
+
+.pointer-cursor {
   position: fixed;
   top: 0;
   left: 0;
@@ -9,7 +15,8 @@
   contain: layout style size;
   transform: translate(-50%, -50%);
 }
-.c-cursor__inner {
+
+.pointer-cursor__inner {
   position: absolute;
   top: 0;
   left: 0;
@@ -32,15 +39,18 @@
   background-repeat: no-repeat !important;
   background-size: cover !important;
 }
-.c-cursor__img {
+
+.pointer-cursor__img {
   width: 100%;
   height: 100%;
   border-radius: 100%;
   filter: invert(1);
 }
+
 [data-cursor-size], [data-cursor-background-image], [data-cursor-color], [data-cursor-exclusion], [data-cursor-text], [data-cursor-stick], [data-cursor-magnetic] {
   position: relative;
 }
+
 [data-cursor-size]::before, [data-cursor-background-image]::before, [data-cursor-color]::before, [data-cursor-exclusion]::before, [data-cursor-text]::before, [data-cursor-stick]::before, [data-cursor-magnetic]::before {
   content: '';
   position: absolute;
@@ -50,7 +60,75 @@
   bottom: 0;
   background-color: transparent;
 }
+
 [data-cursor-size] a, [data-cursor-background-image] a, [data-cursor-color] a, [data-cursor-exclusion] a, [data-cursor-text] a, [data-cursor-stick] a, [data-cursor-magnetic] a, [data-cursor-size] button, [data-cursor-background-image] button, [data-cursor-color] button, [data-cursor-exclusion] button, [data-cursor-text] button, [data-cursor-stick] button, [data-cursor-magnetic] button, [data-cursor-size] input, [data-cursor-background-image] input, [data-cursor-color] input, [data-cursor-exclusion] input, [data-cursor-text] input, [data-cursor-stick] input, [data-cursor-magnetic] input, [data-cursor-size] textarea, [data-cursor-background-image] textarea, [data-cursor-color] textarea, [data-cursor-exclusion] textarea, [data-cursor-text] textarea, [data-cursor-stick] textarea, [data-cursor-magnetic] textarea {
   pointer-events: painted;
   transform: translate(0, 0) !important;
 }
+
+/*--------------------------------------------------------------*/
+/*----------------*//*----Tilt Style------*//*------------------*/
+/*--------------------------------------------------------------*/
+/*-*/
+
+/*--------------------------------------------------------------*/
+/*----------------*//*----Glow Style------*//*------------------*/
+/*--------------------------------------------------------------*/
+.glow-card::after {
+  opacity: var(--glow-card-opacity);
+}
+
+.glow-card {
+  position: relative;
+}
+
+.glow-card:hover::before {
+  opacity: var(--glow-card-hover-opacity);
+  transition: opacity var(--opacity-duration);
+}
+
+.glow-card::before {
+  border-radius: inherit;
+  content: "";
+  height: 100%;
+  left: 0px;
+  opacity: 0;
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  transition: opacity var(--opacity-duration);
+
+}
+
+.glow-card::after {
+  border-radius: inherit;
+  content: "";
+  height: 100%;
+  left: 0px;
+  opacity: 0;
+  position: absolute;
+  top: 0px;
+  width: 100%;
+}
+
+.glow-card::before {
+  background: radial-gradient(
+    var(--color-hover-size) circle at var(--mouse-x) var(--mouse-y),
+    var(--color-hover),
+    transparent 40%
+  );
+  opacity: 0;
+  z-index: 3;
+}
+
+.glow-card::after {
+  background: radial-gradient(
+    var(--color-proximity-size) circle at var(--mouse-x) var(--mouse-y),
+    var(--color-proximity),
+    transparent 40%
+  );
+  opacity: var(--glow-card-proximity-opacity);
+  z-index: 1;
+}
+
+/*-----------------------------------------------------------------------*/

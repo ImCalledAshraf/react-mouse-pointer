@@ -13,7 +13,7 @@
   "typings": "lib/index.d.ts",
   "scripts": {
     "start": "yarn storybook",
-    "test": "jest --maxWorkers 2",
+    "test": "jest --maxWorkers 2 --passWithNoTests",
     "test:ssr": "jest --maxWorkers 2 --config ./jest.config.node.ts",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
@@ -52,7 +52,8 @@
     "access": "public"
   },
   "dependencies": {
-    "gsap": "^3.10.3"
+    "gsap": "^3.10.3",
+    "react-device-detect": "^2.2.3"
   },
   "peerDependencies": {
     "react": "^16.8.0  || ^17.0.0 || ^18.0.0",

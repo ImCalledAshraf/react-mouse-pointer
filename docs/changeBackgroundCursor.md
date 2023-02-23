@@ -1,5 +1,5 @@
-<h3>
-Change Crusor Background 
+<h2>
+🗺️ Change Crusor Background 
 </h3>
 <p>
 </p>
@@ -10,50 +10,37 @@ Change Crusor Background
 
 
 [//]: # (------------------------------------------)
-<p> <b> Related Component Props:</b> </p>
-<p> TBD</p>
-<pre>
-<b>backgroundImageAnimationDuration</b>
-// Type: Number
-// Default:
-</pre>
+<h3>🌍 Global Cursor Component Props </h3>
 
-<pre>
-<b>backgroundImageAnimationEase</b>
-// Type:  Ease
-// Default:
-</pre>
-
-[//]: # (----)
-<hr>
-
-[//]: # (------------------------------------------)
-
-
-[//]: # (------------------------------------------)
-<p> <b> Change Cursor Background Image From [ Data Attribute ]:</b> </p>
-<p> TBD </p>
-<pre>
-<b>data-cursor-background-image</b>="IMG_PATH"
-</pre>
-
-[//]: # (----)
-<hr>
-
-[//]: # (------------------------------------------)
-
-
-
-[//]: # (------------------------------------------)
-<p> <b> Examples :</b> </p>
-
-[//]: # (<p>Data Attribute</p>)
-<pre><code>&lt;Cursor/&gt;
-&lt;div <b>data-cursor-background-image</b>="/images/1.jpg"&gt;
-   &lt;h3 Hover to change Cursor BG&lt;/h3&gt;
-&lt;/div&gt;
+<p> <b> Change Background Image Animation Duration :</b> </p>
+<pre><code>&lt;Cursor <b>backgroundImageAnimationDuration={0}</b> /&gt;
 </code></pre>
 
+<p> <b> Change Background Image Animation Ease :</b> </p>
+<pre><code>&lt;Cursor <b>backgroundImageAnimationEase={'Expo.easeOut'}</b> /&gt;
+</code></pre>
+
+[//]: # (----)
 <hr>
-<p> <b> Demo :</b> </p>
-<a href='/?path=/story/cursor-changecolor--demo'>Click Here</a>
+
+[//]: # (------------------------------------------)
+
+
+[//]: # (------------------------------------------)
+<h3>⭐️ CursorStyle Component Props </h3>
+<p> <b> Change Background Image Path :</b> </p>
+<pre><code>&lt;CursorStyle <b>cursorOutlineColor={'blue'}</b> &gt;
+</code></pre>
+
+<p> <b> Change Background Image Scale :</b> </p>
+<pre><code>&lt;CursorStyle <b>cursorOutlineColor={'blue'}</b> &gt;
+</code></pre>
+
+<p> <b> Change Background Image Animation Duration :</b> </p>
+<pre><code>&lt;CursorStyle <b>backgroundImageAnimationDuration={0}</b> &gt;
+</code></pre>
+
+<p> <b> Change Background Image Animation Ease :</b> </p>
+<pre><code>&lt;CursorStyle <b>backgroundImageAnimationEase={'Expo.easeOut'}</b> &gt;
+</code></pre>
+

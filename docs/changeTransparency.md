@@ -1,6 +1,6 @@
-<h3>
-Change Cursor Transparency
-</h3>
+<h2>
+🔦 Change Cursor Transparency
+</h2>
 <p>
 </p>
 
@@ -8,53 +8,23 @@ Change Cursor Transparency
 <hr>
 
 [//]: # (------------------------------------------)
-<p> <b> Related Component Attributes :</b> </p>
-<p> TBD </p>
-<pre>
-cursorTransparency
-// Default
-// Type
-</pre>
-
-[//]: # (----)
-<hr>
+<h3>🌍 Global Cursor Component Props </h3>
 
 [//]: # (------------------------------------------)
-
-[//]: # (------------------------------------------)
-<p> <b> Data Attributes</b> </p>
-<p> TBD </p>
-<p>If youwish to hadnle transparency of a certain element, use the following data attribute:</p>
-<pre>
-data-cursor-transparency="100%"
-</pre>
-Example:
-<pre>
-&lt;div <b>data-cursor-transparency</b> = "50%">
-  &lt;h1 id="stick-title">50% Transparency&lt;/h1>
-&lt;/div>
-
-</pre>
-
-[//]: # (----)
-<hr>
-
-[//]: # (------------------------------------------)
-<p> <b> Examples :</b> </p>
-<p>Prop</p>
-<pre><code>&lt;Cursor cursorSize={50}/&gt;
+<p> <b> Change Cursor Transparency :</b> </p>
+<pre><code>&lt;Cursor <b>cursorTransparency={'50%'}</b> /&gt;
 </code></pre>
 
-<p>Data Attribute</p>
-<pre><code>&lt;Cursor cursorTransparency={"70%"} /&gt;
-&lt;div <b>data-cursor-transparency</b> = "50%">
-  &lt;h1 id="stick-title">50% Transparency&lt;/h1>
-&lt;/div>
-&lt;div <b>data-cursor-transparency</b> = "10%">
-  &lt;h1 id="stick-title">10% Transparency&lt;/h1>
-&lt;/div>
-</code></pre>
+[//]: # (------------------------------------------)
 
 <hr>
-<p> <b> Demo :</b> </p>
-<a href='/?path=/story/cursor-changecolor--demo'>Click Here</a>
+
+[//]: # (------------------------------------------)
+<h3>⭐️ CursorStyle Component Props </h3>
+<p> <b> Change Background Color :</b> </p>
+<pre><code>&lt;CursorStyle <b>cursorTransparency={'10%'}</b> &gt;
+  &lt;div&gt;
+    &lt;h3 Change Cursor Transparency&lt;/h3&gt;
+  &lt;/div&gt;
+&lt;/CursorStyle&gt;
+</code></pre>

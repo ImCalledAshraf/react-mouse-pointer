@@ -1,58 +1,66 @@
-[//]: # (// TODO: Add Inner Background Color Documentation)
-<h3>
-Change Color Cursor
-</h3>
+<h2>
+🎨 Change Color Cursor
+</h2>
 <hr>
 
 [//]: # (------------------------------------------)
-<p> <b> Related Component Props:</b> </p>
-<p> TBD</p>
-<pre>
-  <b>elementFloatAmount</b>
-  // Type: Number
-  // Default:
-</pre>
-<pre>
-  <b>elementFloatDuration</b>
-  // Type: Number
-  // Default:
-</pre>
-<pre>
-  <b>elementFloatFollow</b>
-  // Type: Boolean
-  // Default:
-</pre>
-
-[//]: # (----)
-<hr>
+<h3>🌍 Global Cursor Component Props </h3>
 
 [//]: # (------------------------------------------)
-
-<p> <b> Data Attributes :</b> </p>
-<p> To Change Background Color</p>
-
-<pre>
-data-cursor-background-color
-// Default : None
-</pre>
-<p> To Change Outline Color</p>
-<pre>
-data-cursor-outline-color
-// Default : black
-</pre>
-<hr>
-<p> <b> Examples :</b> </p>
-<p>Background Color</p>
-<pre><code>&lt;div data-cursor-background-color="red"&gt;
-   &lt;h3 Change Cursor Background Color &lt;/h3&gt;
-&lt;/div&gt;
+<p> <b> Change Outline Color :</b> </p>
+<pre><code>&lt;Cursor <b>cursorOutlineColor={'blue'}</b> &gt;
 </code></pre>
-<p>Outline Color</p>
-<pre><code>&lt;div data-cursor-outline-color="blue"&gt;
-   &lt;h3 Change Cursor Outline Color &lt;/h3&gt;
-&lt;/div&gt;
+<p> <b> Change Background Color :</b> </p>
+<pre><code>&lt;Cursor <b>cursorBackgroundColor={'red'}</b> &gt;
+</code></pre>
+<p> <b> Change Inner Color :</b> </p>
+<pre><code>&lt;Cursor <b>cursorInnerColor={'yellow'}</b> &gt;
+</code></pre>
+<p> <b> Change Duration & Ease :</b> </p>
+<pre><code>&lt;Cursor 
+  <b>colorAnimationDuration={0.2}
+  colorAnimationEase={'Power4.easeOut'}</b>
+&gt;
 </code></pre>
 
-<hr>
-<p> <b> Demo :</b> </p>
-<a href='/?path=/story/cursor-changecolor--demo'>Click Here</a>
+[//]: # (------------------------------------------)
+<h3>⭐️ CursorStyle Component Props </h3>
+
+[//]: # (------------------------------------------)
+<p> <b> Change Outline Color :</b> </p>
+<pre><code>&lt;CursorStyle <b>cursorOutlineColor={'blue'}</b> &gt;
+  &lt;div&gt;
+    &lt;h3 Change Cursor Outline Color&lt;/h3&gt;
+  &lt;/div&gt;
+&lt;/CursorStyle&gt;
+</code></pre>
+
+<p> <b> Change Background Color :</b> </p>
+<pre><code>&lt;CursorStyle <b>cursorBackgroundColor={'red'}</b> &gt;
+  &lt;div&gt;
+    &lt;h3 Change Cursor Background Color&lt;/h3&gt;
+  &lt;/div&gt;
+&lt;/CursorStyle&gt;
+</code></pre>
+
+<p> <b> Change Inner Color :</b> </p>
+<pre><code>&lt;CursorStyle <b>cursorInnerColor={'yellow'}</b> &gt;
+  &lt;div&gt;
+    &lt;h3 Change Cursor Inner Text Color&lt;/h3&gt;
+  &lt;/div&gt;
+&lt;/CursorStyle&gt;
+</code></pre>
+
+<p> <b> Change Duration & Ease :</b> </p>
+<pre><code>&lt;CursorStyle 
+  cursorBackgroundColor={'red'}
+  <b>colorAnimationDuration={0.2}
+  colorAnimationEase={'Power4.easeOut'}</b> &gt;
+  &lt;div&gt;
+    &lt;h3 Change Cursor Animation Duration & Ease &lt;/h3&gt;
+  &lt;/div&gt;
+&lt;/CursorStyle&gt;
+</code></pre>
+<p>The <code>cursorBackgroundColor</code> was added just to visualize the Color Animation Duration and Ease Change</p>
+
+

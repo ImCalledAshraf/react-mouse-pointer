@@ -1,46 +1,35 @@
-<h3>
-Exclusion Cursor
-</h3>
-<p>
-</p>
+<h2>
+🎴 Exclusion Cursor
+</h2>
 
 [//]: # (----)
 <hr>
 
 [//]: # (------------------------------------------)
-<p> <b> Related Component Props :</b> </p>
-<p> TBD </p>
-<pre>
-<b>exclusionBackgroundColor </b>
-// Default : 
-// Type
-</pre>
-
-[//]: # (----)
-<hr>
+<h3>🌍 Global Cursor Component Props </h3>
 
 [//]: # (------------------------------------------)
-
-[//]: # (------------------------------------------)
-<p><b> Using Data Attributes </b></p>
-<p> TBD </p>
-<pre>
-data-cursor-exclusion
-</pre>
-
-[//]: # (----)
-<hr>
-
-[//]: # (------------------------------------------)
-<p> <b> Examples :</b> </p>
-
-<pre><code>&lt;Cursor /&gt;
-&lt;div style={{ backgroundColor: 'white' }}>
-&lt;div data-cursor-exclusion &gt;
-   &lt;h3 Exclusion Cursor &lt;/h3&gt;
-&lt;/div&gt;
+<p> <b> Change Exclusion Background Color :</b> </p>
+<pre><code>&lt;Cursor <b>exclusionBackgroundColor={'red'}</b> /&gt;
 </code></pre>
 
+
+[//]: # (------------------------------------------)
 <hr>
-<p> <b> Demo :</b> </p>
-<a href='/?path=/story/cursor-changecolor--demo'>Click Here</a>
+<h3>⭐️ CursorStyle Component Props </h3>
+
+<p> <b> Add Exclusion Effect :</b> </p>
+<pre><code>&lt;CursorStyle <b>exclusion={true}</b> &gt;
+  &lt;div&gt;
+    &lt;h3 Exclusion &lt;/h3&gt;
+  &lt;/div&gt;
+&lt;/CursorStyle&gt;
+</code></pre>
+
+<p> <b> Change Exclusion Background Color :</b> </p>
+<pre><code>&lt;CursorStyle <b>exclusionBackgroundColor={'blue'}</b> &gt;
+  &lt;div&gt;
+    &lt;h3 Exclusion BG Color Blue &lt;/h3&gt;
+  &lt;/div&gt;
+&lt;/CursorStyle&gt;
+</code></pre>

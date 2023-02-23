@@ -1,0 +1,42 @@
+
+.glow-card::after {
+  opacity: var(--glow-card-opacity);
+}
+.glow-card {
+  position: relative;
+}
+.glow-card:hover::before {
+  opacity: var(--glow-card-hover-opacity);
+}
+.glow-card::before,
+.glow-card::after {
+  border-radius: inherit;
+  content: "";
+  height: 100%;
+  left: 0px;
+  opacity: 0;
+  position: absolute;
+  top: 0px;
+  transition: opacity var(--opacity-duration);
+  width: 100%;
+}
+.glow-card::before {
+  background: radial-gradient(
+    var(--color-hover-size) circle at var(--mouse-x) var(--mouse-y),
+    var(--color-hover),
+    transparent 40%
+  );
+  opacity: 0;
+  z-index: 3;
+}
+.glow-card::after {
+  background: radial-gradient(
+    var(--color-proximity-size) circle at var(--mouse-x) var(--mouse-y),
+    var(--color-proximity),
+    transparent 40%
+  );
+  opacity: var(--glow-card-proximity-opacity);
+  z-index: 1;
+}
+
+
