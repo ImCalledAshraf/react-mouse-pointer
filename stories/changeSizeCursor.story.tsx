@@ -7,10 +7,7 @@ import '../src/misc/style.css';
 import ShowDocs from './util/ShowDocs';
 import { boolean, number, text, withKnobs } from '@storybook/addon-knobs';
 
-
-export const Docs = () => (
-  <ShowDocs md={require('../docs/changeSizeCursor.md')} />
-);
+export const Docs = () => <ShowDocs md={require('../docs/changeSizeCursor.md')} />;
 
 export const Demo = () => {
   const isGelly = boolean('isGelly', false);
@@ -29,12 +26,8 @@ export const Demo = () => {
           cursorOutlineWidth={cursorOutlineWidth}
           sizeAnimationDuration={sizeAnimationDuration}
           // sizeAnimationEase={}
-
         />
-        <CursorStyle
-          cursorSize={cursorSizeOnHover}
-          cursorOutlineWidth={cursorOutlineWidthOnHover}
-        >
+        <CursorStyle cursorSize={cursorSizeOnHover} cursorOutlineWidth={cursorOutlineWidthOnHover}>
           <div
             // data-cursor-size={cursorSizeOnHover}
             // data-cursor-outline-width={cursorOutlineWidthOnHover}
@@ -44,15 +37,19 @@ export const Demo = () => {
               // outline: '2px solid orange',
               padding: '2em',
               display: 'grid',
-              placeItems: 'center'
+              placeItems: 'center',
             }}>
-            <h1 style={{ margin: '0' }} id='stick-title'>Change Cursor Size</h1>
+            <h1 style={{ margin: '0' }} id="stick-title">
+              Change Cursor Size
+            </h1>
             <h3 style={{ margin: '0' }}>Hover To see Effect</h3>
-            <p style={{ margin: '0' }}>Wrapped with <b> &lt;CursorStyle </b> cursorSize=&#123;{cursorSizeOnHover}&#125;&#62; cursorOutlineWidth=&#123;{cursorOutlineWidthOnHover}<b> &#125;&#62;  &lt;/CursorStyle&gt;</b> </p>
-
+            <p style={{ margin: '0' }}>
+              Wrapped with <b> &lt;CursorStyle </b> cursorSize=&#123;{cursorSizeOnHover}&#125;&#62;
+              cursorOutlineWidth=&#123;{cursorOutlineWidthOnHover}
+              <b> &#125;&#62; &lt;/CursorStyle&gt;</b>{' '}
+            </p>
           </div>
         </CursorStyle>
-
       </div>
     );
   };

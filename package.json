@@ -13,7 +13,7 @@
   "typings": "lib/index.d.ts",
   "scripts": {
     "start": "yarn storybook",
-    "test": "jest --maxWorkers 2",
+    "test": "jest --maxWorkers 2 --passWithNoTests",
     "test:ssr": "jest --maxWorkers 2 --config ./jest.config.node.ts",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",

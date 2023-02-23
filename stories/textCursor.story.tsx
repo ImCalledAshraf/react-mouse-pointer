@@ -5,11 +5,7 @@ import '../src/misc/style.css';
 import ShowDocs from './util/ShowDocs';
 import { number, text, withKnobs } from '@storybook/addon-knobs';
 
-
-export const Docs = () => (
-  <ShowDocs md={require('../docs/textCursor.md')} />
-);
-
+export const Docs = () => <ShowDocs md={require('../docs/textCursor.md')} />;
 
 export const Demo = () => {
   const demoComponent = () => {
@@ -27,7 +23,6 @@ export const Demo = () => {
           cursorSize={cursorSize}
           // textAnimationEase={}
           // textAnimationDuration={}
-
         />
         <CursorStyle
           cursorBackgroundColor={cursorBackgroundColorOnHover}
@@ -37,9 +32,7 @@ export const Demo = () => {
           // cursorTextOpacity={0.2}
           // textAnimationDuration={}
           // textAnimationEase={}
-          cursorSize={cursorSizeOnHover}
-        >
-
+          cursorSize={cursorSizeOnHover}>
           <div
             style={{
               borderRadius: '20px',
@@ -48,35 +41,32 @@ export const Demo = () => {
               // display: 'grid',
               // alignContent:'top',
               // alignItems: 'left',
-
-            }}
-          >
-            <div style={{textAlign:'left'}}>
-
-            <h1 style={{ margin: '0' }} id='stick-title'>Change Cursor BG Image</h1>
-            <h3 style={{ margin: '0' }}>Hover To see Effect</h3>
-            <p style={{ margin: '0' }}>Wrapped with :</p>
-            <p></p>
+            }}>
+            <div style={{ textAlign: 'left' }}>
+              <h1 style={{ margin: '0' }} id="stick-title">
+                Change Cursor BG Image
+              </h1>
+              <h3 style={{ margin: '0' }}>Hover To see Effect</h3>
+              <p style={{ margin: '0' }}>Wrapped with :</p>
+              <p></p>
 
               <p style={{ margin: '0' }}>
-                <b> &lt;CursorStyle </b> <br /> cursorBackgroundColor
-                = &#123;'{cursorBackgroundColorOnHover}'&#125; <br />
+                <b> &lt;CursorStyle </b> <br /> cursorBackgroundColor = &#123;'
+                {cursorBackgroundColorOnHover}'&#125; <br />
                 {/*----*/}
-                cursorText
-                = &#123;'{cursorText}'&#125; <br />
+                cursorText = &#123;'{cursorText}'&#125; <br />
                 {/*----*/}
-                cursorTextColor
-                = &#123;'{cursorTextColor}'&#125; <br />
+                cursorTextColor = &#123;'{cursorTextColor}'&#125; <br />
                 {/*----*/}
                 cursorTextScale = &#123;{cursorTextScale}&#125; <br />
                 {/*----*/}
-                cursorSize
-                = &#123;'{cursorSizeOnHover}'&#125;
+                cursorSize = &#123;'{cursorSizeOnHover}'&#125;
                 {/*----*/}
-
-                <b> &#62; <br /> &lt;/CursorStyle&gt;</b>
+                <b>
+                  {' '}
+                  &#62; <br /> &lt;/CursorStyle&gt;
+                </b>
               </p>
-
             </div>
           </div>
         </CursorStyle>
