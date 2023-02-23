@@ -52,7 +52,7 @@
 
 <hr>
 <h2 id="contributing">📑 Changelog</h2>
-<p>See <code><a href='https://github.com/ImCalledAshraf/react-mouse-pointer/blob/main/Changelog.md'>changelog.md</a></code> .</p>
+<p>See <code><a href='https://github.com/ImCalledAshraf/react-mouse-pointer/blob/main/CHANGELOG.md'>changelog.md</a></code> .</p>
 
 <hr>
 <h2 id="contributing">💌 Contributing</h2>

@@ -1,4 +1,5 @@
 <h2 id="hooks">💅 Cursor Style Props</h2>
+<hr>
 <p><b>Expected Behaviour : </b> <code>CursorStyle</code> Component wraps around other elements in the DOM / Web 
 flow, and can add certain effects and/or override the default <code>Cursor</code>'s behaviour with the targeted (wrapped) element.
 (IE: Override Cursor Size for a particular Element , Add Magnetic Effect to a particular Element..)

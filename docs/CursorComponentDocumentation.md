@@ -1,5 +1,6 @@
 
 <h2 id="hooks">💠 Cursor Component Props</h2>
+<hr>
 <p>The Cursor Component is as follows :</p>
 <pre><code>&lt;Cursor/&gt;
 </code></pre>
