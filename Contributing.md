@@ -33,7 +33,7 @@
 <h3>🧰  Commits & Pushes</h3>
 <h6> Commit Messages </h6>
 
-- <p> This repo uses semantic-release and conventional commit messages (Commitizen) so prefix your commits with fix: or feat: if you want your changes to appear in release notes.</p>
+- <p> This repo uses <a href='https://gist.github.com/joshbuchea/6f47e86d2510bce28f8e7f42ae84c716'> semantic-release </a> and conventional commit messages (Commitizen) so prefix your commits with fix: or feat: if you want your changes to appear in release notes.</p>
 - <p>A list of available Convetional Commit Messages:<img src="https://raw.githubusercontent.com/commitizen/cz-cli/master/meta/screenshots/add-commit.png" alt="GPLv3 License"></p>
 
 
