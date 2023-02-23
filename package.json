@@ -1,6 +1,6 @@
 {
   "name": "react-mouse-pointer",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "React Library to manage cursor for creative endeavours",
   "main": "lib/index.js",
   "module": "esm/index.js",
