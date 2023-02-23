@@ -23,6 +23,7 @@ export const Normal = () => {
       <div style={{ height: '95vh' }}>
         <Cursor
           isGelly={false}
+          // disableOnMobile={false}
         />
         <div style={{
           borderRadius: '20px',

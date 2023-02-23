@@ -1,56 +1,52 @@
-<h3>
-Sticky Cursor 
-</h3>
-<p>
-</p>
+<h2>
+📌 Sticky Cursor 
+</h2>
 
 [//]: # (----)
 <hr>
 
 [//]: # (------------------------------------------)
-<p> <b> Related Component Props:</b> </p>
-<p> TBD</p>
-<pre>
-<b>stickAnimationAmount</b>
-// Type: Number
-// Default:
-</pre>
-
-<pre>
-<b>stickAnimationEase</b>
-// Type:  Ease
-// Default:
-</pre>
-
-[//]: # (----)
-<hr>
-
-[//]: # (------------------------------------------)
-
-[//]: # (------------------------------------------)
-<p> <b> Add Sticky Cursor To Element:</b> </p>
-<p> TBD </p>
-<p>The Parent Element of the sticky child should have the following attribute:</p>
-<pre>
-<b>data-cursor-stick = "#stick-title" </b>
-</pre>
-<p>With the Sticky Element having the following ID:</p>
-<pre>
-<b>id = "stick-title"</b>
-</pre>
-
-[//]: # (----)
-<hr>
-
-[//]: # (------------------------------------------)
-<p> <b> Examples :</b> </p>
-
-
-<pre><code>&lt;div data-cursor-stick="#stick-title"&gt;
-   &lt;id="stick-title"> Sticky Cursor &lt;/h3&gt;
-&lt;/div&gt;
+<h3>🌍 Global Cursor Component Props </h3>
+<p> <b> Change Stick Effect Amount / Intensity:</b> </p>
+<pre><code>&lt;Cursor <b>stickAnimationAmount={0.9}</b> /&gt;
 </code></pre>
 
+<p> <b> Change Stick Effect Animation Ease :</b> </p>
+<pre><code>&lt;Cursor <b>stickAnimationEase={'Expo.easeOut'}</b> /&gt;
+</code></pre>
+
+[//]: # (----)
 <hr>
-<p> <b> Demo :</b> </p>
-<a href='/?path=/story/cursor-changecolor--demo'>Click Here</a>
+
+[//]: # (------------------------------------------)
+
+[//]: # (------------------------------------------)
+<h3>⭐️ CursorStyle Component Props </h3>
+
+[//]: # (---------)
+<p> <b> Set Targeted element to Sticky :</b> </p>
+<pre><code>&lt;CursorStyle <b>isSticky={true}</b> &gt;
+  &lt;div&gt;
+    &lt;h3 Sticky Element &lt;/h3&gt;
+  &lt;/div&gt;
+&lt;/CursorStyle&gt;
+</code></pre>
+
+<p> <b> Change Stick Effect Amount / Intensity:</b> </p>
+<pre><code>&lt;CursorStyle <b>stickAnimationAmount={0.9}</b> &gt;
+  &lt;div&gt;
+    &lt;h3 Sticky Element &lt;/h3&gt;
+  &lt;/div&gt;
+&lt;/CursorStyle&gt;
+</code></pre>
+
+<p> <b> Change Stick Effect Animation Ease :</b> </p>
+<pre><code>&lt;CursorStyle <b>stickAnimationEase={'Expo.easeOut'}</b> &gt;
+  &lt;div&gt;
+    &lt;h3 Sticky Element &lt;/h3&gt;
+  &lt;/div&gt;
+&lt;/CursorStyle&gt;
+</code></pre>
+
+
+[//]: # (---------)

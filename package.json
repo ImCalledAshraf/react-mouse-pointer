@@ -52,7 +52,8 @@
     "access": "public"
   },
   "dependencies": {
-    "gsap": "^3.10.3"
+    "gsap": "^3.10.3",
+    "react-device-detect": "^2.2.3"
   },
   "peerDependencies": {
     "react": "^16.8.0  || ^17.0.0 || ^18.0.0",

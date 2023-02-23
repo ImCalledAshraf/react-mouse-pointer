@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Cursor } from '../src/Cursor';
+import { Cursor, CursorStyle } from '../src/Cursor';
 import '../src/misc/style.css';
 // @ts-ignore
 import ShowDocs from './util/ShowDocs';
@@ -19,19 +19,35 @@ export const ShapeShift = () => {
         <Cursor
           isGelly={false}
           cursorSize={30}
-          shapeShiftDuration={shapeShiftDuration}
+          shapeShiftAnimationDuration={shapeShiftDuration}
         />
-        <div
-          data-cursor-shapeshift
-          style={{
-            borderRadius: '20px 40px 180px 20px',
-            background: '#c5ded8',
-            width: '200px',
-            padding: '2em'
-          }}>
-          <h1 style={{ margin: '0' }} id='stick-title'>Shapeshift</h1>
-          <h3 style={{ margin: '0' }}>Hover To see Effect</h3>
-        </div>
+        <CursorStyle
+          shapeShift={true}
+        >
+          <div
+            style={{
+              borderRadius: '20px 40px 180px 20px',
+              background: '#c5ded8',
+              width: '250px',
+              padding: '2em'
+            }}>
+            <h1 style={{ margin: '0' }} id='stick-title'>ShapeShift</h1>
+            <h3 style={{ margin: '0' }}>Hover To see Effect</h3>
+            <p style={{ margin: '0' }}>Wrapped with :</p>
+            <p></p>
+            <div style={{textAlign:'left'}}>
+
+              <p style={{ margin: '0' }}>
+                <b> &lt;CursorStyle </b> <br /> shapeShift
+                = &#123;true&#125;
+                {/*----*/}
+                <b> &#62; <br /> &lt;/CursorStyle&gt;</b>
+              </p>
+
+            </div>
+          </div>
+        </CursorStyle>
+
       </div>
     );
   };
@@ -43,23 +59,47 @@ export const ShapeShiftWithStickyMagnetic = () => {
   const demoComponent = () => {
     return (
       <div style={{ height: '95vh', display: 'grid', placeItems: 'center' }}>
-        <Cursor isGelly={false} cursorSize={30} shapeShiftDuration={shapeShiftDuration} />
-        <div
-          data-cursor-stick='#stick-title'
-          data-cursor-magnetic
-          data-cursor-shapeshift
-          style={{
-            borderRadius: '20px 40px 180px 20px',
-            background: '#c5ded8',
-            width: '200px',
-            padding: '2em'
+        <Cursor
+          isGelly={false}
+          cursorSize={30}
+          shapeShiftAnimationDuration={shapeShiftDuration}
+          // shapeShiftAnimationEase={}
+        />
+        <CursorStyle
+          shapeShift={true}
+          // shapeShiftAnimationDuration={}
+          // shapeShiftAnimationEase={}
+          isSticky={true}
+          isMagnetic={true}
+        >
+          <div
+            style={{
+              borderRadius: '20px 40px 180px 20px',
+              background: '#c5ded8',
+              width: '250px',
+              padding: '2em'
 
-          }}>
-          <h2 style={{ margin: '0' }} id='stick-title'>Magnetic Sticky Shapeshift</h2>
-          <h3 style={{ margin: '0' }}>Hover To see Effect</h3>
-        </div>
+            }}>
+            <h1 style={{ margin: '0' }} id='stick-title'>Shapeshift With Sticky & Magnetic</h1>
+            <h3 style={{ margin: '0' }}>Hover To see Effect</h3>
+            <p style={{ margin: '0' }}>Wrapped with :</p>
+            <p></p>
+            <div style={{textAlign:'left'}}>
 
+              <p style={{ margin: '0' }}>
+                <b> &lt;CursorStyle </b> <br /> shapeShift
+                = &#123;true&#125; <br/>
+                 isSticky
+                = &#123;true&#125; <br/>
+                isMagnetic
+                = &#123;true&#125;
+                {/*----*/}
+                <b> &#62; <br /> &lt;/CursorStyle&gt;</b>
+              </p>
 
+            </div>
+          </div>
+        </CursorStyle>
       </div>
     );
   };

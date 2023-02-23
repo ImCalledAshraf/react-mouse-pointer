@@ -1,51 +1,48 @@
-<h3>
-Shapeshit Cursor 
-</h3>
-<p>
-</p>
+<h2>
+🧬 Shapeshit Cursor 
+</h2>
 
 [//]: # (----)
 <hr>
 
 [//]: # (------------------------------------------)
-<p> <b> Related Component Props:</b> </p>
-<p> TBD</p>
-<pre>
-<b>shapeShiftDuration</b>
-// Type: Number
-// Default:
-</pre>
-
-<pre>
-<b>shapeShiftAnimationEase</b>
-// Type:  Ease
-// Default:
-</pre>
-
-[//]: # (----)
-<hr>
+<h3>🌍 Global Cursor Component Props </h3>
 
 [//]: # (------------------------------------------)
-
-[//]: # (------------------------------------------)
-<p> <b> Shapeshift Cursor :</b> </p>
-<p> TBD </p>
-<pre>
-data-cursor-shapeshift
-</pre>
-
-[//]: # (----)
-<hr>
-
-[//]: # (------------------------------------------)
-<p> <b> Examples :</b> </p>
-
-<pre><code>&lt;Cursor/&gt;
-&lt;div data-cursor-shapeshift &gt;
-   &lt;h3 Cursor Will match Element's Shape&lt;/h3&gt;
-&lt;/div&gt;
+<p> <b> Change Shapeshift Animation Duration :</b> </p>
+<pre><code>&lt;Cursor <b>shapeShiftDuration={0.9}</b> /&gt;
 </code></pre>
 
+<p> <b> Change Shapeshift Animation Ease :</b> </p>
+<pre><code>&lt;Cursor <b>shapeShiftAnimationEase={'Expo.easeOut'}</b> /&gt;
+</code></pre>
+
+[//]: # (----)
+[//]: # (------------------------------------------)
 <hr>
-<p> <b> Demo :</b> </p>
-<a href='/?path=/story/cursor-changecolor--demo'>Click Here</a>
+<h3>⭐️ CursorStyle Component Props </h3>
+
+<p> <b> Add Shapeshift Effect to Element :</b> </p>
+<pre><code>&lt;CursorStyle <b>shapeShift={true}</b> &gt;
+  &lt;div&gt;
+    &lt;h3 Set Cursor Text Value&lt;/h3&gt;
+  &lt;/div&gt;
+&lt;/CursorStyle&gt;
+</code></pre>
+
+<p> <b> Change Shapeshift Effect Animation Duration :</b> </p>
+<pre><code>&lt;CursorStyle <b>shapeShiftAnimationDuration={0.9}</b> &gt;
+  &lt;div&gt;
+    &lt;h3 Set Cursor Text Value&lt;/h3&gt;
+  &lt;/div&gt;
+&lt;/CursorStyle&gt;
+</code></pre>
+
+<p> <b> Change Shapeshift Effect Animation Ease :</b> </p>
+<pre><code>&lt;CursorStyle <b>shapeShiftAnimationEase={'Expo.easeOut'}</b> &gt;
+  &lt;div&gt;
+    &lt;h3 Set Cursor Text Value&lt;/h3&gt;
+  &lt;/div&gt;
+&lt;/CursorStyle&gt;
+</code></pre>
+

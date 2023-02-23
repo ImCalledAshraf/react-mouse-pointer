@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Cursor } from '../src/Cursor';
+import { Cursor, CursorStyle } from '../src/Cursor';
 import '../src/misc/style.css';
 // @ts-ignore
 import ShowDocs from './util/ShowDocs';
@@ -12,12 +12,12 @@ export const Docs = () => (
 export const Demo = () => {
   const isGelly = boolean('isGelly', false);
   const cursorSize = number('Cursor Size', 50);
-  const cursorOutlineColor = text('Cursor Outline Color', 'red');
-  const cursorOutlineColorOnHover = text('Cursor Outline Color On Hover', 'green');
-  const cursorBackgroundColor = text('Cursor Background Color', 'greenyellow');
-  const cursorBackgroundColorOnHover = text('Cursor Background Color On Hover', 'orange');
   const cursorOutlineWidth = text('Cursor Outline Width', '6px');
-  const cursorOutlineWidthOnHover = text('Cursor Outline Width On Hover', '6px');
+  const cursorOutlineColor = text('Cursor Outline Color', 'red');
+  const cursorOutlineColorOnHover = text('<CursorStyle>Cursor Outline Color On Hover', 'green');
+  const cursorBackgroundColor = text('Cursor Background Color', 'greenyellow');
+  const cursorBackgroundColorOnHover = text('<CursorStyle>Cursor Background Color On Hover', 'orange');
+  // const cursorOutlineWidthOnHover = text('Cursor Outline Width On Hover', '6px');
   const demoComponent = () => {
     return (
       <div style={{ height: '95vh' }}>
@@ -28,34 +28,45 @@ export const Demo = () => {
           cursorOutlineColor={cursorOutlineColor}
           cursorOutlineWidth={cursorOutlineWidth}
         />
-        <div data-cursor-background-color={cursorBackgroundColorOnHover}
-             style={{
-               borderRadius:'20px',
-               background: '#E0EFEA',
-               padding: '2em',
-               display: 'grid',
-               placeItems: 'center'
-             }}
+        <CursorStyle
+          cursorBackgroundColor={cursorBackgroundColorOnHover}
         >
-          <h1 id='stick-title'>Hover to Change Cursor Background Color</h1>
-        </div>
+          <div
+            style={{
+              borderRadius: '20px',
+              background: '#E0EFEA',
+              padding: '2em',
+              display: 'grid',
+              placeItems: 'center'
+            }}
+          >
+            <h1 style={{ margin: '0' }} id='stick-title'>Change Cursor Background Color</h1>
+            <h3 style={{ margin: '0' }}>Hover To see Effect</h3>
+            <p style={{ margin: '0' }}>Wrapped with <b> &lt;CursorStyle </b> cursorBackgroundColor=&#123;'{cursorBackgroundColorOnHover}'&#125;&#62; <b> &#125;&#62;  &lt;/CursorStyle&gt;</b> </p>
+
+          </div>
+        </CursorStyle>
+
         <br />
         <br />
         <br />
-        <div
-          data-cursor-outline-color={cursorOutlineColorOnHover}
-          data-cursor-outline-width={cursorOutlineWidthOnHover}
-             style={{
-               // background: 'greenyellow',
-               borderRadius:'20px',
-               outline: '2px solid orange',
-               padding: '2em',
-               display: 'grid',
-               placeItems: 'center'
-             }}
+        <CursorStyle
+        cursorOutlineColor={cursorOutlineColorOnHover}
         >
-          <h1 id='stick-title'>Hover to Change Cursor Outline Color</h1>
-        </div>
+          <div
+            style={{
+              // background: 'greenyellow',
+              borderRadius: '20px',
+              outline: '2px solid orange',
+              padding: '2em',
+              display: 'grid',
+              placeItems: 'center'
+            }}
+          >
+            <h1 style={{ margin: '0' }} id='stick-title'>Change Cursor Outline Color</h1>
+            <h3 style={{ margin: '0' }}>Hover To see Effect</h3>
+            <p style={{ margin: '0' }}>Wrapped with <b> &lt;CursorStyle </b> cursorOutlineColor=&#123;'{cursorOutlineColorOnHover}'&#125;&#62; <b> &#125;&#62;  &lt;/CursorStyle&gt;</b> </p>          </div>
+        </CursorStyle>
       </div>
     );
   };

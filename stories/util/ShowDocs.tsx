@@ -8,7 +8,7 @@ const ShowDocs = (props) => {
     {},
     h('div', {
       style: {
-        padding: '0 20px',
+        padding: '0 0px',
       },
       dangerouslySetInnerHTML: {
         __html: props.md.default,
@@ -42,9 +42,6 @@ div {
   width: 100%;
 }
 
-div img {
-  width: 100%;
-}
 
 blockquote p {
   font-size: 1.5rem;
@@ -80,8 +77,7 @@ pre, pre code {
 
 pre {
   background-color: #fafafa;
-  font-size: .8rem;
-  overflow-x: scroll;
+  overflow-x: auto;
   padding: 1.125em;
 }
 

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Cursor } from '../src/Cursor';
+import { Cursor, CursorStyle } from '../src/Cursor';
 import '../src/misc/style.css';
 // @ts-ignore
 import ShowDocs from './util/ShowDocs';
@@ -9,7 +9,6 @@ export const Docs = () => (
   <ShowDocs md={require('../docs/magneticCrusor.md')} />
 );
 export const Magnetic = () => {
-  const animationDuration = number('animationDuration', 1.25);
   const magneticAnimationAmount = number('Magnetic Animation Amount', 0.5);
   const magneticAnimationDuration = number('Magnetic Animation Duration', 0.9);
   const demoComponent = () => {
@@ -18,24 +17,38 @@ export const Magnetic = () => {
         <Cursor
           isGelly={true}
           cursorSize={30}
-          animationDuration={animationDuration}
           magneticAnimationAmount={magneticAnimationAmount}
           magneticAnimationDuration={magneticAnimationDuration}
         />
-        <div
-          style={{
-            borderRadius: '20px',
-            background: '#c5ded8',
-            padding: '2em',
-            display: 'grid',
-            placeItems: 'center'
-          }}
-          data-cursor-magnetic
+        <CursorStyle
+          isMagnetic={true}
         >
-          <h1 style={{ margin: '0' }} id='stick-title'>Magnetic</h1>
-          <h3 style={{ margin: '0' }}>Hover To see Effect</h3>
-        </div>
 
+          <div
+            style={{
+              borderRadius: '20px',
+              background: '#c5ded8',
+              padding: '2em',
+              display: 'grid',
+              placeItems: 'center'
+            }}
+          >
+            <h1 style={{ margin: '0' }} id='stick-title'>Magnetic Effect</h1>
+            <h3 style={{ margin: '0' }}>Hover To see Effect</h3>
+            <p style={{ margin: '0' }}>Wrapped with :</p>
+            <p></p>
+            <div style={{textAlign:'center'}}>
+
+              <p style={{ margin: '0' }}>
+                <b> &lt;CursorStyle </b> <br /> isMagnetic
+                = &#123;true&#125;
+
+                <b> &#62; <br /> &lt;/CursorStyle&gt;</b>
+              </p>
+
+            </div>
+          </div>
+        </CursorStyle>
 
       </div>
     );
@@ -43,7 +56,6 @@ export const Magnetic = () => {
   return demoComponent();
 };
 export const MagneticWithSticky = () => {
-  const animationDuration = number('animationDuration', 1.25);
   const magneticAnimationAmount = number('Magnetic Animation Amount', 0.5);
   const magneticAnimationDuration = number('Magnetic Animation Duration', 0.9);
   const stickAnimationAmount = number('Stick Animation Amount', 0.1);
@@ -54,26 +66,48 @@ export const MagneticWithSticky = () => {
         <Cursor
           isGelly={true}
           cursorSize={30}
-          animationDuration={animationDuration}
           magneticAnimationAmount={magneticAnimationAmount}
           magneticAnimationDuration={magneticAnimationDuration}
+          // magneticAnimationEase={}
           stickAnimationAmount={stickAnimationAmount}
+          disableOnMobile={true}
         />
-        <div
-          id='magneticComponent'
-          style={{
-            borderRadius: '20px',
-            background: '#c5ded8',
-            padding: '2em',
-            display: 'grid',
-            placeItems: 'center'
-          }}
-          data-cursor-magnetic
-          data-cursor-stick='#stick-title'
+        <CursorStyle
+          isMagnetic={true}
+          // magneticAnimationEase={}
+          // magneticAnimationDuration={}
+          // magneticAnimationAmount={}
+          isSticky={true}
         >
-          <h1 style={{ margin: '0' }} id='stick-title'>Magnetic & Sticky</h1>
-          <h3 style={{ margin: '0' }}>Hover To see Effect</h3></div>
 
+          <div
+            id='magneticComponent'
+            style={{
+              borderRadius: '20px',
+              background: '#c5ded8',
+              padding: '2em',
+              display: 'grid',
+              placeItems: 'center'
+            }}
+
+          >
+            <h1 style={{ margin: '0' }} id='stick-title'>Magnetic With Sticky</h1>
+            <h3 style={{ margin: '0' }}>Hover To see Effect</h3>
+            <p style={{ margin: '0' }}>Wrapped with :</p>
+            <p></p>
+            <div style={{textAlign:'center'}}>
+
+              <p style={{ margin: '0' }}>
+                <b> &lt;CursorStyle </b> <br /> isMagnetic
+                = &#123;true&#125;<br/>
+                isSticky
+                = &#123;true&#125;
+                <b> &#62; <br /> &lt;/CursorStyle&gt;</b>
+              </p>
+
+            </div>
+          </div>
+        </CursorStyle>
 
       </div>
     );
