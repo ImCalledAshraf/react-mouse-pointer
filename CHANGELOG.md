@@ -3,9 +3,6 @@
 
 ### Bug Fixes
 
-* **style:** style issue fixed ([d6c77f3](https://github.com/ImCalledAshraf/react-mouse-pointer/commit/d6c77f3f044dc46bb75e5db95d4f8d93c75deda9))
-* **style:** style issue fixed ([6b64d4b](https://github.com/ImCalledAshraf/react-mouse-pointer/commit/6b64d4b5f35d36c8e2fdb8971f9cca37e0d0a6cf))
-* **style:** style issue fixed ([d1e2763](https://github.com/ImCalledAshraf/react-mouse-pointer/commit/d1e2763bb3885543b2371c1c85fb7cab32e8d13a))
 * **style:** style issue fixed ([11d4678](https://github.com/ImCalledAshraf/react-mouse-pointer/commit/11d46780183166056851229bf52b7c7a3d0a3379))
 
 ## [1.0.1](https://github.com/ImCalledAshraf/react-mouse-pointer/compare/v1.0.0...v1.0.1) (2023-02-23)
