@@ -24,7 +24,7 @@
     "build:es": "tsc -m esNext --outDir esm",
     "build": "yarn build:cjs && yarn build:es && yarn copy-style",
     "copy-style": "copyfiles -u 1 -E -V  \"src/misc/**/*\" lib/ && copyfiles -u 1 -E -V  \"src/misc/**/*\" esm/",
-    "copy-files": "copyfiles -u 1 -E -V  \"src/components/*/images/**/*\" \"src/style/assets/**/*.otf\"  \"src/style/base.css\" \"src/**/*.*css\" lib/",
+    "copy-files": "copyfiles -u 1 -E -V  \"src/components/*/icons/images/**/*\" \"src/style/assets/**/*.otf\"  \"src/style/base.css\" \"src/**/*.*css\" lib/",
     "clean": "rimraf lib storybook-static esm",
     "storybook": "start-storybook -p 6008",
     "storybook:build": "build-storybook",
