@@ -635,7 +635,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
         if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-magnetic-amount')) {
-              recurItem.removeAttribute('data-cursor-magnetic-amount');
+              recurItem.setAttribute('data-cursor-magnetic-amount', `${magneticAmount}`);
             }
           }
         } else {
@@ -650,7 +650,10 @@ const CursorStyle: FC<CrusorStyleProps> = ({
         if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-magnetic-animation-duration')) {
-              recurItem.removeAttribute('data-cursor-magnetic-animation-duration');
+              recurItem.setAttribute(
+                'data-cursor-magnetic-animation-duration',
+                `${magneticAnimationDuration}`
+              );
             }
           }
         } else {
@@ -668,7 +671,10 @@ const CursorStyle: FC<CrusorStyleProps> = ({
         if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-magnetic-animation-ease')) {
-              recurItem.removeAttribute('data-cursor-magnetic-animation-ease');
+              recurItem.setAttribute(
+                'data-cursor-magnetic-animation-ease',
+                `${magneticAnimationEase}`
+              );
             }
           }
         } else {
@@ -701,7 +707,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
         if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-stick-amount')) {
-              recurItem.removeAttribute('data-cursor-stick-amount');
+              recurItem.setAttribute('data-cursor-stick-amount', `${stickAmount}`);
             }
           }
         } else {
@@ -716,7 +722,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
         if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-stick-animation-ease')) {
-              recurItem.removeAttribute('data-cursor-stick-animation-ease');
+              recurItem.setAttribute('data-cursor-stick-animation-ease', `${stickAnimationEase}`);
             }
           }
         } else {
