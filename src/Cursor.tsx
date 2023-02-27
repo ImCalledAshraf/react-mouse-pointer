@@ -303,7 +303,6 @@ const Cursor: FC<CursorProps> = ({
     }
   }, [gellyAnimationAmount, disableOnMobile, isGelly, pos.x, pos.y, set, vel.x, vel.y]);
   useLayoutEffect(() => {
-    // let stickStatus = false;
     const setFromEvent = (e: MouseEvent) => {
       // eslint-disable-next-line react-hooks/rules-of-hooks
       const areatarget = e.target as HTMLElement;
@@ -464,7 +463,6 @@ interface CrusorStyleProps {
   /*-Outline-*/
   cursorOutlineWidth?: string;
   cursorOutlineColor?: string;
-  // cursorOutlineStyle?: string;
   /*-Shapeshift-*/
   shapeShift?: string | boolean;
   shapeShiftAnimationDuration?: number;
@@ -617,9 +615,8 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (isMagnetic) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
-            // console.log(recurItem.getAttribute('data-cursor-magnetic'));
             if (recurItem.getAttribute('data-cursor-magnetic') === 'false') {
               recurItem.removeAttribute('data-cursor-magnetic');
             } else {
@@ -635,7 +632,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (magneticAmount) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-magnetic-amount')) {
               recurItem.removeAttribute('data-cursor-magnetic-amount');
@@ -650,7 +647,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (magneticAnimationDuration) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-magnetic-animation-duration')) {
               recurItem.removeAttribute('data-cursor-magnetic-animation-duration');
@@ -668,7 +665,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (magneticAnimationEase) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-magnetic-animation-ease')) {
               recurItem.removeAttribute('data-cursor-magnetic-animation-ease');
@@ -684,7 +681,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (isSticky) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (recurItem.getAttribute('data-cursor-stick') === 'false') {
               recurItem.removeAttribute('data-cursor-stick');
@@ -701,7 +698,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (stickAmount) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-stick-amount')) {
               recurItem.removeAttribute('data-cursor-stick-amount');
@@ -716,7 +713,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (stickAnimationEase) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-stick-animation-ease')) {
               recurItem.removeAttribute('data-cursor-stick-animation-ease');
@@ -732,7 +729,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (shapeShift) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (recurItem.getAttribute('data-cursor-shapeshift') === 'false') {
               recurItem.removeAttribute('data-cursor-shapeshift');
@@ -749,7 +746,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (shapeShiftAnimationDuration) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-shapeshift-animation-duration')) {
               recurItem.setAttribute(
@@ -770,7 +767,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (shapeShiftAnimationEase) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-shapeshift-animation-ease')) {
               recurItem.setAttribute(
@@ -789,7 +786,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (cursorSize) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-size')) {
               recurItem.setAttribute('data-cursor-size', `${cursorSize}`);
@@ -803,7 +800,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (sizeAnimationDuration) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-size-animation-duration')) {
               recurItem.setAttribute(
@@ -820,7 +817,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (sizeAnimationEase) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-size-animation-ease')) {
               recurItem.setAttribute('data-cursor-size-animation-ease', `${sizeAnimationEase}`);
@@ -834,7 +831,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (cursorBorderRadius) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-border-radius')) {
               recurItem.setAttribute('data-cursor-border-radius', `${cursorBorderRadius}`);
@@ -849,7 +846,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (cursorTransparency) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-transparency')) {
               recurItem.setAttribute('data-cursor-transparency', `${cursorTransparency}`);
@@ -865,10 +862,8 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (cursorText) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        // console.log('Outer Text: ', item.getAttribute('data-cursor-text'));
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
-            // console.log('Cur Text: ', recurItem.getAttribute('data-cursor-text'));
             if (!recurItem.getAttribute('data-cursor-text')) {
               recurItem.setAttribute('data-cursor-text', `${cursorText}`);
             }
@@ -881,7 +876,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (cursorTextScale) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-text-scale')) {
               recurItem.setAttribute('data-cursor-text-scale', `${cursorTextScale}`);
@@ -895,7 +890,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (cursorTextColor) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-text-color')) {
               recurItem.setAttribute('data-cursor-text-color', `${cursorTextColor}`);
@@ -909,7 +904,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (cursorTextOpacity) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-text-opacity')) {
               recurItem.setAttribute('data-cursor-text-opacity', `${cursorTextOpacity}`);
@@ -923,7 +918,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (textAnimationDuration) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-text-animation-duration')) {
               recurItem.setAttribute(
@@ -940,7 +935,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (textAnimationEase) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-text-animation-ease')) {
               recurItem.setAttribute('data-cursor-text-animation-ease', `${textAnimationEase}`);
@@ -955,7 +950,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (float) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (recurItem.getAttribute('data-cursor-float') === 'false') {
               recurItem.removeAttribute('data-cursor-float');
@@ -970,7 +965,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
       if (floatAmount) {
         // @ts-ignore
         for (let item of cursorStyle.current?.children) {
-          if (item.className === 'pointer-cursor-style') {
+          if (item.className === 'p-c-s') {
             for (let recurItem of item.children) {
               if (!recurItem.getAttribute('data-cursor-float-amount')) {
                 recurItem.setAttribute('data-cursor-float-amount', `${floatAmount}`);
@@ -984,7 +979,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
       if (floatFollow) {
         // @ts-ignore
         for (let item of cursorStyle.current?.children) {
-          if (item.className === 'pointer-cursor-style') {
+          if (item.className === 'p-c-s') {
             for (let recurItem of item.children) {
               if (recurItem.getAttribute('data-cursor-float-follow') === 'false') {
                 recurItem.removeAttribute('data-cursor-float-follow');
@@ -1000,7 +995,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
       if (floatTriggerOffset) {
         // @ts-ignore
         for (let item of cursorStyle.current?.children) {
-          if (item.className === 'pointer-cursor-style') {
+          if (item.className === 'p-c-s') {
             for (let recurItem of item.children) {
               if (!recurItem.getAttribute('data-cursor-float-trigger-offset')) {
                 recurItem.setAttribute('data-cursor-float-trigger-offset', `${floatTriggerOffset}`);
@@ -1014,7 +1009,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
       if (floatSpringToPosition) {
         // @ts-ignore
         for (let item of cursorStyle.current?.children) {
-          if (item.className === 'pointer-cursor-style') {
+          if (item.className === 'p-c-s') {
             for (let recurItem of item.children) {
               if (recurItem.getAttribute('data-cursor-float-spring-to-position') === 'false') {
                 recurItem.removeAttribute('data-cursor-float-spring-to-position');
@@ -1033,7 +1028,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
       if (floatAnimationDuration) {
         // @ts-ignore
         for (let item of cursorStyle.current?.children) {
-          if (item.className === 'pointer-cursor-style') {
+          if (item.className === 'p-c-s') {
             for (let recurItem of item.children) {
               if (!recurItem.getAttribute('data-cursor-float-animation-duration')) {
                 recurItem.setAttribute(
@@ -1050,7 +1045,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
       if (floatAnimationEase) {
         // @ts-ignore
         for (let item of cursorStyle.current?.children) {
-          if (item.className === 'pointer-cursor-style') {
+          if (item.className === 'p-c-s') {
             for (let recurItem of item.children) {
               if (!recurItem.getAttribute('data-cursor-float-animation-ease')) {
                 recurItem.setAttribute('data-cursor-float-animation-ease', `${floatAnimationEase}`);
@@ -1066,7 +1061,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (cursorBackgroundColor) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-background-color')) {
               recurItem.setAttribute('data-cursor-background-color', `${cursorBackgroundColor}`);
@@ -1080,7 +1075,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (cursorOutlineColor) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-outline-color')) {
               recurItem.setAttribute('data-cursor-outline-color', `${cursorOutlineColor}`);
@@ -1094,7 +1089,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (cursorOutlineWidth) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-outline-width')) {
               recurItem.setAttribute('data-cursor-outline-width', `${cursorOutlineWidth}`);
@@ -1108,7 +1103,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (colorAnimationDuration) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-color-animation-duration')) {
               recurItem.setAttribute(
@@ -1125,7 +1120,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (colorAnimationEase) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-color-animation-ease')) {
               recurItem.setAttribute('data-cursor-color-animation-ease', `${colorAnimationEase}`);
@@ -1140,7 +1135,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (cursorBackgroundImage) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-background-image')) {
               recurItem.setAttribute('data-cursor-background-image', `${cursorBackgroundImage}`);
@@ -1154,7 +1149,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (cursorBackgroundImageScale) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-background-image-scale')) {
               recurItem.setAttribute(
@@ -1171,7 +1166,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (backgroundImageAnimationDuration) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-background-image-animation-duration')) {
               recurItem.setAttribute(
@@ -1191,7 +1186,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (backgroundImageAnimationEase) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-background-image-animation-ease')) {
               recurItem.setAttribute(
@@ -1212,7 +1207,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (tilt) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (recurItem.getAttribute('data-cursor-tilt') === 'false') {
               recurItem.removeAttribute('data-cursor-tilt');
@@ -1228,7 +1223,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (tiltAmount) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-tilt-amount')) {
               recurItem.setAttribute('data-cursor-tilt-amount', `${tiltAmount}`);
@@ -1242,7 +1237,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (tiltTriggerOffset) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-tilt-trigger-offset')) {
               recurItem.setAttribute('data-cursor-tilt-trigger-offset', `${tiltTriggerOffset}`);
@@ -1256,7 +1251,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (tiltAnimationDuration) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-tilt-animation-duration')) {
               recurItem.setAttribute(
@@ -1273,7 +1268,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (tiltAnimationEase) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-tilt-animation-ease')) {
               recurItem.setAttribute('data-cursor-tilt-animation-ease', `${tiltAnimationEase}`);
@@ -1288,7 +1283,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (exclusion) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (recurItem.getAttribute('data-cursor-exclusion') === 'false') {
               recurItem.removeAttribute('data-cursor-exclusion');
@@ -1304,7 +1299,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (exclusionBackgroundColor) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-exclusion-background-color')) {
               recurItem.setAttribute(
@@ -1327,9 +1322,8 @@ const CursorStyle: FC<CrusorStyleProps> = ({
       glow === 'true' ? cursorStyle.current?.setAttribute('data-cursor-glow', `${glow}`) : null;
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
-            console.log(recurItem.getAttribute('data-cursor-glow-element'));
             if (recurItem.getAttribute('data-cursor-glow-element') === 'false') {
               recurItem.removeAttribute('data-cursor-glow-element');
             } else {
@@ -1346,7 +1340,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (glowProximityColor) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-glow-proximity-color')) {
               recurItem.setAttribute('data-cursor-glow-proximity-color', `${glowProximityColor}`);
@@ -1360,7 +1354,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (glowHoverColor) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-glow-hover-color')) {
               recurItem.setAttribute('data-cursor-glow-hover-color', `${glowHoverColor}`);
@@ -1374,7 +1368,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (glowProximityColorOpacity) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-glow-proximity-color-opacity')) {
               recurItem.setAttribute(
@@ -1394,7 +1388,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (glowHoverColorOpacity) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-glow-hover-color-opacity')) {
               recurItem.setAttribute(
@@ -1411,7 +1405,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (glowProximityColorSize) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-glow-proximity-color-size')) {
               recurItem.setAttribute(
@@ -1428,7 +1422,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (glowHoverColorSize) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-glow-hover-color-size')) {
               recurItem.setAttribute('data-cursor-glow-hover-color-size', `${glowHoverColorSize}`);
@@ -1442,7 +1436,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (glowTriggerOffset) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-glow-trigger-offset')) {
               recurItem.setAttribute('data-cursor-glow-trigger-offset', `${glowTriggerOffset}`);
@@ -1456,7 +1450,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (glowAnimationDuration) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-glow-animation-duration')) {
               recurItem.setAttribute(
@@ -1473,7 +1467,7 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     if (glowAnimationEase) {
       // @ts-ignore
       for (let item of cursorStyle.current?.children) {
-        if (item.className === 'pointer-cursor-style') {
+        if (item.className === 'p-c-s') {
           for (let recurItem of item.children) {
             if (!recurItem.getAttribute('data-cursor-glow-animation-ease')) {
               recurItem.setAttribute('data-cursor-glow-animation-ease', `${glowAnimationEase}`);
@@ -1485,7 +1479,6 @@ const CursorStyle: FC<CrusorStyleProps> = ({
       }
     }
     /*---------------------------------------------------------------------------*/
-
     const sizeElements = document.querySelectorAll(
       '[data-cursor-size]'
     ) as unknown as NodeListOf<HTMLElement>;
@@ -1532,9 +1525,8 @@ const CursorStyle: FC<CrusorStyleProps> = ({
     const glowElements = document.querySelectorAll(
       '[data-cursor-glow="true"]'
     ) as unknown as NodeListOf<HTMLElement>;
-    //--------------------------------------------------------------------------------------//[START Elements]
+    //---------------------------------------------------------------------------------------------------[START OF ELEMENTS]--//
     if (!isMobile || !globalProps.disableOnMobile) {
-      //---------------------------------------------------------------------------------------------------[START OF ELEMENTS]--//
       //---- [ Size Elements ]------------------------------------------------------------------------//
       sizeElements.forEach((el) => {
         // @ts-ignore
@@ -1571,7 +1563,6 @@ const CursorStyle: FC<CrusorStyleProps> = ({
       });
       // //---- [ Text Elements ]------------------------------------------------------------------------//
       textElements.forEach((el) => {
-        // console.log('textElements', textElements);
         // @ts-ignore
         let calculatedTextAnimationDuration = el.dataset['cursorTextAnimationDuration']
           ? el.dataset['cursorTextAnimationDuration']
@@ -1841,7 +1832,6 @@ const CursorStyle: FC<CrusorStyleProps> = ({
       });
       //---- [ Floating Elements ]------------------------------------------------------------------------//
       floatingElements.forEach((el) => {
-        console.log('float', floatingElements);
         document.addEventListener('mousemove', (e: MouseEvent) => {
           /*-------------------------------------------------------------------------*/
           let calculatedFloatSpringToPosition = el.dataset['cursorFloatSpringToPosition']
@@ -2217,9 +2207,8 @@ const CursorStyle: FC<CrusorStyleProps> = ({
           setGlobalStickStatus(false);
         });
       });
-      //---------------------------------------------------------------------------------------------------[END OF ELEMENTS]--//
     }
-    //--------------------------------------------------------------------------------------//[END Elements]
+    //---------------------------------------------------------------------------------------------------[END OF ELEMENTS]--//
 
     return () => {
       sizeElements.forEach((el) => {
@@ -2284,8 +2273,8 @@ const CursorStyle: FC<CrusorStyleProps> = ({
   return (
     <>
       <div
-        className={'pointer-cursor-style'}
-        // id={'pointer-cursor-style'} //
+        className={'p-c-s'}
+        // id={'p-c-s'} //
         // @ts-ignore
         style={{ ...style }}
         ref={cursorStyle}
