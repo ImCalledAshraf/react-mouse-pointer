@@ -47,13 +47,12 @@
 
 <p> <b> Add Glow Effect :</b> </p>
 <pre><code>&lt;CursorStyle <b>glow={true}</b> &gt;
-  &lt;div <b>data-cursor-glow-element</b> &gt;
+  &lt;div&gt;
     &lt;h3 Add Glow Effect &lt;/h3&gt;
   &lt;/div&gt;
 &lt;/CursorStyle&gt;
 </code></pre>
-Note that you have to add the following Data Attribute to the elements wrapped by <i>CursorStyle</i> : 
-<code><b>data-cursor-glow-element</b></code>
+
 
 
 <p> <b> Change Glow Hover Color :</b> </p>
