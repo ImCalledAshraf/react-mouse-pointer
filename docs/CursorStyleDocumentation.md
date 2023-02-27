@@ -6,7 +6,7 @@ flow, and can add certain effects and/or override the default <code>Cursor</code
 </p>
 
 <p>
-Consider Checking The <a href="https://imcalledashraf.github.io/react-mouse-pointer/">Docs</a> for more Information
+Consider Checking The <a href="https://imcalledashraf.github.io/react-mouse-pointer/">Demo</a> for more Information
 </p>
 
 <p>The CursorStyle Component is as follows :</p>
@@ -14,9 +14,35 @@ Consider Checking The <a href="https://imcalledashraf.github.io/react-mouse-poin
 ...Elements Here
 &lt;/CursorStyle&gt;
 </code></pre>
+<h3>Nested CursorStyle</h3>
+<p>Nesting CursorStyle Components allow us to precisely customize certain effects and which Components to interact with.</p>
+<b>Example 1:</b>
+<pre><code>&lt;CursorStyle cursorSize={60}&gt;
+  &lt;Element - 1 /&gt;
+  &lt;Element - 2 /&gt;
+  <b style='color : palegoldenrod'>&lt;CursorStyle</b> cursorSize={200} <b style='color : palegoldenrod'>&gt;</b>
+    <i>&lt;Element - 3 /&gt;</i>
+  <b style='color : palegoldenrod'>&lt;/CursorStyle&gt;</b>
+&lt;/CursorStyle&gt;
+</code></pre>
+<p><b>Expected Behaviour:</b> Element 1 & 2 will have the Cursor Size effect of <b>60</b>, 
+while <b>Element 3</b> will have the Cursor Effect of <b>200</b></p>
 <p>and has the following props to handle the cursor's general behaviour :</p>
 
-|     | Misc Props | Functionality                                |
+<b>Example 2:</b>
+<pre><code>&lt;CursorStyle cursorSize={60}&gt;
+  &lt;Element - 1 /&gt;
+  &lt;Element - 2 /&gt;
+  <b style='color : palegoldenrod'>&lt;CursorStyle</b> cursorBackgroundColor={'red'} <b style='color : palegoldenrod'>&gt;</b>
+    <i>&lt;Element - 3 /&gt;</i>
+  <b style='color : palegoldenrod'>&lt;/CursorStyle&gt;</b>
+&lt;/CursorStyle&gt;
+</code></pre>
+<p><b>Expected Behaviour:</b> Element 1 & 2 will have the Cursor Size effect of <b>60</b>, 
+while <b>Element 3</b> will have the Cursor Effect of <b>60</b> and will have a background color of <b>red</b></p>
+<p>and has the following props to handle the cursor's general behaviour :</p>
+
+|     | Misc Props             | Functionality                                |
 |-----|------------------------|----------------------------------------------|
 | 📎  | `style   `             | Add CSS Styling to the <CursorStyle> Element |
 
@@ -28,16 +54,16 @@ Consider Checking The <a href="https://imcalledashraf.github.io/react-mouse-poin
 | 🛑  | `cursorBorderRadius  `    | Adjust Cursor Border Radius    |
 | 🔦  | `cursorTransparency  `    | Adjust Cursor Transparency     |
 
-|        |  Sticky Props	           | Functionality                  | Type      |
-|--------|--------------------------|--------------------------------|-----------|
-| 📌     | `isSticky   `            | Enable/Disable Sticky Effect   | `boolean` |
-| 📌     | `stickAnimationAmount  ` | Adjust Stick Animation Amount	 |           |
-| 📌     | `stickAnimationEase  `   | Adjust Stick Animation Ease	   |           |
+|        | Sticky Props	          | Functionality                  | Type      |
+|--------|------------------------|--------------------------------|-----------|
+| 📌     | `isSticky   `          | Enable/Disable Sticky Effect   | `boolean` |
+| 📌     | `stickAmount   `       | Adjust Stick Animation Amount	 |           |
+| 📌     | `stickAnimationEase  ` | Adjust Stick Animation Ease	   |           |
 
-|     |  Magnetic Props	              | Functionality                       | Type      |
+|     | Magnetic Props	               | Functionality                       | Type      |
 |-----|-------------------------------|-------------------------------------|-----------|
 | 🧲  | `isMagnetic   `               | Enable/Disable Magnetic Effect      | `boolean` |
-| 🧲  | `magneticAnimationAmount  `   | Adjust Magnetic Effect Amount	      |           |
+| 🧲  | `magneticAmount  `            | Adjust Magnetic Effect Amount	      |           |
 | 🧲  | `magneticAnimationDuration  ` | Adjust Magnetic Animation Duration	 |           |
 | 🧲  | `magneticAnimationEase  `     | Adjust Magnetic Animation Ease	     |           |
 
@@ -123,3 +149,4 @@ the differences between the Cursor Background & The Targeted Element Background<
 | 🌟  | `glowEase  `                  | Adjust Glow Effect Animation Ease	     |                     |
 
 <p><b>Note</b> : Consider Reading <a href="https://github.com/ImCalledAshraf/react-mouse-pointer/tree/main/docs/CursorComponentDocumentation.md">Cursor Component</a> Documentation as well.</p>
+

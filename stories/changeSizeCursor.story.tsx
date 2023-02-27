@@ -21,13 +21,20 @@ export const Demo = () => {
     return (
       <div style={{ height: '95vh' }}>
         <Cursor
-          isGelly={isGelly}
+          isGelly={true}
           cursorSize={cursorSize}
           cursorOutlineWidth={cursorOutlineWidth}
           sizeAnimationDuration={sizeAnimationDuration}
+          // cursorBorderRadius={'5'}
+
           // sizeAnimationEase={}
         />
-        <CursorStyle cursorSize={cursorSizeOnHover} cursorOutlineWidth={cursorOutlineWidthOnHover}>
+        <CursorStyle
+          cursorSize={cursorSizeOnHover}
+          cursorOutlineWidth={cursorOutlineWidthOnHover}
+          // cursorBorderRadius={'0'}
+          // sizeAnimationDuration={}
+        >
           <div
             // data-cursor-size={cursorSizeOnHover}
             // data-cursor-outline-width={cursorOutlineWidthOnHover}

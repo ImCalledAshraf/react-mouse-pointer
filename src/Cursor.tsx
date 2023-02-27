@@ -1,7 +1,8 @@
-import React, { FC, useCallback, useLayoutEffect, useRef } from 'react';
+import React, { FC, useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 import './misc/style.css';
 import { isMobile } from 'react-device-detect';
 import { gsap, Expo, Power4 } from 'gsap';
+import createGlobalState from './misc/util/globalState';
 
 interface Pos {
   x?: number;
@@ -67,10 +68,10 @@ interface CursorProps {
   cursorBorderRadius?: string;
   cursorTransparency?: string;
   /*-Stick-*/
-  stickAnimationAmount?: number;
+  stickAmount?: number;
   stickAnimationEase?: string | gsap.EaseFunction | undefined;
   /*-Magnetic-*/
-  magneticAnimationAmount?: number;
+  magneticAmount?: number;
   magneticAnimationDuration?: number;
   magneticAnimationEase?: string | gsap.EaseFunction | undefined;
   /*-Color-*/
@@ -114,7 +115,13 @@ interface CursorProps {
   glowAnimationEase?: string | gsap.EaseFunction | undefined;
 }
 
-export const Cursor: FC<CursorProps> = ({
+export const useGlobalProps = createGlobalState<CursorProps>({});
+export const useGlobalCursorRef = createGlobalState<any>();
+export const useGlobalCursorInnerRef = createGlobalState<any>();
+export const useGlobalStickStatus = createGlobalState<boolean>(false);
+export const useRotateCursor = createGlobalState<boolean>(true);
+
+const Cursor: FC<CursorProps> = ({
   /*-Misc-*/
   animationDuration = 1.25,
   animationEase = Expo.easeOut,
@@ -129,10 +136,10 @@ export const Cursor: FC<CursorProps> = ({
   cursorBorderRadius = '100%',
   cursorTransparency = '100%',
   /*-Stick-*/
-  stickAnimationAmount = 0.1,
+  stickAmount = 0.2,
   stickAnimationEase = Power4.easeOut,
   /*-Magnetic-*/
-  magneticAnimationAmount = 0.5,
+  magneticAmount = 0.5,
   magneticAnimationDuration = 0.9,
   magneticAnimationEase = Power4.easeOut,
   /*-Color-*/
@@ -175,6 +182,15 @@ export const Cursor: FC<CursorProps> = ({
   glowHoverColorSize = '800px',
   glowAnimationEase = Expo.easeOut,
 }) => {
+  // @ts-ignore
+  const [globalProps, setGlobalProps] = useGlobalProps();
+  // @ts-ignore
+  const [globalCursorRef, setGlobalCursorRef] = useGlobalCursorRef();
+  // @ts-ignore
+  const [globalCursorInnerRef, setGlobalCursorInnerRef] = useGlobalCursorInnerRef();
+  const [globalStickStatus, setGlobalStickStatus] = useGlobalStickStatus();
+  const [rotateCursor, setRotateCursor] = useRotateCursor();
+
   // let rotateCursor = true;
   const cursor = useRef<HTMLDivElement | null>(null);
   const cursorInner = useRef<HTMLDivElement | null>(null);
@@ -182,6 +198,73 @@ export const Cursor: FC<CursorProps> = ({
   const pos: Pos = useInstance(() => ({ x: 0, y: 0 }));
   const vel: Vel = useInstance(() => ({ x: 0, y: 0 }));
   const set: any = useInstance();
+  useEffect(() => {
+    setGlobalCursorRef(cursor.current);
+    setGlobalCursorInnerRef(cursorInner.current);
+    setGlobalProps({
+      /*-Misc-*/
+      animationDuration: animationDuration,
+      animationEase: animationEase,
+      disableOnMobile: disableOnMobile,
+      /*-Gelly-*/
+      isGelly: isGelly,
+      gellyAnimationAmount: gellyAnimationAmount,
+      /*-Style-*/
+      cursorSize: cursorSize,
+      sizeAnimationDuration: sizeAnimationDuration,
+      sizeAnimationEase: sizeAnimationEase,
+      cursorBorderRadius: cursorBorderRadius,
+      cursorTransparency: cursorTransparency,
+      /*-Stick-*/
+      stickAmount: stickAmount,
+      stickAnimationEase: stickAnimationEase,
+      /*-Magnetic-*/
+      magneticAmount: magneticAmount,
+      magneticAnimationDuration: magneticAnimationDuration,
+      magneticAnimationEase: magneticAnimationEase,
+      /*-Color-*/
+      colorAnimationEase: colorAnimationEase,
+      colorAnimationDuration: colorAnimationDuration,
+      /*-Background-*/
+      cursorBackgroundColor: cursorBackgroundColor,
+      backgroundImageAnimationEase: backgroundImageAnimationEase,
+      backgroundImageAnimationDuration: backgroundImageAnimationDuration,
+      cursorInnerColor: cursorInnerColor,
+      /*-Outline-*/
+      cursorOutlineWidth: cursorOutlineWidth,
+      cursorOutlineColor: cursorOutlineColor,
+      cursorOutlineStyle: cursorOutlineStyle,
+      /*-Shapeshift-*/
+      shapeShiftAnimationEase: shapeShiftAnimationEase,
+      shapeShiftAnimationDuration: shapeShiftAnimationDuration,
+      /*-Text-*/
+      textAnimationEase: textAnimationEase,
+      textAnimationDuration: textAnimationDuration,
+      /*-Exclusion-*/
+      exclusionBackgroundColor: exclusionBackgroundColor,
+      /*-Float-*/
+      floatAmount: floatAmount,
+      floatAnimationDuration: floatAnimationDuration,
+      floatFollow: floatFollow,
+      floatAnimationEase: floatAnimationEase,
+      floatSpringToPosition: floatSpringToPosition,
+      /*-Tilt-*/
+      tiltAmount: tiltAmount,
+      tiltAnimationDuration: tiltAnimationDuration,
+      tiltAnimationEase: tiltAnimationEase,
+      /*-Glow-*/
+      glowAnimationDuration: glowAnimationDuration,
+      glowProximityColor: glowProximityColor,
+      glowHoverColor: glowHoverColor,
+      glowProximityColorOpacity: glowProximityColorOpacity,
+      glowHoverColorOpacity: glowHoverColorOpacity,
+      glowProximityColorSize: glowProximityColorSize,
+      glowHoverColorSize: glowHoverColorSize,
+      glowAnimationEase: glowAnimationEase,
+    });
+    setGlobalStickStatus(false);
+    setRotateCursor(true);
+  }, []);
   useLayoutEffect(() => {
     set.x = gsap.quickSetter(cursor.current, 'x', 'px');
     set.y = gsap.quickSetter(cursor.current, 'y', 'px');
@@ -206,13 +289,13 @@ export const Cursor: FC<CursorProps> = ({
         set.width(cursor.current?.style.height + scale * gellyAnimationAmount);
         set.sx(1 + scale);
         set.sy(1 - scale);
-        // if (rotateCursor) {
-        set.r(rotation);
-        set.rt(-rotation);
-        // } else {
-        //   set.r(rotation);
-        //   set.rt(-rotation);
-        // }
+        if (rotateCursor) {
+          set.r(rotation);
+          set.rt(-rotation);
+        } else {
+          set.r(0);
+          set.rt(0);
+        }
       }
     } else {
       set.sx(0);
@@ -220,6 +303,1182 @@ export const Cursor: FC<CursorProps> = ({
     }
   }, [gellyAnimationAmount, disableOnMobile, isGelly, pos.x, pos.y, set, vel.x, vel.y]);
   useLayoutEffect(() => {
+    const setFromEvent = (e: MouseEvent) => {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const areatarget = e.target as HTMLElement;
+      let target: HTMLElement | null;
+      let bound: DOMRect | undefined;
+      let x = e.clientX;
+      let y = e.clientY;
+      let duration = animationDuration;
+      let ease = animationEase;
+
+      if (globalStickStatus) {
+        if (areatarget.dataset['cursorStick']) {
+          target = areatarget;
+          bound = target?.getBoundingClientRect();
+          let calculatedStickAnimationAmount = target.dataset['cursorStickAmount']
+            ? target.dataset['cursorStickAmount']
+            : stickAmount;
+          // @ts-ignore
+          let calculatedStickAnimationEase = target.dataset['cursorStickAnimationEase']
+            ? target.dataset['cursorStickAnimationEase']
+            : stickAnimationEase;
+          if (target && bound) {
+            y =
+              bound.top +
+              target.clientHeight / 2 -
+              // @ts-ignore
+              (bound.top + target.clientHeight / 2 - e.clientY) * calculatedStickAnimationAmount;
+            x =
+              bound.left +
+              target.clientWidth / 2 -
+              // @ts-ignore
+              (bound.left + target.clientWidth / 2 - e.clientX) * calculatedStickAnimationAmount;
+            duration = animationDuration;
+            // @ts-ignore
+            ease = calculatedStickAnimationEase;
+          }
+        }
+      }
+      gsap.set(pos, {});
+      const xTo = gsap.quickTo(pos, 'x', {
+        duration,
+        ease,
+        onUpdate: () => {
+          if (pos.x) vel.x = x - pos.x;
+        },
+      });
+      const yTo = gsap.quickTo(pos, 'y', {
+        duration,
+        ease,
+        onUpdate: () => {
+          if (pos.y) vel.y = y - pos.y;
+        },
+      });
+      xTo(x);
+      yTo(y);
+      loop();
+    };
+    //---------------------------------------------------------------------------------------------------[START Listenesers]--//
+    if (!isMobile || !disableOnMobile) {
+      window.addEventListener('mousemove', (e) => {
+        setFromEvent(e);
+      });
+      document.addEventListener('mouseenter', () => {
+        if (cursor.current) {
+          // @ts-ignore
+          gsap.to(`#${cursor.current.id}`, {
+            opacity: 1,
+            duration: animationDuration,
+            ease: animationEase,
+          });
+        }
+      });
+      document.addEventListener('mouseleave', () => {
+        if (cursor.current) {
+          // @ts-ignore
+          gsap.to(`#${cursor.current.id}`, {
+            opacity: 0,
+            duration: animationDuration,
+            ease: animationEase,
+          });
+        }
+      });
+    }
+    //---------------------------------------------------------------------------------------------------[END Listenesers]--//
+
+    return () => {
+      window.removeEventListener('mousemove', setFromEvent);
+      document.removeEventListener('mouseenter', () => {});
+      document.removeEventListener('mouseleave', () => {});
+    };
+  });
+
+  useTicker(loop);
+  return (
+    <div
+      ref={cursor}
+      id={'pointer-cursor'}
+      className="pointer-cursor"
+      style={{
+        width: cursorSize,
+        height: cursorSize,
+        background: cursorBackgroundColor,
+        outlineWidth: cursorOutlineWidth,
+        outlineColor: cursorOutlineColor,
+        outlineStyle: cursorOutlineStyle,
+        borderRadius: `${cursorBorderRadius}`,
+        filter: `opacity(${cursorTransparency}`,
+      }}>
+      <div
+        style={{ color: cursorInnerColor }}
+        ref={cursorInner}
+        id={'pointer-cursorInner'}
+        className="pointer-cursor__inner"
+      />
+    </div>
+  );
+};
+/*--------------------------------------------------------------------------------*/
+/*-*/
+/*-*/
+/*-*/
+/*-*/
+/*--------------------------------------------------------------------------------*/
+/*-------------------------------CursorStyleProp----------------------------------*/
+
+/*--------------------------------------------------------------------------------*/
+interface CrusorStyleProps {
+  /*-Misc-*/
+  children?: JSX.Element | JSX.Element[] | null;
+  style?: CSSStyleDeclaration;
+  // animationDuration?: number;
+  // animationEase?: string | gsap.EaseFunction | undefined;
+  /*-Style-*/
+  cursorSize?: number | string;
+  sizeAnimationDuration?: number;
+  sizeAnimationEase?: string | gsap.EaseFunction | undefined;
+  cursorBorderRadius?: string;
+  cursorTransparency?: string;
+  /*-Stick-*/
+  isSticky?: string | boolean;
+  stickAmount?: number;
+  stickAnimationEase?: string | gsap.EaseFunction | undefined;
+  /*-Magnetic-*/
+  isMagnetic?: string | boolean;
+  magneticAmount?: number;
+  magneticAnimationDuration?: number;
+  magneticAnimationEase?: string | gsap.EaseFunction | undefined;
+  /*-Color-*/
+  colorAnimationEase?: string | gsap.EaseFunction | undefined;
+  colorAnimationDuration?: number;
+  /*-Background-*/
+  cursorBackgroundColor?: string | undefined;
+  cursorBackgroundImage?: string;
+  cursorBackgroundImageScale?: number;
+  backgroundImageAnimationEase?: string | gsap.EaseFunction | undefined;
+  backgroundImageAnimationDuration?: number;
+  cursorInnerColor?: string;
+  /*-Outline-*/
+  cursorOutlineWidth?: string;
+  cursorOutlineColor?: string;
+  /*-Shapeshift-*/
+  shapeShift?: string | boolean;
+  shapeShiftAnimationDuration?: number;
+  shapeShiftAnimationEase?: string | gsap.EaseFunction | undefined;
+  /*-Text-*/
+  cursorText?: string;
+  cursorTextScale?: number | string;
+  cursorTextColor?: string;
+  cursorTextOpacity?: string | number;
+  textAnimationEase?: string | gsap.EaseFunction | undefined;
+  textAnimationDuration?: number;
+  /*-Exclusion-*/
+  exclusion?: string | boolean;
+  exclusionBackgroundColor?: string;
+  /*-Float-*/
+  float?: string | boolean;
+  floatAmount?: number | string;
+  floatFollow?: boolean;
+  floatTriggerOffset?: number | string;
+  floatSpringToPosition?: boolean;
+  floatAnimationDuration?: number | string;
+  floatAnimationEase?: string | gsap.EaseFunction | undefined;
+  /*-Tilt-*/
+  tilt?: string | boolean;
+  tiltAmount?: number | string;
+  tiltTriggerOffset?: number | string;
+  tiltAnimationDuration?: number | string;
+  tiltAnimationEase?: string | gsap.EaseFunction | undefined;
+  /*-Glow-*/
+  glow?: string | boolean;
+  glowProximityColor?: string;
+  glowHoverColor?: string;
+  glowProximityColorOpacity?: string | number;
+  glowHoverColorOpacity?: string | number;
+  glowProximityColorSize?: string;
+  glowHoverColorSize?: string;
+  glowTriggerOffset?: number;
+  glowAnimationDuration?: number;
+  glowAnimationEase?: string | gsap.EaseFunction | undefined;
+}
+
+const CursorStyle: FC<CrusorStyleProps> = ({
+  /*-Misc-*/
+  children,
+  style = null,
+  // animationDuration = null,
+  // animationEase = null,
+  /*-Style-*/
+  cursorSize = null,
+  sizeAnimationDuration = null,
+  sizeAnimationEase = null,
+  cursorBorderRadius = null,
+  cursorTransparency = null,
+  /*-Stick-*/
+  isSticky = null,
+  stickAmount = null,
+  stickAnimationEase = null,
+  /*-Magnetic-*/
+  isMagnetic = null,
+  magneticAmount = null,
+  magneticAnimationDuration = null,
+  magneticAnimationEase = null,
+  /*-Color-*/
+  colorAnimationEase = null,
+  colorAnimationDuration = null,
+  /*-Background-*/
+  cursorBackgroundColor = null,
+  cursorBackgroundImage = null,
+  cursorBackgroundImageScale = null,
+  backgroundImageAnimationEase = undefined,
+  backgroundImageAnimationDuration = null,
+  /*-Outline-*/
+  cursorOutlineWidth = null,
+  cursorOutlineColor = null,
+  /*-Shapeshift-*/
+  shapeShift = null,
+  shapeShiftAnimationDuration = null,
+  shapeShiftAnimationEase = null,
+  /*-Text-*/
+  cursorText = null,
+  cursorTextScale = null,
+  cursorTextColor = null,
+  cursorTextOpacity = null,
+  textAnimationEase = null,
+  textAnimationDuration = null,
+  /*-Exclusion-*/
+  exclusion = null,
+  exclusionBackgroundColor = null,
+  /*-Float-*/
+  float = null,
+  floatAmount = null,
+  floatFollow = null,
+  floatTriggerOffset = null,
+  floatSpringToPosition = null,
+  floatAnimationDuration = null,
+  floatAnimationEase = null,
+  /*-Tilt-*/
+  tilt = null,
+  tiltAmount = null,
+  tiltTriggerOffset = null,
+  tiltAnimationDuration = null,
+  tiltAnimationEase = null,
+  /*-Glow-*/
+  glow = null,
+  glowProximityColor = null,
+  glowHoverColor = null,
+  glowProximityColorOpacity = null,
+  glowHoverColorOpacity = null,
+  glowProximityColorSize = null,
+  glowHoverColorSize = null,
+  glowTriggerOffset = null,
+  glowAnimationDuration = null,
+  glowAnimationEase = null,
+}) => {
+  // @ts-ignore
+  const [globalProps, setGlobalProps] = useGlobalProps();
+  // @ts-ignore
+  const [globalCursorRef, setGlobalCursorRef] = useGlobalCursorRef();
+  // @ts-ignore
+  const [globalCursorInnerRef, setGlobalCursorInnerRef] = useGlobalCursorInnerRef();
+  // @ts-ignore
+  const [globalStickStatus, setGlobalStickStatus] = useGlobalStickStatus();
+  // @ts-ignore
+  const [rotateCursor, setRotateCursor] = useRotateCursor();
+
+  /*----------------------------------*/
+  useLayoutEffect(() => {
+    /*---------------------------------------------------------------------------*/
+    /* Magnetic */
+    // @ts-ignore
+    isMagnetic = isMagnetic?.toString();
+    // @ts-ignore
+    isSticky = isSticky?.toString();
+    // @ts-ignore
+    shapeShift = shapeShift?.toString();
+    // @ts-ignore
+    float = float?.toString();
+    // @ts-ignore
+    floatFollow = floatFollow?.toString();
+    // @ts-ignore
+    floatSpringToPosition = floatSpringToPosition?.toString();
+    // @ts-ignore
+    exclusion = exclusion?.toString();
+    // @ts-ignore
+    tilt = tilt?.toString();
+    // @ts-ignore
+    glow = glow?.toString();
+    /*---------------------------------------------------------------------------*/
+    /* Magnetic */
+    if (isMagnetic) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (recurItem.getAttribute('data-cursor-magnetic') === 'false') {
+              recurItem.removeAttribute('data-cursor-magnetic');
+            } else {
+              recurItem.setAttribute('data-cursor-magnetic', `${isMagnetic}`);
+            }
+          }
+        } else {
+          // @ts-ignore
+          item.setAttribute('data-cursor-magnetic', `${isMagnetic}`);
+        }
+      }
+    }
+    if (magneticAmount) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-magnetic-amount')) {
+              recurItem.removeAttribute('data-cursor-magnetic-amount');
+            }
+          }
+        } else {
+          // @ts-ignore
+          item.setAttribute('data-cursor-magnetic-amount', `${magneticAmount}`);
+        }
+      }
+    }
+    if (magneticAnimationDuration) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-magnetic-animation-duration')) {
+              recurItem.removeAttribute('data-cursor-magnetic-animation-duration');
+            }
+          }
+        } else {
+          // @ts-ignore
+          item.setAttribute(
+            'data-cursor-magnetic-animation-duration',
+            `${magneticAnimationDuration}`
+          );
+        }
+      }
+    }
+    if (magneticAnimationEase) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-magnetic-animation-ease')) {
+              recurItem.removeAttribute('data-cursor-magnetic-animation-ease');
+            }
+          }
+        } else {
+          // @ts-ignore
+          item.setAttribute('data-cursor-magnetic-animation-ease', `${magneticAnimationEase}`);
+        }
+      }
+    }
+    /* Sticky */
+    if (isSticky) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (recurItem.getAttribute('data-cursor-stick') === 'false') {
+              recurItem.removeAttribute('data-cursor-stick');
+            } else {
+              recurItem.setAttribute('data-cursor-stick', `${isSticky}`);
+            }
+          }
+        } else {
+          // @ts-ignore
+          item.setAttribute('data-cursor-stick', `${isSticky}`);
+        }
+      }
+    }
+    if (stickAmount) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-stick-amount')) {
+              recurItem.removeAttribute('data-cursor-stick-amount');
+            }
+          }
+        } else {
+          // @ts-ignore
+          item.setAttribute('data-cursor-stick-amount', `${stickAmount}`);
+        }
+      }
+    }
+    if (stickAnimationEase) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-stick-animation-ease')) {
+              recurItem.removeAttribute('data-cursor-stick-animation-ease');
+            }
+          }
+        } else {
+          // @ts-ignore
+          item.setAttribute('data-cursor-stick-animation-ease', `${stickAnimationEase}`);
+        }
+      }
+    }
+    /* Shapeshift */
+    if (shapeShift) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (recurItem.getAttribute('data-cursor-shapeshift') === 'false') {
+              recurItem.removeAttribute('data-cursor-shapeshift');
+            } else {
+              recurItem.setAttribute('data-cursor-shapeshift', `${shapeShift}`);
+            }
+          }
+        } else {
+          // @ts-ignore
+          item.setAttribute('data-cursor-shapeshift', `${shapeShift}`);
+        }
+      }
+    }
+    if (shapeShiftAnimationDuration) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-shapeshift-animation-duration')) {
+              recurItem.setAttribute(
+                'data-cursor-shapeshift-animation-duration',
+                `${shapeShiftAnimationDuration}`
+              );
+            }
+          }
+        } else {
+          // @ts-ignore
+          item.setAttribute(
+            'data-cursor-shapeshift-animation-duration',
+            `${shapeShiftAnimationDuration}`
+          );
+        }
+      }
+    }
+    if (shapeShiftAnimationEase) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-shapeshift-animation-ease')) {
+              recurItem.setAttribute(
+                'data-cursor-shapeshift-animation-ease',
+                `${shapeShiftAnimationEase}`
+              );
+            }
+          }
+        } else {
+          // @ts-ignore
+          item.setAttribute('data-cursor-shapeshift-animation-ease', `${shapeShiftAnimationEase}`);
+        }
+      }
+    }
+    /* Cursor Style */
+    if (cursorSize) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-size')) {
+              recurItem.setAttribute('data-cursor-size', `${cursorSize}`);
+            }
+          }
+        } else {
+          item.setAttribute('data-cursor-size', `${cursorSize}`);
+        }
+      }
+    }
+    if (sizeAnimationDuration) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-size-animation-duration')) {
+              recurItem.setAttribute(
+                'data-cursor-size-animation-duration',
+                `${sizeAnimationDuration}`
+              );
+            }
+          }
+        } else {
+          item.setAttribute('data-cursor-size-animation-duration', `${sizeAnimationDuration}`);
+        }
+      }
+    }
+    if (sizeAnimationEase) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-size-animation-ease')) {
+              recurItem.setAttribute('data-cursor-size-animation-ease', `${sizeAnimationEase}`);
+            }
+          }
+        } else {
+          item.setAttribute('data-cursor-size-animation-ease', `${sizeAnimationEase}`);
+        }
+      }
+    }
+    if (cursorBorderRadius) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-border-radius')) {
+              recurItem.setAttribute('data-cursor-border-radius', `${cursorBorderRadius}`);
+            }
+          }
+        } else {
+          item.setAttribute('data-cursor-border-radius', `${cursorBorderRadius}`);
+        }
+      }
+      // Ease & Duration : Shapeshift  Animation
+    }
+    if (cursorTransparency) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-transparency')) {
+              recurItem.setAttribute('data-cursor-transparency', `${cursorTransparency}`);
+            }
+          }
+        } else {
+          item.setAttribute('data-cursor-transparency', `${cursorTransparency}`);
+        }
+      }
+      // Ease & Duration : Color Animation
+    }
+    /*Text*/
+    if (cursorText) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-text')) {
+              recurItem.setAttribute('data-cursor-text', `${cursorText}`);
+            }
+          }
+        } else {
+          item.setAttribute('data-cursor-text', `${cursorText}`);
+        }
+      }
+    }
+    if (cursorTextScale) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-text-scale')) {
+              recurItem.setAttribute('data-cursor-text-scale', `${cursorTextScale}`);
+            }
+          }
+        } else {
+          item.setAttribute('data-cursor-text-scale', `${cursorTextScale}`);
+        }
+      }
+    }
+    if (cursorTextColor) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-text-color')) {
+              recurItem.setAttribute('data-cursor-text-color', `${cursorTextColor}`);
+            }
+          }
+        } else {
+          item.setAttribute('data-cursor-text-color', `${cursorTextColor}`);
+        }
+      }
+    }
+    if (cursorTextOpacity) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-text-opacity')) {
+              recurItem.setAttribute('data-cursor-text-opacity', `${cursorTextOpacity}`);
+            }
+          }
+        } else {
+          item.setAttribute('data-cursor-text-opacity', `${cursorTextOpacity}`);
+        }
+      }
+    }
+    if (textAnimationDuration) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-text-animation-duration')) {
+              recurItem.setAttribute(
+                'data-cursor-text-animation-duration',
+                `${textAnimationDuration}`
+              );
+            }
+          }
+        } else {
+          item.setAttribute('data-cursor-text-animation-duration', `${textAnimationDuration}`);
+        }
+      }
+    }
+    if (textAnimationEase) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-text-animation-ease')) {
+              recurItem.setAttribute('data-cursor-text-animation-ease', `${textAnimationEase}`);
+            }
+          }
+        } else {
+          item.setAttribute('data-cursor-text-animation-ease', `${textAnimationEase}`);
+        }
+      }
+    }
+    /*Float*/
+    if (float) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (recurItem.getAttribute('data-cursor-float') === 'false') {
+              recurItem.removeAttribute('data-cursor-float');
+            } else {
+              recurItem.setAttribute('data-cursor-float', `${float}`);
+            }
+          }
+        } else {
+          item.setAttribute('data-cursor-float', `${float}`);
+        }
+      }
+      if (floatAmount) {
+        // @ts-ignore
+        for (let item of cursorStyle.current?.children) {
+          if (item.className === 'p-c-s') {
+            for (let recurItem of item.children) {
+              if (!recurItem.getAttribute('data-cursor-float-amount')) {
+                recurItem.setAttribute('data-cursor-float-amount', `${floatAmount}`);
+              }
+            }
+          } else {
+            item.setAttribute('data-cursor-float-amount', `${floatAmount}`);
+          }
+        }
+      }
+      if (floatFollow) {
+        // @ts-ignore
+        for (let item of cursorStyle.current?.children) {
+          if (item.className === 'p-c-s') {
+            for (let recurItem of item.children) {
+              if (recurItem.getAttribute('data-cursor-float-follow') === 'false') {
+                recurItem.removeAttribute('data-cursor-float-follow');
+              } else {
+                recurItem.setAttribute('data-cursor-float-follow', `${floatFollow}`);
+              }
+            }
+          } else {
+            item.setAttribute('data-cursor-float-follow', `${floatFollow}`);
+          }
+        }
+      }
+      if (floatTriggerOffset) {
+        // @ts-ignore
+        for (let item of cursorStyle.current?.children) {
+          if (item.className === 'p-c-s') {
+            for (let recurItem of item.children) {
+              if (!recurItem.getAttribute('data-cursor-float-trigger-offset')) {
+                recurItem.setAttribute('data-cursor-float-trigger-offset', `${floatTriggerOffset}`);
+              }
+            }
+          } else {
+            item.setAttribute('data-cursor-float-trigger-offset', `${floatTriggerOffset}`);
+          }
+        }
+      }
+      if (floatSpringToPosition) {
+        // @ts-ignore
+        for (let item of cursorStyle.current?.children) {
+          if (item.className === 'p-c-s') {
+            for (let recurItem of item.children) {
+              if (recurItem.getAttribute('data-cursor-float-spring-to-position') === 'false') {
+                recurItem.removeAttribute('data-cursor-float-spring-to-position');
+              } else {
+                recurItem.setAttribute(
+                  'data-cursor-float-spring-to-position',
+                  `${floatSpringToPosition}`
+                );
+              }
+            }
+          } else {
+            item.setAttribute('data-cursor-float-spring-to-position', `${floatSpringToPosition}`);
+          }
+        }
+      }
+      if (floatAnimationDuration) {
+        // @ts-ignore
+        for (let item of cursorStyle.current?.children) {
+          if (item.className === 'p-c-s') {
+            for (let recurItem of item.children) {
+              if (!recurItem.getAttribute('data-cursor-float-animation-duration')) {
+                recurItem.setAttribute(
+                  'data-cursor-float-animation-duration',
+                  `${floatAnimationDuration}`
+                );
+              }
+            }
+          } else {
+            item.setAttribute('data-cursor-float-animation-duration', `${floatAnimationDuration}`);
+          }
+        }
+      }
+      if (floatAnimationEase) {
+        // @ts-ignore
+        for (let item of cursorStyle.current?.children) {
+          if (item.className === 'p-c-s') {
+            for (let recurItem of item.children) {
+              if (!recurItem.getAttribute('data-cursor-float-animation-ease')) {
+                recurItem.setAttribute('data-cursor-float-animation-ease', `${floatAnimationEase}`);
+              }
+            }
+          } else {
+            item.setAttribute('data-cursor-float-animation-ease', `${floatAnimationEase}`);
+          }
+        }
+      }
+    }
+    /*Color& Background & Outline*/
+    if (cursorBackgroundColor) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-background-color')) {
+              recurItem.setAttribute('data-cursor-background-color', `${cursorBackgroundColor}`);
+            }
+          }
+        } else {
+          item.setAttribute('data-cursor-background-color', `${cursorBackgroundColor}`);
+        }
+      }
+    }
+    if (cursorOutlineColor) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-outline-color')) {
+              recurItem.setAttribute('data-cursor-outline-color', `${cursorOutlineColor}`);
+            }
+          }
+        } else {
+          item.setAttribute('data-cursor-outline-color', `${cursorOutlineColor}`);
+        }
+      }
+    }
+    if (cursorOutlineWidth) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-outline-width')) {
+              recurItem.setAttribute('data-cursor-outline-width', `${cursorOutlineWidth}`);
+            }
+          }
+        } else {
+          item.setAttribute('data-cursor-outline-width', `${cursorOutlineWidth}`);
+        }
+      }
+    }
+    if (colorAnimationDuration) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-color-animation-duration')) {
+              recurItem.setAttribute(
+                'data-cursor-color-animation-duration',
+                `${colorAnimationDuration}`
+              );
+            }
+          }
+        } else {
+          item.setAttribute('data-cursor-color-animation-duration', `${colorAnimationDuration}`);
+        }
+      }
+    }
+    if (colorAnimationEase) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-color-animation-ease')) {
+              recurItem.setAttribute('data-cursor-color-animation-ease', `${colorAnimationEase}`);
+            }
+          }
+        } else {
+          item.setAttribute('data-cursor-color-animation-ease', `${colorAnimationEase}`);
+        }
+      }
+    }
+    /*Background Image*/
+    if (cursorBackgroundImage) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-background-image')) {
+              recurItem.setAttribute('data-cursor-background-image', `${cursorBackgroundImage}`);
+            }
+          }
+        } else {
+          item.setAttribute('data-cursor-background-image', `${cursorBackgroundImage}`);
+        }
+      }
+    }
+    if (cursorBackgroundImageScale) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-background-image-scale')) {
+              recurItem.setAttribute(
+                'data-cursor-background-image-scale',
+                `${cursorBackgroundImageScale}`
+              );
+            }
+          }
+        } else {
+          item.setAttribute('data-cursor-background-image-scale', `${cursorBackgroundImageScale}`);
+        }
+      }
+    }
+    if (backgroundImageAnimationDuration) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-background-image-animation-duration')) {
+              recurItem.setAttribute(
+                'data-cursor-background-image-animation-duration',
+                `${backgroundImageAnimationDuration}`
+              );
+            }
+          }
+        } else {
+          item.setAttribute(
+            'data-cursor-background-image-animation-duration',
+            `${backgroundImageAnimationDuration}`
+          );
+        }
+      }
+    }
+    if (backgroundImageAnimationEase) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-background-image-animation-ease')) {
+              recurItem.setAttribute(
+                'data-cursor-background-image-animation-ease',
+                `${backgroundImageAnimationEase}`
+              );
+            }
+          }
+        } else {
+          item.setAttribute(
+            'data-cursor-background-image-animation-ease',
+            `${backgroundImageAnimationEase}`
+          );
+        }
+      }
+    }
+    /*Tilt*/
+    if (tilt) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (recurItem.getAttribute('data-cursor-tilt') === 'false') {
+              recurItem.removeAttribute('data-cursor-tilt');
+            } else {
+              recurItem.setAttribute('data-cursor-tilt', `${tilt}`);
+            }
+          }
+        } else {
+          item.setAttribute('data-cursor-tilt', `${tilt}`);
+        }
+      }
+    }
+    if (tiltAmount) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-tilt-amount')) {
+              recurItem.setAttribute('data-cursor-tilt-amount', `${tiltAmount}`);
+            }
+          }
+        } else {
+          item.setAttribute('data-cursor-tilt-amount', `${tiltAmount}`);
+        }
+      }
+    }
+    if (tiltTriggerOffset) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-tilt-trigger-offset')) {
+              recurItem.setAttribute('data-cursor-tilt-trigger-offset', `${tiltTriggerOffset}`);
+            }
+          }
+        } else {
+          item.setAttribute('data-cursor-tilt-trigger-offset', `${tiltTriggerOffset}`);
+        }
+      }
+    }
+    if (tiltAnimationDuration) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-tilt-animation-duration')) {
+              recurItem.setAttribute(
+                'data-cursor-tilt-animation-duration',
+                `${tiltAnimationDuration}`
+              );
+            }
+          }
+        } else {
+          item.setAttribute('data-cursor-tilt-animation-duration', `${tiltAnimationDuration}`);
+        }
+      }
+    }
+    if (tiltAnimationEase) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-tilt-animation-ease')) {
+              recurItem.setAttribute('data-cursor-tilt-animation-ease', `${tiltAnimationEase}`);
+            }
+          }
+        } else {
+          item.setAttribute('data-cursor-tilt-animation-ease', `${tiltAnimationEase}`);
+        }
+      }
+    }
+    /*Exclusion*/
+    if (exclusion) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (recurItem.getAttribute('data-cursor-exclusion') === 'false') {
+              recurItem.removeAttribute('data-cursor-exclusion');
+            } else {
+              recurItem.setAttribute('data-cursor-exclusion', `${exclusion}`);
+            }
+          }
+        } else {
+          item.setAttribute('data-cursor-exclusion', `${exclusion}`);
+        }
+      }
+    }
+    if (exclusionBackgroundColor) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-exclusion-background-color')) {
+              recurItem.setAttribute(
+                'data-cursor-exclusion-background-color',
+                `${exclusionBackgroundColor}`
+              );
+            }
+          }
+        } else {
+          item.setAttribute(
+            'data-cursor-exclusion-background-color',
+            `${exclusionBackgroundColor}`
+          );
+        }
+      }
+    }
+    /* Glow */
+    if (glow) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      glow === 'true' ? cursorStyle.current?.setAttribute('data-cursor-glow', `${glow}`) : null;
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (recurItem.getAttribute('data-cursor-glow-element') === 'false') {
+              recurItem.removeAttribute('data-cursor-glow-element');
+            } else {
+              if (!recurItem.getAttribute('data-cursor-glow-element')) {
+                recurItem.setAttribute('data-cursor-glow-element', `${glow}`);
+              }
+            }
+          }
+        } else {
+          item.setAttribute('data-cursor-glow-element', `${glow}`);
+        }
+      }
+    }
+    if (glowProximityColor) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-glow-proximity-color')) {
+              recurItem.setAttribute('data-cursor-glow-proximity-color', `${glowProximityColor}`);
+            }
+          }
+        } else {
+          item.setAttribute('data-cursor-glow-proximity-color', `${glowProximityColor}`);
+        }
+      }
+    }
+    if (glowHoverColor) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-glow-hover-color')) {
+              recurItem.setAttribute('data-cursor-glow-hover-color', `${glowHoverColor}`);
+            }
+          }
+        } else {
+          item.setAttribute('data-cursor-glow-hover-color', `${glowHoverColor}`);
+        }
+      }
+    }
+    if (glowProximityColorOpacity) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-glow-proximity-color-opacity')) {
+              recurItem.setAttribute(
+                'data-cursor-glow-proximity-color-opacity',
+                `${glowProximityColorOpacity}`
+              );
+            }
+          }
+        } else {
+          item.setAttribute(
+            'data-cursor-glow-proximity-color-opacity',
+            `${glowProximityColorOpacity}`
+          );
+        }
+      }
+    }
+    if (glowHoverColorOpacity) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-glow-hover-color-opacity')) {
+              recurItem.setAttribute(
+                'data-cursor-glow-hover-color-opacity',
+                `${glowHoverColorOpacity}`
+              );
+            }
+          }
+        } else {
+          item.setAttribute('data-cursor-glow-hover-color-opacity', `${glowHoverColorOpacity}`);
+        }
+      }
+    }
+    if (glowProximityColorSize) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-glow-proximity-color-size')) {
+              recurItem.setAttribute(
+                'data-cursor-glow-proximity-color-size',
+                `${glowProximityColorSize}`
+              );
+            }
+          }
+        } else {
+          item.setAttribute('data-cursor-glow-proximity-color-size', `${glowProximityColorSize}`);
+        }
+      }
+    }
+    if (glowHoverColorSize) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-glow-hover-color-size')) {
+              recurItem.setAttribute('data-cursor-glow-hover-color-size', `${glowHoverColorSize}`);
+            }
+          }
+        } else {
+          item.setAttribute('data-cursor-glow-hover-color-size', `${glowHoverColorSize}`);
+        }
+      }
+    }
+    if (glowTriggerOffset) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-glow-trigger-offset')) {
+              recurItem.setAttribute('data-cursor-glow-trigger-offset', `${glowTriggerOffset}`);
+            }
+          }
+        } else {
+          item.setAttribute('data-cursor-glow-trigger-offset', `${glowTriggerOffset}`);
+        }
+      }
+    }
+    if (glowAnimationDuration) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-glow-animation-duration')) {
+              recurItem.setAttribute(
+                'data-cursor-glow-animation-duration',
+                `${glowAnimationDuration}`
+              );
+            }
+          }
+        } else {
+          item.setAttribute('data-cursor-glow-animation-duration', `${glowAnimationDuration}`);
+        }
+      }
+    }
+    if (glowAnimationEase) {
+      // @ts-ignore
+      for (let item of cursorStyle.current?.children) {
+        if (item.className === 'p-c-s') {
+          for (let recurItem of item.children) {
+            if (!recurItem.getAttribute('data-cursor-glow-animation-ease')) {
+              recurItem.setAttribute('data-cursor-glow-animation-ease', `${glowAnimationEase}`);
+            }
+          }
+        } else {
+          item.setAttribute('data-cursor-glow-animation-ease', `${glowAnimationEase}`);
+        }
+      }
+    }
+    /*---------------------------------------------------------------------------*/
     const sizeElements = document.querySelectorAll(
       '[data-cursor-size]'
     ) as unknown as NodeListOf<HTMLElement>;
@@ -244,6 +1503,7 @@ export const Cursor: FC<CursorProps> = ({
     const magneticElements = document.querySelectorAll(
       '[data-cursor-magnetic="true"]'
     ) as unknown as NodeListOf<HTMLElement>;
+
     const stickElements = document.querySelectorAll(
       '[data-cursor-stick="true"]'
     ) as unknown as NodeListOf<HTMLElement>;
@@ -251,7 +1511,7 @@ export const Cursor: FC<CursorProps> = ({
       '[data-cursor-exclusion="true"]'
     ) as unknown as NodeListOf<HTMLElement>;
     const floatingElements = document.querySelectorAll(
-      '[data-cursor-float]'
+      '[data-cursor-float="true"]'
     ) as unknown as NodeListOf<HTMLElement>;
     const shapeShiftElements = document.querySelectorAll(
       '[data-cursor-shapeshift="true"]'
@@ -265,124 +1525,22 @@ export const Cursor: FC<CursorProps> = ({
     const glowElements = document.querySelectorAll(
       '[data-cursor-glow="true"]'
     ) as unknown as NodeListOf<HTMLElement>;
-    let stickStatus = false;
-    const setFromEvent = (e: MouseEvent) => {
-      const areatarget = e.target as HTMLElement;
-      let target: HTMLElement | null;
-      let bound: DOMRect | undefined;
-      let x = e.clientX;
-      let y = e.clientY;
-      let duration = animationDuration;
-      let ease = animationEase;
-      if (stickStatus) {
-        target = areatarget;
-        // @ts-ignore
-        let calculatedStickAnimationAmount = !target
-          ? stickAnimationAmount
-          : target.dataset['cursorStickAmount']
-          ? target.dataset['cursorStickAmount']
-          : stickAnimationAmount;
-        // @ts-ignore
-        let calculatedStickAnimationEase = !target
-          ? stickAnimationAmount
-          : target.dataset['cursorStickAnimationEase']
-          ? target.dataset['cursorStickAnimationEase']
-          : stickAnimationEase;
-        bound = target?.getBoundingClientRect();
-        if (target && bound) {
-          y =
-            bound.top +
-            target.clientHeight / 2 -
-            // @ts-ignore
-            (bound.top + target.clientHeight / 2 - e.clientY) * calculatedStickAnimationAmount;
-          x =
-            bound.left +
-            target.clientWidth / 2 -
-            // @ts-ignore
-            (bound.left + target.clientWidth / 2 - e.clientX) * calculatedStickAnimationAmount;
-          duration = animationDuration;
-          // @ts-ignore
-          ease = calculatedStickAnimationEase;
-        }
-      }
-      gsap.set(pos, {});
-      const xTo = gsap.quickTo(pos, 'x', {
-        duration,
-        ease,
-        onUpdate: () => {
-          if (pos.x) vel.x = x - pos.x;
-        },
-      });
-      const yTo = gsap.quickTo(pos, 'y', {
-        duration,
-        ease,
-        onUpdate: () => {
-          if (pos.y) vel.y = y - pos.y;
-        },
-      });
-      xTo(x);
-      yTo(y);
-      loop();
-    };
-    if (!isMobile || !disableOnMobile) {
-      window.addEventListener('mousemove', (e) => {
-        setFromEvent(e);
-      });
-      document.body.addEventListener('mouseenter', (e: MouseEvent) => {
-        if (e.target instanceof HTMLElement && cursor.current) {
-          gsap.to(`#${cursor.current.id}`, {
-            opacity: 1,
-            duration: animationDuration,
-            ease: animationEase,
-          });
-        }
-      });
-      document.body.addEventListener('mouseleave', (e: MouseEvent) => {
-        glowElements.forEach((el) => {
-          // @ts-ignore
-          let calculatedGlowDuration = el.dataset['cursorGlowAnimationDuration']
-            ? // @ts-ignore
-              el.dataset['cursorGlowAnimationDuration'] * 1
-            : glowAnimationDuration;
-          let calculatedGlowEase = el.dataset['cursorGlowAnimationEase']
-            ? el.dataset['cursorGlowAnimationEase']
-            : glowAnimationEase;
-
-          // @ts-ignore
-          for (const card of document.querySelectorAll('[data-cursor-glow-element]')) {
-            gsap.to(card, {
-              '--glow-card-proximity-opacity': `0`,
-              // '--glow-card-hover-opacity': `0`,
-              '--opacity-duration': `300ms`,
-
-              duration: calculatedGlowDuration,
-              ease: calculatedGlowEase,
-            });
-          }
-        });
-        if (e.target instanceof HTMLElement && cursor.current) {
-          gsap.to(`#${cursor.current.id}`, {
-            opacity: 0,
-            duration: animationDuration,
-            ease: animationEase,
-          });
-        }
-      });
-      //---------------------------------------------------------------------------------------------------[START OF ELEMENTS]--//
+    //---------------------------------------------------------------------------------------------------[START OF ELEMENTS]--//
+    if (!isMobile || !globalProps.disableOnMobile) {
       //---- [ Size Elements ]------------------------------------------------------------------------//
       sizeElements.forEach((el) => {
         // @ts-ignore
         let calculatedSizeAnimationDuration = el.dataset['cursorSizeAnimationDuration']
           ? el.dataset['cursorSizeAnimationDuration']
-          : sizeAnimationDuration;
+          : globalProps.sizeAnimationDuration;
         // @ts-ignore
         let calculatedSizeAnimationEase = el.dataset['cursorSizeAnimationEase']
           ? el.dataset['cursorSizeAnimationEase']
-          : sizeAnimationEase;
+          : globalProps.sizeAnimationEase;
         /*--------------------------------------------------------------------*/
         el.addEventListener('mouseenter', (e: MouseEvent) => {
-          if (e.target instanceof HTMLElement && cursor.current) {
-            gsap.to(`#${cursor.current.id}`, {
+          if (e.target instanceof HTMLElement && globalCursorRef) {
+            gsap.to(`#${globalCursorRef.id}`, {
               width: `${e.target.dataset['cursorSize']}`,
               height: `${e.target.dataset['cursorSize']}`,
               duration: calculatedSizeAnimationDuration,
@@ -392,10 +1550,10 @@ export const Cursor: FC<CursorProps> = ({
         });
         /*--------------------------------------------------------------------*/
         el.addEventListener('mouseleave', (e: MouseEvent) => {
-          if (e.target instanceof HTMLElement && cursor.current) {
-            gsap.to(`#${cursor.current.id}`, {
-              width: `${cursorSize}`,
-              height: `${cursorSize}`,
+          if (e.target instanceof HTMLElement && globalCursorRef) {
+            gsap.to(`#${globalCursorRef.id}`, {
+              width: `${globalProps.cursorSize}`,
+              height: `${globalProps.cursorSize}`,
               duration: calculatedSizeAnimationDuration,
               ease: calculatedSizeAnimationEase,
             });
@@ -403,36 +1561,30 @@ export const Cursor: FC<CursorProps> = ({
         });
         /*--------------------------------------------------------------------*/
       });
-      //---- [ Text Elements ]------------------------------------------------------------------------//
+      // //---- [ Text Elements ]------------------------------------------------------------------------//
       textElements.forEach((el) => {
-        // @ts-ignore
-        let calculatedTextAnimationEase = el.dataset['cursorTextAnimationEase']
-          ? el.dataset['cursorTextAnimationEase']
-          : textAnimationEase;
         // @ts-ignore
         let calculatedTextAnimationDuration = el.dataset['cursorTextAnimationDuration']
           ? el.dataset['cursorTextAnimationDuration']
-          : textAnimationDuration;
+          : globalProps.textAnimationDuration;
+        // @ts-ignore
+        let calculatedTextAnimationEase = el.dataset['cursorTextAnimationEase']
+          ? el.dataset['cursorTextAnimationEase']
+          : globalProps.textAnimationEase;
+        let calculatedText = el.dataset['cursorText'] ? el.dataset['cursorText'] : cursorText;
         /*--------------------------------------------------------------------*/
         el.addEventListener('mouseenter', (e: MouseEvent) => {
-          if (e.target instanceof HTMLElement && cursorInner.current) {
+          if (e.target instanceof HTMLElement && globalCursorInnerRef) {
             /*-------------------------------------------------------------------------------*/
             // @ts-ignore
-            let calculatedTextColor = e.target.dataset['cursorTextColor']
-              ? e.target.dataset['cursorTextColor']
-              : null;
+            let calculatedTextColor = cursorTextColor ? el.dataset['cursorTextColor'] : null;
             // @ts-ignore
-            let calculatedTextScale = e.target.dataset['cursorTextScale']
-              ? // @ts-ignore
-                1 * e.target.dataset['cursorTextScale']
-              : 1;
+            let calculatedTextScale = cursorTextScale ? el.dataset['cursorTextScale'] : 1;
             // @ts-ignore
-            let calculatedTextOpacity = e.target.dataset['cursorTextOpacity']
-              ? e.target.dataset['cursorTextOpacity']
-              : 1;
-            cursorInner.current.textContent = `${e.target.dataset['cursorText']}`;
+            let calculatedTextOpacity = cursorTextOpacity ? el.dataset['cursorTextOpacity'] : 1;
+            globalCursorInnerRef.textContent = `${calculatedText}`;
             /*-------------------------------------------------------------------------------*/
-            gsap.to(`#${cursorInner.current.id}`, {
+            gsap.to(`#${globalCursorInnerRef.id}`, {
               color: calculatedTextColor ? calculatedTextColor : 'inherit',
               scale: calculatedTextScale,
               opacity: calculatedTextOpacity,
@@ -443,9 +1595,9 @@ export const Cursor: FC<CursorProps> = ({
         });
         /*--------------------------------------------------------------------*/
         el.addEventListener('mouseleave', (e: MouseEvent) => {
-          if (e.target instanceof HTMLElement && cursorInner.current) {
-            cursorInner.current.textContent = '';
-            gsap.to(`#${cursorInner.current.id}`, {
+          if (e.target instanceof HTMLElement && globalCursorInnerRef) {
+            globalCursorInnerRef.textContent = '';
+            gsap.to(`#${globalCursorInnerRef.id}`, {
               scale: 0,
               opacity: 0,
               duration: calculatedTextAnimationDuration,
@@ -455,22 +1607,245 @@ export const Cursor: FC<CursorProps> = ({
         });
         /*--------------------------------------------------------------------*/
       });
+      // //---- [ Cursor Transparency Elements ]------------------------------------------------------------------------//
+      cursorTransparencyElements.forEach((el) => {
+        let calculatedColorAnimationDuration = el.dataset['cursorColorAnimationDuration']
+          ? el.dataset['cursorColorAnimationDuration']
+          : globalProps.colorAnimationDuration;
+        let calculatedColorAnimationEase = el.dataset['cursorColorAnimationEase']
+          ? el.dataset['cursorColorAnimationEase']
+          : globalProps.colorAnimationEase;
+        el.addEventListener('mouseenter', (e: MouseEvent) => {
+          if (e.target instanceof HTMLElement && globalCursorRef) {
+            gsap.to(`#${globalCursorRef.id}`, {
+              filter: `opacity(${e.target.dataset['cursorTransparency']})`,
+              duration: calculatedColorAnimationDuration,
+              ease: calculatedColorAnimationEase,
+            });
+          }
+        });
+        el.addEventListener('mouseleave', (e: MouseEvent) => {
+          if (e.target instanceof HTMLElement && globalCursorRef) {
+            gsap.to(`#${globalCursorRef.id}`, {
+              filter: `opacity(${globalProps.cursorTransparency})`,
+              duration: calculatedColorAnimationDuration,
+              ease: calculatedColorAnimationEase,
+            });
+          }
+        });
+      });
+      // //---- [ Outline ]--------------------------------------------------------------------------------------------------------------------------------------------------//
+      //---- [ Outline Color Elements ]------------------------------------------------------------------------//
+      outlineColorElements.forEach((el) => {
+        let calculatedColorAnimationDuration = el.dataset['cursorColorAnimationDuration']
+          ? el.dataset['cursorColorAnimationDuration']
+          : globalProps.colorAnimationDuration;
+        let calculatedColorAnimationEase = el.dataset['cursorColorAnimationEase']
+          ? el.dataset['cursorColorAnimationEase']
+          : globalProps.colorAnimationEase;
+        el.addEventListener('mouseenter', (e: MouseEvent) => {
+          if (e.target instanceof HTMLElement && globalCursorRef) {
+            let calculatedOutlineColor = e.target.dataset['cursorOutlineColor']
+              ? e.target.dataset['cursorOutlineColor']
+              : cursorOutlineColor;
+            gsap.to(`#${globalCursorRef.id}`, {
+              outlineColor: `${calculatedOutlineColor}`,
+              duration: calculatedColorAnimationDuration,
+              ease: calculatedColorAnimationEase,
+            });
+          }
+        });
+        el.addEventListener('mouseleave', (e: MouseEvent) => {
+          if (e.target instanceof HTMLElement && globalCursorRef) {
+            gsap.to(`#${globalCursorRef.id}`, {
+              outlineColor: `${globalProps.cursorOutlineColor}`,
+              duration: calculatedColorAnimationDuration,
+              ease: calculatedColorAnimationEase,
+            });
+          }
+        });
+      });
+      //---- [ Outline Size Elements ]------------------------------------------------------------------------//
+      outlineWidthElements.forEach((el) => {
+        let calculatedColorAnimationDuration = el.dataset['cursorColorAnimationDuration']
+          ? el.dataset['cursorColorAnimationDuration']
+          : globalProps.colorAnimationDuration;
+        let calculatedColorAnimationEase = el.dataset['cursorColorAnimationEase']
+          ? el.dataset['cursorColorAnimationEase']
+          : globalProps.colorAnimationEase;
+        el.addEventListener('mouseenter', (e: MouseEvent) => {
+          if (e.target instanceof HTMLElement && globalCursorRef) {
+            let calculatedOutlineWidth = e.target.dataset['cursorOutlineWidth']
+              ? e.target.dataset['cursorOutlineWidth']
+              : globalProps.cursorOutlineWidth;
+            gsap.to(`#${globalCursorRef.id}`, {
+              outlineWidth: `${calculatedOutlineWidth}`,
+              duration: calculatedColorAnimationDuration,
+              ease: calculatedColorAnimationEase,
+            });
+          }
+        });
+        el.addEventListener('mouseleave', (e: MouseEvent) => {
+          if (e.target instanceof HTMLElement && globalCursorRef) {
+            gsap.to(`#${globalCursorRef.id}`, {
+              outlineWidth: `${globalProps.cursorOutlineWidth}`,
+              duration: calculatedColorAnimationDuration,
+              ease: calculatedColorAnimationEase,
+            });
+          }
+        });
+      });
+      //---- [ END Outline ]------------------------------------------------------------------------------------------------------------------------------------------------//
+      //---- [ Background Color Elements ]------------------------------------------------------------------------//
+      backgroundColorElements.forEach((el) => {
+        let calculatedColorAnimationDuration = el.dataset['cursorColorAnimationDuration']
+          ? el.dataset['cursorColorAnimationDuration']
+          : globalProps.colorAnimationDuration;
+        let calculatedColorAnimationEase = el.dataset['cursorColorAnimationEase']
+          ? el.dataset['cursorColorAnimationEase']
+          : globalProps.colorAnimationEase;
+        el.addEventListener('mouseenter', (e: MouseEvent) => {
+          if (e.target instanceof HTMLElement && globalCursorRef) {
+            gsap.to(`#${globalCursorRef.id}`, {
+              backgroundColor: `${e.target.dataset['cursorBackgroundColor']}`,
+              duration: calculatedColorAnimationDuration,
+              ease: calculatedColorAnimationEase,
+            });
+          }
+        });
+        el.addEventListener('mouseleave', (e: MouseEvent) => {
+          if (e.target instanceof HTMLElement && globalCursorRef) {
+            gsap.to(`#${globalCursorRef.id}`, {
+              backgroundColor: `${globalProps.cursorBackgroundColor}`,
+              duration: calculatedColorAnimationDuration,
+              ease: calculatedColorAnimationEase,
+            });
+          }
+        });
+      });
+      //---- [ Exclusion Elements ]------------------------------------------------------------------------//
+      exclusionElements.forEach((el) => {
+        el.addEventListener('mouseenter', (e: MouseEvent) => {
+          if (e.target instanceof HTMLElement && globalCursorRef) {
+            let calcualtedExclusionBackgroundColor = e.target.dataset[
+              'cursorExclusionBackgroundColor'
+            ]
+              ? e.target.dataset['cursorExclusionBackgroundColor']
+              : globalProps.exclusionBackgroundColor;
+            // @ts-ignore: Unreachable code error
+            globalCursorRef.style.mixBlendMode = 'exclusion';
+            globalCursorRef.style.background = `${calcualtedExclusionBackgroundColor}`;
+          }
+        });
+        el.addEventListener('mouseleave', (e: MouseEvent) => {
+          if (e.target instanceof HTMLElement && globalCursorRef) {
+            // @ts-ignore: Unreachable code error
+            globalCursorRef.style.mixBlendMode = '';
+            globalCursorRef.style.background = `${globalProps.cursorBackgroundColor}`;
+          }
+        });
+      });
+      //---- [ Background Image Elements ]------------------------------------------------------------------------//
+      backgroundImageElements.forEach((el) => {
+        let calculatedBackgroundImageAnimationDuration = el.dataset[
+          'cursorBackgroundImageAnimationDuration'
+        ]
+          ? el.dataset['cursorBackgroundImageAnimationDuration']
+          : globalProps.backgroundImageAnimationDuration;
+        let calculatedBackgroundImageAnimationEase = el.dataset[
+          'cursorBackgroundImageAnimationEase'
+        ]
+          ? el.dataset['cursorBackgroundImageAnimationEase']
+          : globalProps.backgroundImageAnimationEase;
+        el.addEventListener('mouseenter', (e: MouseEvent) => {
+          if (e.target instanceof HTMLElement && globalCursorRef) {
+            // @ts-ignore
+            let calculatedBackgroundScale = e.target.dataset['cursorBackgroundImageScale']
+              ? // @ts-ignore
+                1 * e.target.dataset['cursorBackgroundImageScale']
+              : 1;
+            let calculatedBorderRadius = e.target.dataset['cursorBorderRadius']
+              ? e.target.dataset['cursorBorderRadius']
+              : globalProps.cursorBorderRadius;
+            // rotateCursor = false;
+            gsap.to(`#${globalCursorInnerRef.id}`, {
+              scale: calculatedBackgroundScale,
+              borderRadius: calculatedBorderRadius,
+              background: `url("${e.target.dataset['cursorBackgroundImage']}")`,
+              opacity: 1,
+              duration: calculatedBackgroundImageAnimationDuration,
+              ease: calculatedBackgroundImageAnimationEase,
+            });
+          }
+        });
+        el.addEventListener('mouseleave', (e: MouseEvent) => {
+          if (e.target instanceof HTMLElement && globalCursorInnerRef) {
+            // rotateCursor = true;
+            if (globalCursorRef) {
+              // @ts-ignore: Unreachable code error
+              globalCursorRef.style.mixBlendMode = '';
+              globalCursorRef.style.zIndex = '999999999';
+              globalCursorRef.style.backgroundColor = `${globalProps.cursorBackgroundColor}`;
+            }
+            gsap.to(`#${globalCursorInnerRef.id}`, {
+              scale: 0,
+              opacity: 0,
+              background: ``,
+              duration: calculatedBackgroundImageAnimationDuration,
+              ease: calculatedBackgroundImageAnimationEase,
+            });
+          }
+        });
+      });
+      //---- [ Border Radius Elements ]------------------------------------------------------------------------//
+      cursorBorderRadiusElements.forEach((el) => {
+        let calculatedShapeShiftDuration = el.dataset['cursorShapeShiftDuration']
+          ? el.dataset['cursorShapeShiftDuration']
+          : globalProps.shapeShiftAnimationDuration;
+        let calculatedShapeShiftEase = el.dataset['cursorShapeShiftEase']
+          ? el.dataset['cursorShapeShiftEase']
+          : globalProps.shapeShiftAnimationEase;
+        el.addEventListener('mouseenter', (e: MouseEvent) => {
+          if (e.target instanceof HTMLElement && globalCursorRef) {
+            let calculatedBorderRadius;
+            if (e.target.dataset.cursorBorderRadius) {
+              calculatedBorderRadius = e.target.dataset.cursorBorderRadius;
+            } else {
+              calculatedBorderRadius = globalProps.cursorBorderRadius;
+            }
+            gsap.to(`#${globalCursorRef.id}`, {
+              borderRadius: calculatedBorderRadius,
+              duration: calculatedShapeShiftDuration,
+              ease: calculatedShapeShiftEase,
+            });
+          }
+        });
+        el.addEventListener('mouseleave', (e: MouseEvent) => {
+          if (e.target instanceof HTMLElement && globalCursorRef) {
+            gsap.to(`#${globalCursorRef.id}`, {
+              borderRadius: `${globalProps.cursorBorderRadius}`,
+              duration: calculatedShapeShiftDuration,
+              ease: calculatedShapeShiftEase,
+            });
+          }
+        });
+      });
       //---- [ Floating Elements ]------------------------------------------------------------------------//
       floatingElements.forEach((el) => {
         document.addEventListener('mousemove', (e: MouseEvent) => {
           /*-------------------------------------------------------------------------*/
           let calculatedFloatSpringToPosition = el.dataset['cursorFloatSpringToPosition']
             ? el.dataset['cursorFloatSpringToPosition']
-            : floatSpringToPosition;
+            : globalProps.floatSpringToPosition;
           let calculatedFloatAmount = el.dataset['cursorFloatAmount']
             ? el.dataset['cursorFloatAmount']
-            : floatAmount;
+            : globalProps.floatAmount;
           let calculatedFloatDuration = el.dataset['cursorFloatAnimationDuration']
             ? el.dataset['cursorFloatAnimationDuration']
-            : floatAnimationDuration;
+            : globalProps.floatAnimationDuration;
           let calculatedFloatFollow = el.dataset['cursorFloatFollow']
             ? el.dataset['cursorFloatFollow']
-            : floatFollow;
+            : globalProps.floatFollow;
           // @ts-ignore
           let triggerDistanceOffset = el.dataset['cursorFloatTriggerOffset']
             ? // @ts-ignore
@@ -478,7 +1853,7 @@ export const Cursor: FC<CursorProps> = ({
             : null;
           let calculatedFloatEase = el.dataset['cursorFloatAnimationEase']
             ? el.dataset['cursorFloatAnimationEase']
-            : floatAnimationEase;
+            : globalProps.floatAnimationEase;
           /*-------------------------------------------------------------------------*/
           const cursorPosition = {
             left: calculatedFloatFollow === 'true' ? e.clientX : e.clientX,
@@ -548,15 +1923,16 @@ export const Cursor: FC<CursorProps> = ({
           let calculatedTiltAmount = el.dataset['cursorTiltAmount']
             ? // @ts-ignore
               el.dataset['cursorTiltAmount'] * 1
-            : tiltAmount;
+            : globalProps.tiltAmount;
           // @ts-ignore
           let calculatedTiltDuration = el.dataset['cursorTiltAnimationDuration']
             ? // @ts-ignore
               el.dataset['cursorTiltAnimationDuration'] * 1
-            : tiltAnimationDuration;
+            : globalProps.tiltAnimationDuration;
           let calculatedTiltEase = el.dataset['cursorTiltAnimationEase']
             ? el.dataset['cursorTiltAnimationEase']
-            : tiltAnimationEase;
+            : globalProps.tiltAnimationEase;
+
           // @ts-ignore
           let triggerDistanceOffset = el.dataset['cursorTiltTriggerOffset']
             ? // @ts-ignore
@@ -622,44 +1998,22 @@ export const Cursor: FC<CursorProps> = ({
       //---- [ Glow Elements ]------------------------------------------------------------------------//
       glowElements.forEach((el) => {
         document.addEventListener('mousemove', (e: MouseEvent) => {
-          /*------------------------------------------------------------------------*/
-          // @ts-ignore
-          // let calculatedGlowAmount = el.dataset['cursorGlowAmount'] ? el.dataset['cursorGlowAmount'] * 1 : elementTiltAmount;
+          /*------------------------------------------------------*/
           // @ts-ignore
           let calculatedGlowDuration = el.dataset['cursorGlowAnimationDuration']
             ? // @ts-ignore
               el.dataset['cursorGlowAnimationDuration'] * 1
-            : glowAnimationDuration;
+            : globalProps.glowAnimationDuration;
           let calculatedGlowEase = el.dataset['cursorGlowAnimationEase']
             ? el.dataset['cursorGlowAnimationEase']
-            : glowAnimationEase;
-          let calculatedGlowProximityColor = el.dataset['cursorGlowProximityColor']
-            ? el.dataset['cursorGlowProximityColor']
-            : glowProximityColor;
-          let calculatedGlowHoverColor = el.dataset['cursorGlowHoverColor']
-            ? el.dataset['cursorGlowHoverColor']
-            : glowHoverColor;
-          /*-*/
-          let calculatedGlowProximityColorOpacity = el.dataset['cursorGlowProximityColorOpacity']
-            ? el.dataset['cursorGlowProximityColorOpacity']
-            : glowProximityColorOpacity;
-          let calculatedGlowHoverColorOpacity = el.dataset['cursorGlowHoverColorOpacity']
-            ? el.dataset['cursorGlowHoverColorOpacity']
-            : glowHoverColorOpacity;
-          /*-*/
-          let calculatedGlowProximityColorSize = el.dataset['cursorGlowProximityColorSize']
-            ? el.dataset['cursorGlowProximityColorSize']
-            : glowProximityColorSize;
-          let calculatedGlowHoverColorSize = el.dataset['cursorGlowHoverColorSize']
-            ? el.dataset['cursorGlowHoverColorSize']
-            : glowHoverColorSize;
-          /*-*/
+            : globalProps.glowAnimationEase;
           // @ts-ignore
           let triggerDistanceOffset = el.dataset['cursorGlowTriggerOffset']
             ? // @ts-ignore
               el.dataset['cursorGlowTriggerOffset'] * 1
             : null;
-          /*------------------------------------------------------------------------*/
+          /*------------------------------------------------------*/
+
           let triggerDistance =
             el.getBoundingClientRect().width + (triggerDistanceOffset ? triggerDistanceOffset : 0);
           const cursorPosition = {
@@ -678,11 +2032,41 @@ export const Cursor: FC<CursorProps> = ({
 
           /*------------------------------------------------------------------------*/
           function handleGlow() {
+            /*------------------------------------------------------------------------*/
+            // @ts-ignore
+            // let calculatedGlowAmount = el.dataset['cursorGlowAmount'] ? el.dataset['cursorGlowAmount'] * 1 : elementTiltAmount;
+
+            /*------------------------------------------------------------------------*/
             // @ts-ignore
             for (const card of document.querySelectorAll('[data-cursor-glow-element]')) {
               if (!card.classList.contains('glow-card')) {
                 card.classList.add('glow-card');
               }
+              /*-----------------------*/
+              let calculatedGlowProximityColor = card.dataset['cursorGlowProximityColor']
+                ? card.dataset['cursorGlowProximityColor']
+                : globalProps.glowProximityColor;
+              let calculatedGlowHoverColor = card.dataset['cursorGlowHoverColor']
+                ? card.dataset['cursorGlowHoverColor']
+                : globalProps.glowHoverColor;
+              /*-*/
+              let calculatedGlowProximityColorOpacity = card.dataset[
+                'cursorGlowProximityColorOpacity'
+              ]
+                ? card.dataset['cursorGlowProximityColorOpacity']
+                : globalProps.glowProximityColorOpacity;
+              let calculatedGlowHoverColorOpacity = card.dataset['cursorGlowHoverColorOpacity']
+                ? card.dataset['cursorGlowHoverColorOpacity']
+                : globalProps.glowHoverColorOpacity;
+              /*-*/
+              let calculatedGlowProximityColorSize = card.dataset['cursorGlowProximityColorSize']
+                ? card.dataset['cursorGlowProximityColorSize']
+                : globalProps.glowProximityColorSize;
+              let calculatedGlowHoverColorSize = card.dataset['cursorGlowHoverColorSize']
+                ? card.dataset['cursorGlowHoverColorSize']
+                : globalProps.glowHoverColorSize;
+              /*-----------------------*/
+
               const rect = card.getBoundingClientRect(),
                 x = e.clientX - rect.left,
                 y = e.clientY - rect.top;
@@ -728,245 +2112,17 @@ export const Cursor: FC<CursorProps> = ({
           }
         });
       });
-      //---- [ Cursor Transparency Elements ]------------------------------------------------------------------------//
-      cursorTransparencyElements.forEach((el) => {
-        let calculatedColorAnimationDuration = el.dataset['cursorColorAnimationDuration']
-          ? el.dataset['cursorColorAnimationDuration']
-          : colorAnimationDuration;
-        let calculatedColorAnimationEase = el.dataset['cursorColorAnimationEase']
-          ? el.dataset['cursorColorAnimationEase']
-          : colorAnimationEase;
-        el.addEventListener('mouseenter', (e: MouseEvent) => {
-          if (e.target instanceof HTMLElement && cursor.current) {
-            gsap.to(`#${cursor.current.id}`, {
-              filter: `opacity(${e.target.dataset['cursorTransparency']})`,
-              duration: calculatedColorAnimationDuration,
-              ease: calculatedColorAnimationEase,
-            });
-          }
-        });
-        el.addEventListener('mouseleave', (e: MouseEvent) => {
-          if (e.target instanceof HTMLElement && cursor.current) {
-            gsap.to(`#${cursor.current.id}`, {
-              filter: `opacity(${cursorTransparency})`,
-              duration: calculatedColorAnimationDuration,
-              ease: calculatedColorAnimationEase,
-            });
-          }
-        });
-      });
-      //---- [ Outline ]--------------------------------------------------------------------------------------------------------------------------------------------------//
-      //---- [ Outline Color Elements ]------------------------------------------------------------------------//
-      outlineColorElements.forEach((el) => {
-        let calculatedColorAnimationDuration = el.dataset['cursorColorAnimationDuration']
-          ? el.dataset['cursorColorAnimationDuration']
-          : colorAnimationDuration;
-        let calculatedColorAnimationEase = el.dataset['cursorColorAnimationEase']
-          ? el.dataset['cursorColorAnimationEase']
-          : colorAnimationEase;
-        el.addEventListener('mouseenter', (e: MouseEvent) => {
-          if (e.target instanceof HTMLElement && cursor.current) {
-            let calculatedOutlineColor = e.target.dataset['cursorOutlineColor']
-              ? e.target.dataset['cursorOutlineColor']
-              : cursorOutlineColor;
-            gsap.to(`#${cursor.current.id}`, {
-              outlineColor: `${calculatedOutlineColor}`,
-              duration: calculatedColorAnimationDuration,
-              ease: calculatedColorAnimationEase,
-            });
-          }
-        });
-        el.addEventListener('mouseleave', (e: MouseEvent) => {
-          if (e.target instanceof HTMLElement && cursor.current) {
-            gsap.to(`#${cursor.current.id}`, {
-              outlineColor: `${cursorOutlineColor}`,
-              duration: calculatedColorAnimationDuration,
-              ease: calculatedColorAnimationEase,
-            });
-          }
-        });
-      });
-      //---- [ Outline Size Elements ]------------------------------------------------------------------------//
-      outlineWidthElements.forEach((el) => {
-        let calculatedColorAnimationDuration = el.dataset['cursorColorAnimationDuration']
-          ? el.dataset['cursorColorAnimationDuration']
-          : colorAnimationDuration;
-        let calculatedColorAnimationEase = el.dataset['cursorColorAnimationEase']
-          ? el.dataset['cursorColorAnimationEase']
-          : colorAnimationEase;
-        el.addEventListener('mouseenter', (e: MouseEvent) => {
-          if (e.target instanceof HTMLElement && cursor.current) {
-            let calculatedOutlineWidth = e.target.dataset['cursorOutlineWidth']
-              ? e.target.dataset['cursorOutlineWidth']
-              : cursorOutlineWidth;
-            gsap.to(`#${cursor.current.id}`, {
-              outlineWidth: `${calculatedOutlineWidth}`,
-              duration: calculatedColorAnimationDuration,
-              ease: calculatedColorAnimationEase,
-            });
-          }
-        });
-        el.addEventListener('mouseleave', (e: MouseEvent) => {
-          if (e.target instanceof HTMLElement && cursor.current) {
-            gsap.to(`#${cursor.current.id}`, {
-              outlineWidth: `${cursorOutlineWidth}`,
-              duration: calculatedColorAnimationDuration,
-              ease: calculatedColorAnimationEase,
-            });
-          }
-        });
-      });
-      //---- [ END Outline ]------------------------------------------------------------------------------------------------------------------------------------------------//
-      //---- [ Background Color Elements ]------------------------------------------------------------------------//
-      backgroundColorElements.forEach((el) => {
-        let calculatedColorAnimationDuration = el.dataset['cursorColorAnimationDuration']
-          ? el.dataset['cursorColorAnimationDuration']
-          : colorAnimationDuration;
-        let calculatedColorAnimationEase = el.dataset['cursorColorAnimationEase']
-          ? el.dataset['cursorColorAnimationEase']
-          : colorAnimationEase;
-        el.addEventListener('mouseenter', (e: MouseEvent) => {
-          if (e.target instanceof HTMLElement && cursor.current) {
-            gsap.to(`#${cursor.current.id}`, {
-              backgroundColor: `${e.target.dataset['cursorBackgroundColor']}`,
-              duration: calculatedColorAnimationDuration,
-              ease: calculatedColorAnimationEase,
-            });
-          }
-        });
-        el.addEventListener('mouseleave', (e: MouseEvent) => {
-          if (e.target instanceof HTMLElement && cursor.current) {
-            gsap.to(`#${cursor.current.id}`, {
-              backgroundColor: `${cursorBackgroundColor}`,
-              duration: calculatedColorAnimationDuration,
-              ease: calculatedColorAnimationEase,
-            });
-          }
-        });
-      });
-      //---- [ Exclusion Elements ]------------------------------------------------------------------------//
-      exclusionElements.forEach((el) => {
-        el.addEventListener('mouseenter', (e: MouseEvent) => {
-          if (e.target instanceof HTMLElement && cursor.current) {
-            let calcualtedExclusionBackgroundColor = e.target.dataset[
-              'cursorExclusionBackgroundColor'
-            ]
-              ? e.target.dataset['cursorExclusionBackgroundColor']
-              : exclusionBackgroundColor;
-            // @ts-ignore: Unreachable code error
-            cursor.current.style.mixBlendMode = 'exclusion';
-            cursor.current.style.background = `${calcualtedExclusionBackgroundColor}`;
-          }
-        });
-        el.addEventListener('mouseleave', (e: MouseEvent) => {
-          if (e.target instanceof HTMLElement && cursor.current) {
-            // @ts-ignore: Unreachable code error
-            cursor.current.style.mixBlendMode = '';
-            cursor.current.style.background = `${cursorBackgroundColor}`;
-          }
-        });
-      });
-      //---- [ Background Image Elements ]------------------------------------------------------------------------//
-      backgroundImageElements.forEach((el) => {
-        let calculatedBackgroundImageAnimationDuration = el.dataset[
-          'cursorBackgroundImageAnimationDuration'
-        ]
-          ? el.dataset['cursorBackgroundImageAnimationDuration']
-          : backgroundImageAnimationDuration;
-        let calculatedBackgroundImageAnimationEase = el.dataset[
-          'cursorBackgroundImageAnimationEase'
-        ]
-          ? el.dataset['cursorBackgroundImageAnimationEase']
-          : backgroundImageAnimationEase;
-        el.addEventListener('mouseenter', (e: MouseEvent) => {
-          if (e.target instanceof HTMLElement && cursorInner.current) {
-            if (cursor.current) {
-              // @ts-ignore: Unreachable code error
-              if (cursor.current.style.mixBlendMode === 'exclusion') hasExclusionAlready = true;
-            }
-            // @ts-ignore
-            let calculatedBackgroundScale = e.target.dataset['cursorBackgroundImageScale']
-              ? // @ts-ignore
-                1 * e.target.dataset['cursorBackgroundImageScale']
-              : 1;
-            let calculatedBorderRadius = e.target.dataset['cursorBorderRadius']
-              ? e.target.dataset['cursorBorderRadius']
-              : '100%';
-            // rotateCursor = false;
-            gsap.to(`#${cursorInner.current.id}`, {
-              scale: calculatedBackgroundScale,
-              borderRadius: calculatedBorderRadius,
-              background: `url("${e.target.dataset['cursorBackgroundImage']}")`,
-              opacity: 1,
-              duration: calculatedBackgroundImageAnimationDuration,
-              ease: calculatedBackgroundImageAnimationEase,
-            });
-          }
-        });
-        el.addEventListener('mouseleave', (e: MouseEvent) => {
-          if (e.target instanceof HTMLElement && cursorInner.current) {
-            // rotateCursor = true;
-            if (cursor.current) {
-              // @ts-ignore: Unreachable code error
-              cursor.current.style.mixBlendMode = '';
-              cursor.current.style.zIndex = '999999999';
-              cursor.current.style.backgroundColor = `${cursorBackgroundColor}`;
-            }
-            gsap.to(`#${cursorInner.current.id}`, {
-              scale: 0,
-              opacity: 0,
-              background: ``,
-              duration: calculatedBackgroundImageAnimationDuration,
-              ease: calculatedBackgroundImageAnimationEase,
-            });
-          }
-        });
-      });
-      //---- [ Border Radius Elements ]------------------------------------------------------------------------//
-      cursorBorderRadiusElements.forEach((el) => {
-        let calculatedShapeShiftDuration = el.dataset['cursorShapeShiftDuration']
-          ? el.dataset['cursorShapeShiftDuration']
-          : shapeShiftAnimationDuration;
-        let calculatedShapeShiftEase = el.dataset['cursorShapeShiftEase']
-          ? el.dataset['cursorShapeShiftEase']
-          : shapeShiftAnimationEase;
-        el.addEventListener('mouseenter', (e: MouseEvent) => {
-          if (e.target instanceof HTMLElement && cursor.current) {
-            let calculatedBorderRadius;
-            if (e.target.dataset.cursorBorderRadius) {
-              calculatedBorderRadius = e.target.dataset.cursorBorderRadius;
-            } else {
-              calculatedBorderRadius = cursorBorderRadius;
-            }
-            gsap.to(`#${cursor.current.id}`, {
-              borderRadius: calculatedBorderRadius,
-              duration: calculatedShapeShiftDuration,
-              ease: calculatedShapeShiftEase,
-            });
-          }
-        });
-        el.addEventListener('mouseleave', (e: MouseEvent) => {
-          if (e.target instanceof HTMLElement && cursor.current) {
-            gsap.to(`#${cursor.current.id}`, {
-              borderRadius: `${cursorBorderRadius}`,
-              duration: calculatedShapeShiftDuration,
-              ease: calculatedShapeShiftEase,
-            });
-          }
-        });
-      });
       //---- [ Shape Shift Elements ]------------------------------------------------------------------------//
       shapeShiftElements.forEach((el) => {
-        let calculatedShapeShiftDuration = el.dataset['cursorShapeShiftAnimationDuration']
-          ? el.dataset['cursorShapeShiftAnimationDuration']
-          : shapeShiftAnimationDuration;
-        let calculatedShapeShiftEase = el.dataset['cursorShapeShiftAnimationEase']
-          ? el.dataset['cursorShapeShiftAnimationEase']
-          : shapeShiftAnimationEase;
+        let calculatedShapeShiftDuration = el.dataset['cursorShapeshiftAnimationDuration']
+          ? el.dataset['cursorShapeshiftAnimationDuration']
+          : globalProps.shapeShiftAnimationDuration;
+        let calculatedShapeShiftEase = el.dataset['cursorShapeshiftAnimationEase']
+          ? el.dataset['cursorShapeshiftAnimationEase']
+          : globalProps.shapeShiftAnimationEase;
         el.addEventListener('mouseenter', (e: MouseEvent) => {
-          if (e.target instanceof HTMLElement && cursor.current) {
-            // isShapeShifting = true;
-            // rotateCursor = false;
+          if (e.target instanceof HTMLElement && globalCursorRef) {
+            setRotateCursor(false);
             let calculatedBorderRadius;
             if (e.target.style.borderRadius.length > 0) {
               calculatedBorderRadius = e.target.style.borderRadius;
@@ -979,7 +2135,7 @@ export const Cursor: FC<CursorProps> = ({
                 calculatedBorderRadius = 0;
               }
             }
-            gsap.to(`#${cursor.current.id}`, {
+            gsap.to(`#${globalCursorRef.id}`, {
               width: `${e.target.clientWidth}`,
               height: `${e.target.clientHeight}`,
               borderRadius: calculatedBorderRadius,
@@ -989,12 +2145,12 @@ export const Cursor: FC<CursorProps> = ({
           }
         });
         el.addEventListener('mouseleave', (e: MouseEvent) => {
-          if (e.target instanceof HTMLElement && cursor.current) {
-            // rotateCursor = true;
-            gsap.to(`#${cursor.current.id}`, {
-              width: `${cursorSize}`,
-              height: `${cursorSize}`,
-              borderRadius: `${cursorBorderRadius}`,
+          if (e.target instanceof HTMLElement && globalCursorRef) {
+            setRotateCursor(true);
+            gsap.to(`#${globalCursorRef.id}`, {
+              width: `${globalProps.cursorSize}`,
+              height: `${globalProps.cursorSize}`,
+              borderRadius: `${globalProps.cursorBorderRadius}`,
               duration: calculatedShapeShiftDuration,
               ease: calculatedShapeShiftEase,
             });
@@ -1005,29 +2161,28 @@ export const Cursor: FC<CursorProps> = ({
       magneticElements.forEach((el) => {
         // @ts-ignore
         let calculatedMagneticDuration = el.dataset['cursorMagneticAnimationDuration']
-          ? // @ts-ignore
-            1 * el.dataset['cursorMagneticAnimationDuration']
-          : magneticAnimationDuration;
+          ? el.dataset['cursorMagneticAnimationDuration']
+          : globalProps.magneticAnimationDuration;
         let calculatedMagneticEase = el.dataset['cursorMagneticAnimationEase']
           ? el.dataset['cursorMagneticAnimationEase']
-          : magneticAnimationEase;
+          : globalProps.magneticAnimationEase;
         el.addEventListener('mousemove', (e) => {
-          // @ts-ignore
           let calculatedMagneticAmount = el.dataset['cursorMagneticAmount']
-            ? // @ts-ignore
-              1 * el.dataset['cursorMagneticAmount']
-            : magneticAnimationAmount;
+            ? el.dataset['cursorMagneticAmount']
+            : globalProps.magneticAmount;
           const areatarget = e.target as HTMLElement;
           gsap.to(el, {
             x:
               (e.clientX -
                 (areatarget.offsetLeft - window.pageXOffset) -
                 areatarget.clientWidth / 2) *
+              // @ts-ignore
               calculatedMagneticAmount,
             y:
               (e.clientY -
                 (areatarget.offsetTop - window.pageYOffset) -
                 areatarget.clientHeight / 2) *
+              // @ts-ignore
               calculatedMagneticAmount,
             duration: calculatedMagneticDuration,
             ease: calculatedMagneticEase,
@@ -1045,19 +2200,17 @@ export const Cursor: FC<CursorProps> = ({
       //---- [ Sticky Elements ]------------------------------------------------------------------------//
       stickElements.forEach((el) => {
         el.addEventListener('mouseenter', () => {
-          stickStatus = true;
+          setGlobalStickStatus(true);
         });
+
         el.addEventListener('mouseleave', () => {
-          stickStatus = false;
+          setGlobalStickStatus(false);
         });
       });
-      //---------------------------------------------------------------------------------------------------[END OF ELEMENTS]--//
     }
+    //---------------------------------------------------------------------------------------------------[END OF ELEMENTS]--//
 
     return () => {
-      window.removeEventListener('mousemove', setFromEvent);
-      document.body.removeEventListener('mouseenter', () => {});
-      document.body.removeEventListener('mouseleave', () => {});
       sizeElements.forEach((el) => {
         el.removeEventListener('mouseenter', () => {});
         el.removeEventListener('mouseleave', () => {});
@@ -1116,264 +2269,24 @@ export const Cursor: FC<CursorProps> = ({
       });
     };
   });
-
-  useTicker(loop);
-  return (
-    <div
-      ref={cursor}
-      id={'pointer-cursor'}
-      className="pointer-cursor"
-      style={{
-        width: cursorSize,
-        height: cursorSize,
-        background: cursorBackgroundColor,
-        outlineWidth: cursorOutlineWidth,
-        outlineColor: cursorOutlineColor,
-        outlineStyle: cursorOutlineStyle,
-        borderRadius: `${cursorBorderRadius}`,
-        filter: `opacity(${cursorTransparency}`,
-      }}>
-      <div
-        style={{ color: cursorInnerColor }}
-        ref={cursorInner}
-        id={'pointer-cursorInner'}
-        className="pointer-cursor__inner"
-      />
-    </div>
-  );
-};
-
-interface CrusorStyleProps {
-  /*-Misc-*/
-  children?: JSX.Element | JSX.Element[] | null;
-  style?: CSSStyleDeclaration;
-  // animationDuration?: number;
-  // animationEase?: string | gsap.EaseFunction | undefined;
-  /*-Style-*/
-  cursorSize?: number | string;
-  sizeAnimationDuration?: number;
-  sizeAnimationEase?: string | gsap.EaseFunction | undefined;
-  cursorBorderRadius?: string;
-  cursorTransparency?: string;
-  /*-Stick-*/
-  isSticky?: boolean;
-  stickAnimationAmount?: number;
-  stickAnimationEase?: string | gsap.EaseFunction | undefined;
-  /*-Magnetic-*/
-  isMagnetic?: boolean;
-  magneticAnimationAmount?: number;
-  magneticAnimationDuration?: number;
-  magneticAnimationEase?: string | gsap.EaseFunction | undefined;
-  /*-Color-*/
-  colorAnimationEase?: string | gsap.EaseFunction | undefined;
-  colorAnimationDuration?: number;
-  /*-Background-*/
-  cursorBackgroundColor?: string | undefined;
-  cursorBackgroundImage?: string;
-  cursorBackgroundImageScale?: number;
-  backgroundImageAnimationEase?: string | gsap.EaseFunction | undefined;
-  backgroundImageAnimationDuration?: number;
-  cursorInnerColor?: string;
-  /*-Outline-*/
-  cursorOutlineWidth?: string;
-  cursorOutlineColor?: string;
-  // cursorOutlineStyle?: string;
-  /*-Shapeshift-*/
-  shapeShift?: boolean;
-  shapeShiftAnimationDuration?: number;
-  shapeShiftAnimationEase?: string | gsap.EaseFunction | undefined;
-  /*-Text-*/
-  cursorText?: string;
-  cursorTextScale?: number | string;
-  cursorTextColor?: string;
-  cursorTextOpacity?: string | number;
-  textAnimationEase?: string | gsap.EaseFunction | undefined;
-  textAnimationDuration?: number;
-  /*-Exclusion-*/
-  exclusion?: boolean;
-  exclusionBackgroundColor?: string;
-  /*-Float-*/
-  float?: boolean;
-  floatAmount?: number | string;
-  floatFollow?: boolean;
-  floatTriggerOffset?: number | string;
-  floatSpringToPosition?: boolean;
-  floatAnimationDuration?: number | string;
-  floatAnimationEase?: string | gsap.EaseFunction | undefined;
-  /*-Tilt-*/
-  tilt?: boolean;
-  tiltAmount?: number | string;
-  tiltTriggerOffset?: number | string;
-  tiltAnimationDuration?: number | string;
-  tiltAnimationEase?: string | gsap.EaseFunction | undefined;
-  /*-Glow-*/
-  glow?: boolean;
-  glowProximityColor?: string;
-  glowHoverColor?: string;
-  glowProximityColorOpacity?: string | number;
-  glowHoverColorOpacity?: string | number;
-  glowProximityColorSize?: string;
-  glowHoverColorSize?: string;
-  glowTriggerOffset?: number;
-  glowAnimationDuration?: number;
-  glowAnimationEase?: string | gsap.EaseFunction | undefined;
-}
-
-export const CursorStyle: ({
-  children,
-}: CrusorStyleProps) => React.ReactElement<any, any> | JSX.Element = ({
-  /*-Misc-*/
-  children,
-  style = null,
-  // animationDuration = null,
-  // animationEase = null,
-  /*-Style-*/
-  cursorSize = null,
-  sizeAnimationDuration = null,
-  sizeAnimationEase = null,
-  cursorBorderRadius = null,
-  cursorTransparency = null,
-  /*-Stick-*/
-  isSticky = null,
-  stickAnimationAmount = null,
-  stickAnimationEase = null,
-  /*-Magnetic-*/
-  isMagnetic = null,
-  magneticAnimationAmount = null,
-  magneticAnimationDuration = null,
-  magneticAnimationEase = null,
-  /*-Color-*/
-  colorAnimationEase = null,
-  colorAnimationDuration = null,
-  /*-Background-*/
-  cursorBackgroundColor = null,
-  cursorBackgroundImage = null,
-  cursorBackgroundImageScale = null,
-  backgroundImageAnimationEase = undefined,
-  backgroundImageAnimationDuration = null,
-  /*-Outline-*/
-  cursorOutlineWidth = null,
-  cursorOutlineColor = null,
-  /*-Shapeshift-*/
-  shapeShift = null,
-  shapeShiftAnimationDuration = null,
-  shapeShiftAnimationEase = null,
-  /*-Text-*/
-  cursorText = null,
-  cursorTextScale = null,
-  cursorTextColor = null,
-  cursorTextOpacity = null,
-  textAnimationEase = null,
-  textAnimationDuration = null,
-  /*-Exclusion-*/
-  exclusion = null,
-  exclusionBackgroundColor = null,
-  /*-Float-*/
-  float = null,
-  floatAmount = null,
-  floatFollow = null,
-  floatTriggerOffset = null,
-  floatSpringToPosition = null,
-  floatAnimationDuration = null,
-  floatAnimationEase = null,
-  /*-Tilt-*/
-  tilt = null,
-  tiltAmount = null,
-  tiltTriggerOffset = null,
-  tiltAnimationDuration = null,
-  tiltAnimationEase = null,
-  /*-Glow-*/
-  glow = null,
-  glowProximityColor = null,
-  glowHoverColor = null,
-  glowProximityColorOpacity = null,
-  glowHoverColorOpacity = null,
-  glowProximityColorSize = null,
-  glowHoverColorSize = null,
-  glowTriggerOffset = null,
-  glowAnimationDuration = null,
-  glowAnimationEase = null,
-}) => {
   const cursorStyle = useRef<HTMLDivElement | null>(null);
   return (
     <>
       <div
-        // id='cards' //
-        id={glow ? 'glow-pointer-cards' : undefined}
+        className={'p-c-s'}
+        // id={'p-c-s'} //
         // @ts-ignore
         style={{ ...style }}
         ref={cursorStyle}
         /* Misc */
         // data-cursor-animation-duration={animationDuration}
         // data-cursor-animation-ease={animationEase}
-
-        /* Cursor Style */
-        data-cursor-size={cursorSize}
-        data-cursor-size-animation-duration={sizeAnimationDuration}
-        data-cursor-size-animation-ease={sizeAnimationEase}
-        data-cursor-border-radius={cursorBorderRadius}
-        data-cursor-transparency={cursorTransparency} // Color Animation Ease
-        /*Text*/
-        data-cursor-text={cursorText}
-        data-cursor-text-scale={cursorTextScale}
-        data-cursor-text-color={cursorTextColor}
-        data-cursor-text-opacity={cursorTextOpacity}
-        data-cursor-text-animation-duration={textAnimationDuration}
-        data-cursor-text-animation-ease={textAnimationEase}
-        /*Float*/
-        data-cursor-float={float}
-        data-cursor-float-amount={floatAmount}
-        data-cursor-float-follow={floatFollow}
-        data-cursor-float-trigger-offset={floatTriggerOffset}
-        data-cursor-float-spring-to-position={floatSpringToPosition}
-        data-cursor-float-animation-duration={floatAnimationDuration}
-        data-cursor-float-animation-ease={floatAnimationEase}
-        /*Color& Background & Outline*/
-        data-cursor-background-color={cursorBackgroundColor}
-        data-cursor-outline-color={cursorOutlineColor} // Goes with ColorAnimationDuration & Ease
-        data-cursor-outline-width={cursorOutlineWidth}
-        data-cursor-color-animation-duration={colorAnimationDuration}
-        data-cursor-color-animation-ease={colorAnimationEase}
-        /*Background Image*/
-        data-cursor-background-image={cursorBackgroundImage}
-        data-cursor-background-image-scale={cursorBackgroundImageScale}
-        data-cursor-background-image-animation-duration={backgroundImageAnimationDuration}
-        data-cursor-background-image-animation-ease={backgroundImageAnimationEase}
-        // /*Magnetic*/
-        data-cursor-magnetic={isMagnetic}
-        data-cursor-magnetic-amount={magneticAnimationAmount}
-        data-cursor-magnetic-animation-duration={magneticAnimationDuration}
-        data-cursor-magnetic-animation-ease={magneticAnimationEase}
-        /*ShapeShift*/
-        data-cursor-shapeshift={shapeShift}
-        data-cursor-shapeshift-animation-duration={shapeShiftAnimationDuration}
-        data-cursor-shapeshift-animation-ease={shapeShiftAnimationEase}
-        /*Tilt*/
-        data-cursor-tilt={tilt}
-        data-cursor-tilt-amount={tiltAmount}
-        data-cursor-tilt-trigger-offset={tiltTriggerOffset}
-        data-cursor-tilt-animation-duration={tiltAnimationDuration}
-        data-cursor-tilt-animation-ease={tiltAnimationEase}
-        /*Exclusion*/
-        data-cursor-exclusion={exclusion}
-        data-cursor-exclusion-background-color={exclusionBackgroundColor}
-        /* Sticky */
-        data-cursor-stick={isSticky}
-        data-cursor-stick-amount={stickAnimationAmount}
-        data-cursor-stick-animation-ease={stickAnimationEase}
-        /* Glow */
-        data-cursor-glow={glow}
-        data-cursor-glow-proximity-color={glowProximityColor}
-        data-cursor-glow-hover-color={glowHoverColor}
-        data-cursor-glow-proximity-color-opacity={glowProximityColorOpacity}
-        data-cursor-glow-hover-color-opacity={glowHoverColorOpacity}
-        data-cursor-glow-proximity-color-size={glowProximityColorSize}
-        data-cursor-glow-hover-color-size={glowHoverColorSize}
-        data-cursor-glow-trigger-offset={glowTriggerOffset}
-        data-cursor-glow-animation-duration={glowAnimationDuration}
-        data-cursor-glow-animation-ease={glowAnimationEase}>
+        /*-*/
+      >
         {children}
       </div>
     </>
   );
 };
+
+export { Cursor, CursorStyle };

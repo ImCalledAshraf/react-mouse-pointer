@@ -8,7 +8,7 @@ import './public/tiltStyle.css';
 
 export const Docs = () => <ShowDocs md={require('../docs/tiltElements.md')} />;
 export const Demo = () => {
-  const cursorTiltAmount = number('<CursorStyle>tiltAmount', 0.05);
+  const cursorTiltAmount = number('<CursorStyle>tiltAmount', 0.02);
   const cursorTiltDuration = number('<CursorStyle>tiltDuration', 1.02);
   // const cursorFloatFollow = boolean('data-cursor-tilt-follow', true);
   const elementTiltTriggerOffset = text('<CursorStyle>tiltTriggerOffset', 'example : 20');

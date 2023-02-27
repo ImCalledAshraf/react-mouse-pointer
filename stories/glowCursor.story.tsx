@@ -50,7 +50,6 @@ export const Demo = () => {
         >
           <div
             // className='glow-card'
-            data-cursor-glow-element
             style={{
               width: '320px',
               borderRadius: '20px',
@@ -65,9 +64,6 @@ export const Demo = () => {
                 Cursor Glow
               </h1>
               <h3 style={{ margin: '0' }}>Hover Around To see Effect</h3>
-              <p style={{ margin: '0' }}>
-                <b>Has Data Attribute :</b> data-cursor-glow-element
-              </p>
               <p style={{ margin: '0' }}>Wrapped with :</p>
               <p></p>
 
@@ -104,7 +100,6 @@ export const Demo = () => {
           <br />
           <div
             // className='glow-card'
-            data-cursor-glow-element
             style={{
               width: '320px',
               borderRadius: '20px',
@@ -119,9 +114,6 @@ export const Demo = () => {
                 Cursor Glow
               </h1>
               <h3 style={{ margin: '0' }}>Hover Around To see Effect</h3>
-              <p style={{ margin: '0' }}>
-                <b>Has Data Attribute :</b> data-cursor-glow-element
-              </p>
               <p style={{ margin: '0' }}>Wrapped with :</p>
               <p></p>
 
