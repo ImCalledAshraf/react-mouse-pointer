@@ -3,13 +3,13 @@
 
 ### Bug Fixes
 
-* **Cursor:** Fixed [#7](https://github.com/ImCalledAshraf/react-mouse-pointer/issues/7) [#8](https://github.com/ImCalledAshraf/react-mouse-pointer/issues/8) ([b5116c4](https://github.com/ImCalledAshraf/react-mouse-pointer/commit/b5116c4601072220617d0636e5558bdae84f69d0))
-* **Cursor:** Linting & Naming Changes ([a58a74f](https://github.com/ImCalledAshraf/react-mouse-pointer/commit/a58a74f32dc884e4845a117380b8bb9fa8c1b27e))
+* **Cursor:** Fixed [#7](https://github.com/ImCalledAshraf/react-mouse-pointer/issues/7) [#8](https://github.com/ImCalledAshraf/react-mouse-pointer/issues/8) 
+* **Cursor:** Linting & Naming Changes 
 
 
 ### Features
 
-* **Cursor:** Performance Improvement & Added [#10](https://github.com/ImCalledAshraf/react-mouse-pointer/issues/10) ([0f81ff0](https://github.com/ImCalledAshraf/react-mouse-pointer/commit/0f81ff036e34d7a8a71414bbf358fd9ad6a07c5d))
+* **Cursor:** Performance Improvement & Added [#10](https://github.com/ImCalledAshraf/react-mouse-pointer/issues/10) 
 
 ## [1.0.2](https://github.com/ImCalledAshraf/react-mouse-pointer/compare/v1.0.1...v1.0.2) (2023-02-24)
 
