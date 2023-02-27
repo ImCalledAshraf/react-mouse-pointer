@@ -1,9 +1,15 @@
 import * as React from 'react';
-import { Cursor, CursorStyle } from '../src/Cursor';
 import '../src/misc/style.css';
+// import './public/Style.css';
+// import SoundButton from './public';
+
 // @ts-ignore
 import ShowDocs from './util/ShowDocs';
 import { number, withKnobs } from '@storybook/addon-knobs';
+// import SoundButton from './public/SoundButton';
+// import { Cursor, CursorStyle } from '../lib';
+// import { Cursor, CursorStyle } from '../lib';
+import { Cursor, CursorStyle } from '../src';
 
 export const Docs = () => <ShowDocs md={require('../docs/magneticCrusor.md')} />;
 export const Magnetic = () => {
@@ -14,10 +20,12 @@ export const Magnetic = () => {
       <div style={{ height: '95vh', display: 'grid', placeItems: 'center' }}>
         <Cursor
           isGelly={true}
+          // cursorOutlineColor={'white'}
           cursorSize={30}
-          magneticAnimationAmount={magneticAnimationAmount}
+          magneticAmount={magneticAnimationAmount}
           magneticAnimationDuration={magneticAnimationDuration}
         />
+
         <CursorStyle isMagnetic={true}>
           <div
             style={{
@@ -50,7 +58,7 @@ export const Magnetic = () => {
   return demoComponent();
 };
 export const MagneticWithSticky = () => {
-  const magneticAnimationAmount = number('Magnetic Animation Amount', 0.5);
+  const magneticAnimationAmount = number('Magnetic Animation Amount', 0.2);
   const magneticAnimationDuration = number('Magnetic Animation Duration', 0.9);
   const stickAnimationAmount = number('Stick Animation Amount', 0.1);
 
@@ -60,19 +68,23 @@ export const MagneticWithSticky = () => {
         <Cursor
           isGelly={true}
           cursorSize={30}
-          magneticAnimationAmount={magneticAnimationAmount}
+          magneticAmount={magneticAnimationAmount}
           magneticAnimationDuration={magneticAnimationDuration}
           // magneticAnimationEase={}
-          stickAnimationAmount={stickAnimationAmount}
+          stickAmount={stickAnimationAmount}
           disableOnMobile={true}
         />
         <CursorStyle
           isMagnetic={true}
           // magneticAnimationEase={}
-          // magneticAnimationDuration={}
-          // magneticAnimationAmount={}
-          isSticky={true}>
+          // magneticAnimationDuration={55}
+          // magneticAnimationAmount={0.9}
+          isSticky={true}
+          // stickAnimationAmount={5}
+          //-
+        >
           <div
+            // data-cursor-stick={'true'}
             id="magneticComponent"
             style={{
               borderRadius: '20px',

@@ -28,7 +28,10 @@ export const Demo = () => {
           cursorOutlineColor={cursorOutlineColor}
           cursorOutlineWidth={cursorOutlineWidth}
         />
-        <CursorStyle cursorBackgroundColor={cursorBackgroundColorOnHover}>
+        <CursorStyle
+          cursorBackgroundColor={cursorBackgroundColorOnHover}
+          //
+        >
           <div
             style={{
               borderRadius: '20px',

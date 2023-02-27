@@ -13,7 +13,7 @@ export const Demo = () => {
     let cursorBackgroundColorOnHover = text('<CursorStyle>cursorBackgroundColor', 'black');
     let cursorText = text('<CursorStyle>cursorText', 'text');
     let cursorTextColor = text('<CursorStyle>cursorTextColor', 'white');
-    let cursorTextScale = text('<CursorStyle>cursorTextScale', '2');
+    let cursorTextScale = text('<CursorStyle>cursorTextScale', '1');
     let cursorSizeOnHover = text('<CursorStyle>cursorSize', '100px');
 
     return (
@@ -30,7 +30,7 @@ export const Demo = () => {
           cursorTextColor={cursorTextColor}
           cursorTextScale={cursorTextScale}
           // cursorTextOpacity={0.2}
-          // textAnimationDuration={}
+          // textAnimationDuration={5}
           // textAnimationEase={}
           cursorSize={cursorSizeOnHover}>
           <div

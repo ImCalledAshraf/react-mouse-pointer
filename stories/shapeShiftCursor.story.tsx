@@ -62,8 +62,10 @@ export const ShapeShiftWithStickyMagnetic = () => {
           // shapeShiftAnimationDuration={}
           // shapeShiftAnimationEase={}
           isSticky={true}
-          isMagnetic={true}>
+          isMagnetic={true}
+          magneticAmount={0.2}>
           <div
+            // data-cursor-stick={'true'}
             style={{
               borderRadius: '20px 40px 180px 20px',
               background: '#c5ded8',

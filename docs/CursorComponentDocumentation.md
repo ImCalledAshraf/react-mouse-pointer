@@ -28,14 +28,14 @@ will control the behaviour of the overall cursor Gelly and overal movement anima
 | 🛑  | `cursorBorderRadius  `    | Adjust Cursor Border Radius     | `'100%'`       |
 | 🔦  | `cursorTransparency  `    | Adjust Cursor Transparency      | `'100%'`       |
 
-|        | Sticky Props             | Functionality                 | Default Value     |
-|--------|--------------------------|-------------------------------|-------------------|
-| 📌     | `stickAnimationAmount  ` | Adjust Stick Animation Amount | `0.1`             |
-| 📌     | `stickAnimationEase  `   | Adjust Stick Animation Ease   | `Power4.easeOut`  |
+|        | Sticky Props           | Functionality                 | Default Value     |
+|--------|------------------------|-------------------------------|-------------------|
+| 📌     | `stickAmount  `        | Adjust Stick Animation Amount | `0.1`             |
+| 📌     | `stickAnimationEase  ` | Adjust Stick Animation Ease   | `Power4.easeOut`  |
 
 |     | Magnetic Props                | Functionality                      | Default Value     |
 |-----|-------------------------------|------------------------------------|-------------------|
-| 🧲  | `magneticAnimationAmount  `   | Adjust Magnetic Effect Amount      | `0.5`             |
+| 🧲  | `magneticAmount  `            | Adjust Magnetic Effect Amount      | `0.5`             |
 | 🧲  | `magneticAnimationDuration  ` | Adjust Magnetic Animation Duration | `0.9`             |
 | 🧲  | `magneticAnimationEase  `     | Adjust Magnetic Animation Ease     | `Power4.easeOut ` |
 
