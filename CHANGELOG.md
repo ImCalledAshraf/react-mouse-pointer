@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/ImCalledAshraf/react-mouse-pointer/compare/v1.1.0...v1.1.1) (2023-02-27)
+
+
+### Bug Fixes
+
+* **Cursor:** Small Fix ([c72cc4d](https://github.com/ImCalledAshraf/react-mouse-pointer/commit/c72cc4d71fb48cf565a0b0e25af78c7d08721429))
+
 # [1.1.0](https://github.com/ImCalledAshraf/react-mouse-pointer/compare/v1.0.2...v1.1.0) (2023-02-27)
 
 
